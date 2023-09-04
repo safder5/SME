@@ -1,0 +1,44 @@
+
+// this is to upload an image after onpressed/ontap 
+uploadImage() async {
+    final _firebaseStorage = FirebaseStorage.instance;
+    final _imagePicker = ImagePicker();
+    PickedFile image;
+    //Check Permissions
+    await Permission.photos.request();
+
+    var permissionStatus = await Permission.photos.status;
+
+    if (permissionStatus.isGranted){
+      //Select Image
+      image = await _imagePicker.getImage(source: ImageSource.gallery);
+      var file = File(image.path);
+
+      if (image != null){
+        //Upload to Firebase
+        var snapshot = await _firebaseStorage.ref()
+        .child('images/imageName')
+        .putFile(file).onComplete;
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          imageUrl = downloadUrl;
+        });
+      } else {
+        print('No Image Path Received');
+      }
+    } else {
+      print('Permission not granted. Try Again with permission access');
+    }
+  }
+
+
+
+** convert uint8list to file **
+
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+
+Uint8List imageInUnit8List = // store unit8List image here ;
+final tempDir = await getTemporaryDirectory();
+File file = await File('${tempDir.path}/image.png').create();
+file.writeAsBytesSync(imageInUnit8List);

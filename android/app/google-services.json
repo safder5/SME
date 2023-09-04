@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "415455766570",
+    "project_id": "smeflow-8b2be",
+    "storage_bucket": "smeflow-8b2be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415455766570:android:9ea219db05596096b43b53",
+        "android_client_info": {
+          "package_name": "com.example.ashwani"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415455766570-9ppg1hg8kbhph8mcj8froftj0m9eneau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthFExZyonkxBc9ge5dChFpWLjphU_NAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415455766570-9ppg1hg8kbhph8mcj8froftj0m9eneau.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
