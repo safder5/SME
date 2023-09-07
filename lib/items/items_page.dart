@@ -1,6 +1,7 @@
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/items/addItems.dart';
+import 'package:ashwani/items/item_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +70,14 @@ class _ItemsPageState extends State<ItemsPage> {
                       return ListView.builder(
                           itemCount: userItemsSnapshot.length,
                           itemBuilder: (context, index) {
-                            return ItemsPageContainer(
-                                itemName: userItemsSnapshot[index]["item_name"],
-                                sku: userItemsSnapshot[index]["sku"]);
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemScreen(itemname: userItemsSnapshot[index]["item_name"],sku: userItemsSnapshot[index]["sku"],)));
+                              },
+                              child: ItemsPageContainer(
+                                  itemName: userItemsSnapshot[index]["item_name"],
+                                  sku: userItemsSnapshot[index]["sku"]),
+                            );
                           });
                     }),
               )

@@ -2,8 +2,8 @@ import 'package:ashwani/constants.dart';
 import 'package:ashwani/items/addItems.dart';
 import 'package:ashwani/services/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 const List<String> paymentMethods = <String>[
   'Payment Methods',
@@ -35,6 +35,17 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
   // String cD = cDate.toString().substring(0, 10);
   String dropdownValue = paymentMethods.first;
   String ddVDelivery = deliveryMethods.first;
+  TextEditingController dateController = TextEditingController();
+  TextEditingController dateShipmentController = TextEditingController();
+
+  // void showDialog() {
+  //   showDatePicker(
+  //       context: context,
+  //       initialEntryMode: DatePickerEntryMode.calendarOnly,
+  //       initialDate: cDate,
+  //       firstDate: DateTime.utc(cDate.year, cDate.month, 1),
+  //       lastDate: DateTime(cDate.year + 1));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +128,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           cursorColor: blue,
                           cursorWidth: 1,
                           textCapitalization: TextCapitalization.words,
-                          validator: validateName,
+                          // validator: validateName,
                           onSaved: (String? val) {
                             firstName = val;
                           },
@@ -155,7 +166,8 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                         children: [
                                           Row(
                                             children: [
-                                              const Text('Add items & quantity'),
+                                              const Text(
+                                                  'Add items & quantity'),
                                               const Spacer(),
                                               IconButton(
                                                 icon: const Icon(Icons.close),
@@ -266,41 +278,94 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                                   height: 18,
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal:0.0),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 0.0),
                                                   child: Row(
                                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                     children: [
                                                       Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Text('200',style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300,color: blue),),
-                                                          const SizedBox(height: 8,),
-                                                          const Text('Total stock',style: TextStyle(fontWeight: FontWeight.w300),textScaleFactor: 0.8)
+                                                          Text(
+                                                            '200',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                color: blue),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          const Text(
+                                                              'Total stock',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300),
+                                                              textScaleFactor:
+                                                                  0.8)
                                                         ],
                                                       ),
                                                       const Spacer(),
                                                       Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Text('55.0',style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300,color: blue),),
-                                                          const SizedBox(height: 8,),
-                                                          const Text('Already Sold',style: TextStyle(fontWeight: FontWeight.w300),textScaleFactor: 0.8,)
+                                                          Text(
+                                                            '55.0',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                color: blue),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          const Text(
+                                                            'Already Sold',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                            textScaleFactor:
+                                                                0.8,
+                                                          )
                                                         ],
                                                       ),
                                                       const Spacer(),
                                                       Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                        Text('145.0',style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300,color: blue),),
-                                                          const SizedBox(height: 8,),
-                                                          const Text('Available for sale',style: TextStyle(fontWeight: FontWeight.w300),textScaleFactor: 0.8,)
-                                                      ],),
+                                                          Text(
+                                                            '145.0',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                color: blue),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          const Text(
+                                                            'Available for sale',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                            textScaleFactor:
+                                                                0.8,
+                                                          )
+                                                        ],
+                                                      ),
                                                     ],
                                                   ),
                                                 )
@@ -360,35 +425,100 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                         height: 24,
                       ),
                       TextFormField(
+                        controller: dateController,
+                        readOnly: true,
                         cursorColor: blue,
                         cursorWidth: 1,
                         textCapitalization: TextCapitalization.words,
-                        validator: validateDate,
+                        // validator: validateDate,
                         onSaved: (String? val) {
                           orderDate = val;
                         },
                         textInputAction: TextInputAction.next,
                         decoration: getInputDecoration(
                                 //order date nikal li
-                                hint: cDate.toString().substring(0, 10),
+                                // hint: cDate.toString().substring(0, 10),
+                                hint: 'Order Date',
                                 errorColor: Colors.red)
-                            .copyWith(),
+                            .copyWith(
+                                suffixIcon: IconButton(
+                                    onPressed: () async {
+                                      DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialEntryMode:
+                                                  DatePickerEntryMode
+                                                      .calendarOnly,
+                                              initialDate: cDate,
+                                              firstDate:
+                                                  DateTime.utc(1965, 1, 1),
+                                              lastDate:
+                                                  DateTime(cDate.year + 1));
+                                      if (pickedDate != null) {
+                                        //get the picked date in the format => 2022-07-04 00:00:00.000
+                                        String formattedDate =
+                                            DateFormat('dd-MM-yyyy').format(
+                                                pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+                                        //formatted date output using intl package =>  2022-07-04
+                                        setState(() {
+                                          dateController.text =
+                                              formattedDate; //set foratted date to TextField value.
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      LineIcons.calendarWithDayFocus,
+                                      color: b25,
+                                    ))),
                       ),
                       const SizedBox(
                         height: 24,
                       ),
                       TextFormField(
-                          cursorColor: blue,
-                          cursorWidth: 1,
-                          textCapitalization: TextCapitalization.words,
-                          validator: validateDate,
-                          onSaved: (String? val) {
-                            shipmentDate = val;
-                          },
-                          textInputAction: TextInputAction.next,
-                          decoration: getInputDecoration(
-                              hint: 'Expected Shipment date',
-                              errorColor: Colors.red)),
+                        controller: dateShipmentController,
+                        readOnly: true,
+                        cursorColor: blue,
+                        cursorWidth: 1,
+                        textCapitalization: TextCapitalization.words,
+                        // validator: validateDate,
+                        onSaved: (String? val) {
+                          shipmentDate = val;
+                        },
+                        textInputAction: TextInputAction.next,
+                        decoration: getInputDecoration(
+                                hint: 'Expected Shipment date',
+                                errorColor: Colors.red)
+                            .copyWith(
+                                suffixIcon: IconButton(
+                                    onPressed: () async {
+                                      DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialEntryMode:
+                                                  DatePickerEntryMode
+                                                      .calendarOnly,
+                                              initialDate: cDate,
+                                              firstDate:
+                                                  DateTime.utc(1965, 1, 1),
+                                              lastDate:
+                                                  DateTime(cDate.year + 2));
+                                      if (pickedDate != null) {
+                                        //get the picked date in the format => 2022-07-04 00:00:00.000
+                                        String formattedDate =
+                                            DateFormat('dd-MM-yyyy').format(
+                                                pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+                                        //formatted date output using intl package =>  2022-07-04
+                                        setState(() {
+                                          dateShipmentController.text =
+                                              formattedDate; //set foratted date to TextField value.
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      LineIcons.calendarWithDayFocus,
+                                      color: b25,
+                                    ))),
+                      ),
                       const SizedBox(
                         height: 24,
                       ),
@@ -443,39 +573,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                       const SizedBox(
                         height: 24,
                       ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     //submit everything after validation is processed
-                      //   },
-                      //   child: Container(
-                      //     decoration: BoxDecoration(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //         color: Colors.transparent,
-                      //         border: Border.all(width: 0.6, color: blue)),
-                      //     width: double.infinity,
-                      //     height: 48,
-                      //     child: Center(
-                      //         child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         Icon(
-                      //           LineIcons.plusCircle,
-                      //           color: blue,
-                      //         ),
-                      //         Text(
-                      //           '  Add Sales Person',
-                      //           style: TextStyle(
-                      //               color: blue, fontWeight: FontWeight.w300),
-                      //           textScaleFactor: 1,
-                      //         ),
-                      //       ],
-                      //     )),
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   height: 24,
-                      // ),
-
                       // convert this next container into a separate widget
                       //also the below one
                       Container(
@@ -563,14 +660,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                     ],
                   ),
                 ),
-                Container(
-                        height: 40,
-                        width: 40,
-                        color: b,
-                        child: SfDateRangePicker(
-                          selectionMode: DateRangePickerSelectionMode.single,
-                        ),
-                      )
               ],
             ),
           ),

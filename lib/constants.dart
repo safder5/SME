@@ -10,3 +10,5 @@ Color gn = Color(0xFF0A5C36);
 Color d9 = Color(0xFFD9D9D9);
 Color t = Colors.transparent;
 Color r = Colors.red;
+Color b10 = b.withOpacity(0.1);
+Color b25 = b.withOpacity(0.25);
