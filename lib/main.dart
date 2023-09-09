@@ -1,17 +1,13 @@
-import 'package:ashwani/Screens/home.dart';
 import 'package:ashwani/authorizeUser/authorise.dart';
 import 'package:ashwani/authorizeUser/more_user_details.dart';
 import 'package:ashwani/landingbypass.dart';
-import 'package:ashwani/services/db_created.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'constants.dart';
-import 'firebase_options.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

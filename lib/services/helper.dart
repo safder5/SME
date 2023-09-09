@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -36,15 +38,14 @@ String? validateDate(String? value) {
   return null;
 }
 
-InputDecoration getInputDecoration({
-  required String hint,required Color errorColor
-}) {
+InputDecoration getInputDecoration(
+    {required String hint, required Color errorColor}) {
   return InputDecoration(
-     constraints: const BoxConstraints(maxWidth: 600, minWidth: 200),
-     contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-     hintText: hint,
-     hintStyle: TextStyle(fontWeight: FontWeight.w300,fontSize: 12,color: b32),
-     focusedBorder: OutlineInputBorder(
+    constraints: const BoxConstraints(maxWidth: 600, minWidth: 200),
+    contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    hintText: hint,
+    hintStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: 12, color: b32),
+    focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
         borderSide: BorderSide(color: blue, width: 1.0)),
     errorBorder: OutlineInputBorder(
@@ -65,3 +66,13 @@ InputDecoration getInputDecoration({
 // getDropDown({required String name,required List list}){
 //   ret
 // }
+
+String generateSalesOrderID() {
+  String id = DateTime.now().millisecondsSinceEpoch.toString();
+  // final day = DateTime.now().day;
+  // final month = DateTime.now().month;
+  // final time = DateTime.now().hour;
+  // final min = DateTime.now().minute;
+  // id += '$day''$month''$time''$min';
+  return id;
+}

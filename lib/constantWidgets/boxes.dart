@@ -1,7 +1,5 @@
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:line_icons/line_icons.dart';
 
 class ContainerHomeInventory extends StatefulWidget {
@@ -513,6 +511,5 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
         )
       ],
     );
-    ;
   }
 }
