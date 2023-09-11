@@ -70,11 +70,20 @@ class _ItemsPageState extends State<ItemsPage> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> ItemScreen(itemname: userItemsSnapshot[index]["item_name"],sku: userItemsSnapshot[index]["sku"],)));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ItemScreen(
+                                              itemname: userItemsSnapshot[index]
+                                                  ["item_name"],
+                                              sIh: userItemsSnapshot[index]
+                                                  ["sIh"],
+                                            )));
                               },
                               child: ItemsPageContainer(
-                                  itemName: userItemsSnapshot[index]["item_name"],
-                                  sku: userItemsSnapshot[index]["sku"]),
+                                  itemName: userItemsSnapshot[index]
+                                      ["item_name"],
+                                  sku: userItemsSnapshot[index]["sIh"]),
                             );
                           });
                     }),

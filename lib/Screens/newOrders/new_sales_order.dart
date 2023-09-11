@@ -25,7 +25,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
   final AutovalidateMode _fAVM = AutovalidateMode.onUserInteraction;
   String? firstName, orderNo, shipmentDate, orderDate, notes;
   DateTime cDate = DateTime.now();
-  // String cD = cDate.toString().substring(0, 10);
   String dropdownValue = paymentMethods.first;
   TextEditingController dateController = TextEditingController();
   TextEditingController dateShipmentController = TextEditingController();
@@ -33,14 +32,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
   var id = DateTime.now().microsecondsSinceEpoch;
   final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
-  // void showDialog() {
-  //   showDatePicker(
-  //       context: context,
-  //       initialEntryMode: DatePickerEntryMode.calendarOnly,
-  //       initialDate: cDate,
-  //       firstDate: DateTime.utc(cDate.year, cDate.month, 1),
-  //       lastDate: DateTime(cDate.year + 1));
-  // }
   // @override
   // void initState() {
   //   // TODO: implement initState

@@ -1,6 +1,9 @@
 import 'package:ashwani/services/helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:textfield_search/textfield_search.dart';
 
 import '../../../constants.dart';
 import '../../../items/addItems.dart';
@@ -13,6 +16,81 @@ class AddOrderItem extends StatefulWidget {
 }
 
 class _AddOrderItemState extends State<AddOrderItem> {
+  final TextEditingController itemnameController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+
+  List<String> itemNames = [];
+
+  final auth = FirebaseAuth.instance.currentUser;
+
+  String itemQuantity = '0';
+  String itemName = '';
+  String itemUrl = '';
+
+  getItemNames() async {
+    try {
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('Items')
+          .get();
+      for (var element in result.docs) {
+        itemNames.add(element.id);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> checkQuantityLimit() async {
+    String itemkanaam = itemnameController.text;
+    String itemLimit = '0';
+    if (itemkanaam.isNotEmpty) {
+      try {
+        var itemSS = await FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('Items')
+            .doc(itemkanaam)
+            .get();
+        itemLimit = itemSS.data()?['sIh'];
+      } catch (e) {
+        return 'no';
+      }
+    }
+    return itemLimit;
+  }
+
+  getData() async {
+    String item = itemnameController.text;
+    if (item != '') {
+      try {
+        var itemSS = await FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('Items')
+            .doc(item)
+            .get();
+
+        itemQuantity = itemSS.data()?['sIh'];
+        itemName = itemSS.data()?['item_name'];
+        itemUrl = itemSS.data()?['imageUrl'];
+        print(itemQuantity);
+        print(itemName);
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getItemNames();
+    itemnameController.addListener(getData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,14 +130,12 @@ class _AddOrderItemState extends State<AddOrderItem> {
             const SizedBox(
               height: 24,
             ),
-            TextFormField(
-              validator: validateName,
-              cursorColor: blue,
-              cursorWidth: 1,
-              textInputAction: TextInputAction.next,
-              decoration:
-                  getInputDecoration(hint: 'Item Name', errorColor: Colors.red)
-                      .copyWith(
+            TextFieldSearch(
+              minStringLength: 1,
+              label: 'Search Item',
+              controller: itemnameController,
+              decoration: getInputDecoration(hint: 'Search Item', errorColor: r)
+                  .copyWith(
                 suffix: GestureDetector(
                   onTap: () {
                     // add a unique item to items list
@@ -74,12 +150,13 @@ class _AddOrderItemState extends State<AddOrderItem> {
                   ),
                 ),
               ),
+              initialList: itemNames,
             ),
             const SizedBox(
               height: 24,
             ),
             TextFormField(
-              validator: validateOrderNo,
+              // validator: validateOrderNo,
               cursorColor: blue,
               cursorWidth: 1,
               textInputAction: TextInputAction.next,
@@ -102,6 +179,10 @@ class _AddOrderItemState extends State<AddOrderItem> {
                   ),
                 ),
               ),
+              onChanged: (value) async {
+                // String limit = await checkQuantityLimit();
+                // print(limit);
+              },
             ),
             const SizedBox(
               height: 24,
@@ -188,7 +269,31 @@ class _AddOrderItemState extends State<AddOrderItem> {
                   )
                 ],
               ),
-            )
+            ),
+            Spacer(),
+            // const SizedBox(height: 24,),
+            GestureDetector(
+              onTap: () async {
+
+                // add items and pass the item and quantity to the list in sales order 
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: blue,
+                ),
+                width: double.infinity,
+                height: 48,
+                child: Center(
+                    child: Text(
+                  'Add Item',
+                  style: TextStyle(
+                    color: w,
+                  ),
+                  textScaleFactor: 1.2,
+                )),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/items/items_page.dart';
+import 'package:ashwani/landingbypass.dart';
 import 'package:ashwani/services/helper.dart';
 import 'package:ashwani/utils/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class AddItems extends StatefulWidget {
   const AddItems({super.key});
@@ -26,7 +22,7 @@ class _AddItemsState extends State<AddItems> {
   final _fs = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Uint8List? _image;
+  // Uint8List? _image;
 
   File? imageFile;
 
@@ -68,7 +64,7 @@ class _AddItemsState extends State<AddItems> {
   }
 
   String itemName = '';
-  String sKU = '';
+  String sIh = '';
   String imgUrl = '';
   bool ra = false;
   List<String>? measuringUnit = [
@@ -114,11 +110,11 @@ class _AddItemsState extends State<AddItems> {
                 .doc('${_auth!.email}')
                 .collection('Items')
                 .doc(itemName)
-                .set({'item_name': itemName, 'sku': sKU, 'imageUrl': imgUrl});
+                .set({'item_name': itemName, 'sIh': sIh, 'imageUrl': imgUrl});
 
             setState(() {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ItemsPage()));
+                  MaterialPageRoute(builder: (context) => LandingBypass()));
             });
           },
           child: Container(
@@ -205,9 +201,9 @@ class _AddItemsState extends State<AddItems> {
                 height: 24,
               ),
               TextFormField(
-                onChanged: (value) => sKU = value,
+                onChanged: (value) => sIh = value,
                 decoration: getInputDecoration(
-                    hint: 'Stock Keeping Unit (SKU)', errorColor: r),
+                    hint: 'Stock  In Hand (SIH)', errorColor: r),
               ),
               const SizedBox(
                 height: 24,

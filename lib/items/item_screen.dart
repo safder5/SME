@@ -4,9 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 
 class ItemScreen extends StatefulWidget {
-  const ItemScreen({super.key, required this.itemname, required this.sku});
+  const ItemScreen({super.key, required this.itemname, required this.sIh});
   final String itemname;
-  final String sku;
+  final String sIh;
   @override
   State<ItemScreen> createState() => _ItemScreenState();
 }
@@ -40,7 +40,8 @@ class _ItemScreenState extends State<ItemScreen> {
                         const SizedBox(width: 10),
                         Text(
                           'Item Details',
-                          style: TextStyle(color: w),textScaleFactor: 1.2,
+                          style: TextStyle(color: w),
+                          textScaleFactor: 1.2,
                         ),
                         const Spacer(),
                         Icon(
@@ -58,15 +59,17 @@ class _ItemScreenState extends State<ItemScreen> {
                             children: [
                               Text(
                                 widget.itemname,
-                                style: TextStyle(color: w,fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                    color: w, fontWeight: FontWeight.w600),
                                 textScaleFactor: 1.6,
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                'SKU: ${widget.sku}',
-                                style: TextStyle(color: w,fontWeight: FontWeight.w300),
+                                'SIH: ${widget.sIh}',
+                                style: TextStyle(
+                                    color: w, fontWeight: FontWeight.w300),
                                 textScaleFactor: 1,
                               ),
                             ],
