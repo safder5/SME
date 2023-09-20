@@ -1,6 +1,8 @@
 import 'package:ashwani/constants.dart';
+import 'package:ashwani/providers/iq_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 class ContainerHomeInventory extends StatefulWidget {
   const ContainerHomeInventory(
@@ -191,7 +193,16 @@ class ContainerHomeMore extends StatelessWidget {
 }
 
 class ContainerSalesOrder extends StatefulWidget {
-  const ContainerSalesOrder({super.key});
+  const ContainerSalesOrder(
+      {super.key,
+      required this.orderID,
+      required this.name,
+      required this.date,
+      required this.status});
+  final String orderID;
+  final String name;
+  final String date;
+  final String status;
 
   @override
   State<ContainerSalesOrder> createState() => _ContainerSalesOrderState();
@@ -227,18 +238,18 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Text(
-                    'Order No. 0N001',
+                  Text(
+                    '#${widget.orderID}',
                     style: TextStyle(fontWeight: FontWeight.w600),
                     textScaleFactor: 0.9,
                   ),
                   const Spacer(),
-                  Text(
-                    'Unit : 30 box',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
-                  )
+                  // Text(
+                  //   'Unit : 30 box',
+                  //   style: TextStyle(
+                  //       fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
+                  //   textScaleFactor: 0.8,
+                  // )
                 ],
               ),
               const SizedBox(
@@ -248,7 +259,7 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Name : Aryamann Chaudhary ',
+                    widget.name,
                     style: TextStyle(
                         fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
                     textScaleFactor: 0.8,
@@ -257,7 +268,7 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                     height: 5.0,
                   ),
                   Text(
-                    'Date : 11/10/2004',
+                    widget.date,
                     style: TextStyle(
                         fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
                     textScaleFactor: 0.8,
@@ -448,7 +459,8 @@ class ItemsPageContainer extends StatelessWidget {
 }
 
 class CustomersPageContainer extends StatefulWidget {
-  const CustomersPageContainer({super.key, required this.fullname, required this.companyname});
+  const CustomersPageContainer(
+      {super.key, required this.fullname, required this.companyname});
   final String fullname;
   final String companyname;
   @override
@@ -510,6 +522,139 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
           height: 16,
         )
       ],
+    );
+  }
+}
+
+class NewSalesOrderItemsTile extends StatelessWidget {
+  final String name;
+  final String quantity;
+  final int index;
+  const NewSalesOrderItemsTile(
+      {super.key,
+      required this.name,
+      required this.quantity,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final itemProvider = Provider.of<ItemsProvider>(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5), color: w),
+                child: null,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Units : ${quantity.toString()}',
+                    textScaleFactor: 0.8,
+                    style: TextStyle(
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              IconButton(
+                  onPressed: () {
+                    itemProvider.removeItem(index);
+                  },
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    size: 18,
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SOPDetailsItemTile extends StatelessWidget {
+  final String name;
+  final String quantity;
+  final int index;
+  const SOPDetailsItemTile(
+      {super.key,
+      required this.name,
+      required this.quantity,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5), color: w),
+                child: null,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Units : ${quantity.toString()}',
+                    textScaleFactor: 0.8,
+                    style: TextStyle(
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

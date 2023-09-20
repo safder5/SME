@@ -29,12 +29,16 @@ class _SalesPageState extends State<SalesPage> {
                     labelColor: b,
                     // dividerColor: Colors.black,
                     // labelPadding: EdgeInsets.symmetric(horizontal: widthofTabBarPadding),
-                    tabs: const[
+                    tabs: [
                       Tab(
-                        child: Text("Sales Orders",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),),
+                        child: SizedBox(
+                          width:  MediaQuery.of(context).size.width*0.4,
+                          child: Center(child: Text("Sales Orders",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
                       ),
                       Tab(
-                        child: Text("Sales Returns",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: Center(child: Text("Sales Returns",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
                       ),
                       // Tab(
                       //  child: Text("Items",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),),

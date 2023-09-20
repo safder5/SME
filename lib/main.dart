@@ -1,10 +1,14 @@
 import 'package:ashwani/authorizeUser/authorise.dart';
 import 'package:ashwani/authorizeUser/more_user_details.dart';
 import 'package:ashwani/landingbypass.dart';
+import 'package:ashwani/providers/inventory_summary_provider.dart';
+import 'package:ashwani/providers/iq_list_provider.dart';
+import 'package:ashwani/providers/new_sales_order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'constants.dart';
 
 void main() => runApp(const MyApp());
@@ -26,8 +30,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await Firebase.initializeApp();
       setState(() {
         _initialise = true;
-    print(FirebaseAuth.instance.currentUser);
-
+        print(FirebaseAuth.instance.currentUser);
       });
     } catch (e) {
       setState(() {
@@ -43,8 +46,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         home: Scaffold(
           body: Container(
             color: Colors.white,
-            child: Center(
-              child: Column(children: const [
+            child: const Center(
+              child: Column(children: [
                 Icon(
                   Icons.error_outline,
                   color: Colors.red,
@@ -67,37 +70,47 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: const Center(child: CircularProgressIndicator.adaptive()),
       );
     }
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBarTheme:
-            const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
-        snackBarTheme: const SnackBarThemeData(
-          contentTextStyle: TextStyle(color: Colors.white),
-        ),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-            secondary: const Color(colorPrimary), brightness: Brightness.light),
-      ),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: Colors.grey.shade800,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ItemsProvider()),
+        ChangeNotifierProvider(create: (context) => NSOrderProvider()),
+        ChangeNotifierProvider(create: (context) => InventorySummaryProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          brightness: Brightness.light,
+          scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBarTheme:
-              const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+              const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
           snackBarTheme: const SnackBarThemeData(
-              contentTextStyle: TextStyle(color: Colors.white)),
+            contentTextStyle: TextStyle(color: Colors.white),
+          ),
           colorScheme: ColorScheme.fromSwatch().copyWith(
               secondary: const Color(colorPrimary),
-              brightness: Brightness.dark)),
-      debugShowCheckedModeBanner: false,
-      color: const Color(colorPrimary),
-      initialRoute: FirebaseAuth.instance.currentUser == null ? '/authorizePage': '/landingBypass',
-      routes: {
-        '/authorizePage': (context) => const AuthorizePage(),
-        '/landingBypass': (context) => const LandingBypass(),
-        '/moreDetails':(context) =>  const MoreUserDetails(),
-      },
+              brightness: Brightness.light),
+        ),
+        darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Colors.grey.shade800,
+            appBarTheme: const AppBarTheme(
+                systemOverlayStyle: SystemUiOverlayStyle.light),
+            snackBarTheme: const SnackBarThemeData(
+                contentTextStyle: TextStyle(color: Colors.white)),
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+                secondary: const Color(colorPrimary),
+                brightness: Brightness.dark)),
+        debugShowCheckedModeBanner: false,
+        color: const Color(colorPrimary),
+        initialRoute: FirebaseAuth.instance.currentUser == null
+            ? '/authorizePage'
+            : '/landingBypass',
+        routes: {
+          '/authorizePage': (context) => const AuthorizePage(),
+          '/landingBypass': (context) => const LandingBypass(),
+          '/moreDetails': (context) => const MoreUserDetails(),
+        },
+      ),
     );
   }
 

@@ -3,7 +3,9 @@ import 'package:ashwani/Screens/settings/setting_page.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/customer/add_customer.dart';
 import 'package:ashwani/items/addItems.dart';
+import 'package:ashwani/providers/inventory_summary_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,11 +15,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  inventoryFilter myinvF = inventoryFilter.weekly;
+  //  getTotal() async{
+    
+  //   return inventorySummaryProvider.inHand.toString();
+  // }
 
   int currentIndex = 0;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final inventorySummaryProvider =
+        Provider.of<InventorySummaryProvider>(context, listen: false);
+     inventorySummaryProvider.totalInHand();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final inventorySummaryProvider =
+        Provider.of<InventorySummaryProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -113,10 +129,10 @@ class _HomePageState extends State<HomePage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   ContainerHomeInventory(
                     title: 'Available Stock',
-                    amount: '256',
+                    amount: inventorySummaryProvider.inHand.toString(),
                   ),
                   ContainerHomeInventory(
                     title: 'To be Recieved',
@@ -128,9 +144,9 @@ class _HomePageState extends State<HomePage> {
                 height: 32,
               ),
               //activity portion
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     'Trading Activity',
                     style: TextStyle(fontWeight: FontWeight.w500),

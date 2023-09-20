@@ -29,69 +29,68 @@ class _ItemsPageState extends State<ItemsPage> {
         child: const Icon(LineIcons.plus),
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(LineIcons.angleLeft)),
-                  const SizedBox(width: 10),
-                  const Text('Items'),
-                  const Spacer(),
-                ],
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('UserData')
-                        .doc('${_auth!.email}')
-                        .collection('Items')
-                        .snapshots(),
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      final userItemsSnapshot = snapshot.data?.docs;
-                      if (userItemsSnapshot!.isEmpty) {
-                        return const Text('No Items, Add below');
-                      }
-                      return ListView.builder(
-                          itemCount: userItemsSnapshot.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ItemScreen(
-                                              itemname: userItemsSnapshot[index]
-                                                  ["item_name"],
-                                              sIh: userItemsSnapshot[index]
-                                                  ["sIh"],
-                                            )));
-                              },
-                              child: ItemsPageContainer(
-                                  itemName: userItemsSnapshot[index]
-                                      ["item_name"],
-                                  sku: userItemsSnapshot[index]["sIh"]),
-                            );
-                          });
-                    }),
-              )
-            ],
-          ),
-        ),
-      )),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(LineIcons.angleLeft)),
+                    const SizedBox(width: 10),
+                    const Text('Items'),
+                    const Spacer(),
+                  ],
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('UserData')
+                          .doc('${_auth!.email}')
+                          .collection('Items')
+                          .snapshots(),
+                      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        final userItemsSnapshot = snapshot.data?.docs;
+                        if (userItemsSnapshot!.isEmpty) {
+                          return const Text('No Items, Add below');
+                        }
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                            itemCount: userItemsSnapshot.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ItemScreen(
+                                                itemname: userItemsSnapshot[index]
+                                                    ["item_name"],
+                                                sIh: userItemsSnapshot[index]
+                                                    ["sIh"],
+                                              )));
+                                },
+                                child: ItemsPageContainer(
+                                    itemName: userItemsSnapshot[index]
+                                        ["item_name"],
+                                    sku: userItemsSnapshot[index]["sIh"]),
+                              );
+                            });
+                      }),
+                )
+              ],
+            ),
+          )),
     );
   }
 }

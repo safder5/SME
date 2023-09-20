@@ -1,8 +1,12 @@
+import 'package:ashwani/Screens/newOrders/new_sales_order.dart';
+import 'package:ashwani/model/iq_list.dart';
+import 'package:ashwani/providers/iq_list_provider.dart';
 import 'package:ashwani/services/helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 import '../../../constants.dart';
@@ -23,7 +27,7 @@ class _AddOrderItemState extends State<AddOrderItem> {
 
   final auth = FirebaseAuth.instance.currentUser;
 
-  String itemQuantity = '0';
+  String itemQuantity = '';
   String itemName = '';
   String itemUrl = '';
 
@@ -75,8 +79,6 @@ class _AddOrderItemState extends State<AddOrderItem> {
         itemQuantity = itemSS.data()?['sIh'];
         itemName = itemSS.data()?['item_name'];
         itemUrl = itemSS.data()?['imageUrl'];
-        print(itemQuantity);
-        print(itemName);
       } catch (e) {
         print(e);
       }
@@ -93,6 +95,7 @@ class _AddOrderItemState extends State<AddOrderItem> {
 
   @override
   Widget build(BuildContext context) {
+    final itemProvider = Provider.of<ItemsProvider>(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
@@ -179,7 +182,8 @@ class _AddOrderItemState extends State<AddOrderItem> {
                   ),
                 ),
               ),
-              onChanged: (value) async {
+              onChanged: (value) {
+                itemQuantity = value;
                 // String limit = await checkQuantityLimit();
                 // print(limit);
               },
@@ -270,12 +274,20 @@ class _AddOrderItemState extends State<AddOrderItem> {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             // const SizedBox(height: 24,),
             GestureDetector(
               onTap: () async {
-
-                // add items and pass the item and quantity to the list in sales order 
+                try {
+                  itemProvider.addItem(Item(
+                      itemName: itemnameController.text,
+                      itemQuantity: int.parse(itemQuantity)));
+                } catch (e) {
+                  //snackbar to show item not added
+                  print(e);
+                }
+                // add items and pass the item and quantity to the list in sales order
+                Navigator.pop(context);
               },
               child: Container(
                 decoration: BoxDecoration(
