@@ -1,7 +1,5 @@
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class SalesReturns extends StatefulWidget {
   const SalesReturns({super.key});
@@ -26,7 +24,7 @@ class _SalesReturnsState extends State<SalesReturns> {
         child: Container(
           height: 100,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border(
               top: BorderSide(width: 0.1),
             ),
@@ -34,7 +32,7 @@ class _SalesReturnsState extends State<SalesReturns> {
           ),
           child: Column(children: [
             AnimatedContainer(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               width: 30,
               height: 1,
               color: selected ? blue : t,

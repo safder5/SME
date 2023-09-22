@@ -1,4 +1,4 @@
-import 'package:ashwani/Screens/newOrders/addItemto%20Order/addOrderItem.dart';
+import 'package:ashwani/Screens/newOrders/addItemto%20Order/add_order_item.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Models/sales_order.dart';
@@ -41,12 +41,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
   final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final itemProvider = Provider.of<ItemsProvider>(context);
     final salesProvider = Provider.of<NSOrderProvider>(context);
@@ -54,7 +48,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
-          onTap: () async {
+          onTap: () {
             final newSalesOrder = SalesOrderModel(
                 orderID: int.parse(orderId),
                 customerName: customerName,
@@ -66,7 +60,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                 status: status,
                 items: itemProvider.items
                 );
-            await salesProvider.addSalesOrder(newSalesOrder);
+             salesProvider.addSalesOrder(newSalesOrder);
             // update it to firebase
             itemProvider.clearItems();
             //submit everything after validation is processed
@@ -156,7 +150,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                         const SizedBox(
                           height: 24,
                         ),
-                        Container(
+                        SizedBox(
                           height: itemProvider.items.length * 80,
                           child: ListView.builder(
                               itemCount: itemProvider.items.length,
@@ -181,7 +175,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AddOrderItem();
+                                    return const AddOrderItem();
                                   });
                             },
                             child: AbsorbPointer(
