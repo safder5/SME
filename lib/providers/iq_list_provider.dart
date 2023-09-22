@@ -1,4 +1,4 @@
-import 'package:ashwani/model/iq_list.dart';
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 
 class ItemsProvider with ChangeNotifier {

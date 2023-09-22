@@ -1,7 +1,7 @@
 import 'package:ashwani/Screens/newOrders/new_sales_order.dart';
-import 'package:ashwani/model/iq_list.dart';
-import 'package:ashwani/providers/iq_list_provider.dart';
-import 'package:ashwani/services/helper.dart';
+import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:ashwani/Services/helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 import '../../../constants.dart';
-import '../../../items/addItems.dart';
+import '../../../Utils/items/addItems.dart';
 
 class AddOrderItem extends StatefulWidget {
   const AddOrderItem({super.key});

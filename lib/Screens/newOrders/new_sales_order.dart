@@ -1,10 +1,10 @@
 import 'package:ashwani/Screens/newOrders/addItemto%20Order/addOrderItem.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/model/sales_order.dart';
-import 'package:ashwani/providers/iq_list_provider.dart';
-import 'package:ashwani/providers/new_sales_order_provider.dart';
-import 'package:ashwani/services/helper.dart';
+import 'package:ashwani/Models/sales_order.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:ashwani/Providers/new_sales_order_provider.dart';
+import 'package:ashwani/Services/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';

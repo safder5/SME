@@ -1,9 +1,9 @@
 import 'package:ashwani/Screens/more.dart';
 import 'package:ashwani/Screens/settings/setting_page.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
-import 'package:ashwani/customer/add_customer.dart';
-import 'package:ashwani/items/addItems.dart';
-import 'package:ashwani/providers/inventory_summary_provider.dart';
+import 'package:ashwani/Utils/customers/add_customer.dart';
+import 'package:ashwani/Utils/items/addItems.dart';
+import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

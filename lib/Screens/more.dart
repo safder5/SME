@@ -1,14 +1,14 @@
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/customer/add_customer.dart';
-import 'package:ashwani/customer/customers_page.dart';
-import 'package:ashwani/items/addItems.dart';
-import 'package:ashwani/items/items_page.dart';
+import 'package:ashwani/Utils/customers/add_customer.dart';
+import 'package:ashwani/Utils/customers/customers_page.dart';
+import 'package:ashwani/Utils/items/addItems.dart';
+import 'package:ashwani/Utils/items/items_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../Vendors/vendor.dart';
+import '../Utils/Vendors/vendor.dart';
 import '../constantWidgets/boxes.dart';
 
 class MoreFromHomePage extends StatelessWidget {

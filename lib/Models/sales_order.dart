@@ -1,4 +1,4 @@
-import 'package:ashwani/model/iq_list.dart';
+import 'package:ashwani/Models/iq_list.dart';
 
 class SalesOrderModel {
   final int? orderID;

@@ -1,5 +1,5 @@
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/providers/iq_list_provider.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -240,7 +240,7 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                   ),
                   Text(
                     '#${widget.orderID}',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                     textScaleFactor: 0.9,
                   ),
                   const Spacer(),
@@ -279,11 +279,11 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                 height: 16,
               ),
               //Triple Rows Start Here
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              const Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 18.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children:  [
                     Icon(
                       LineIcons.box,
                       size: 18,

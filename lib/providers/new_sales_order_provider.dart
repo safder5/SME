@@ -1,9 +1,9 @@
-import 'package:ashwani/model/sales_order.dart';
+import 'package:ashwani/Models/sales_order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../model/iq_list.dart';
+import '../Models/iq_list.dart';
 
 final _auth = FirebaseAuth.instance.currentUser;
 String? uid = _auth!.email;

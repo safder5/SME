@@ -1,6 +1,6 @@
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/model/iq_list.dart';
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 
 class SOPDetails extends StatefulWidget {

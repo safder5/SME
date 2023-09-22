@@ -1,11 +1,11 @@
-import 'package:ashwani/customer/customers_page.dart';
+import 'package:ashwani/Utils/customers/customers_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../constants.dart';
-import '../services/helper.dart';
+import '../../constants.dart';
+import '../../Services/helper.dart';
 
 class AddCustomer extends StatefulWidget {
   const AddCustomer({super.key});

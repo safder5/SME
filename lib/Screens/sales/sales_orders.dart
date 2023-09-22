@@ -2,7 +2,7 @@ import 'package:ashwani/Screens/newOrders/new_sales_order.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/providers/new_sales_order_provider.dart';
+import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'dart:math' as math;

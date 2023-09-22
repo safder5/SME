@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../../services/helper.dart';
+import '../../Services/helper.dart';
 import 'addItemto Order/addOrderItem.dart';
 
 class NewPurchaseOrder extends StatefulWidget {
@@ -14,9 +14,9 @@ class NewPurchaseOrder extends StatefulWidget {
 }
 
 class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
-  final GlobalKey<FormState> NPOForm = GlobalKey<FormState>();
+  final GlobalKey<FormState> npoForm = GlobalKey<FormState>();
   final AutovalidateMode _npoAVM = AutovalidateMode.onUserInteraction;
-  DateTime cDate = DateTime.now();
+  DateTime cdate = DateTime.now();
 
   final TextEditingController _vendorName = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -97,7 +97,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
               height: 32,
             ),
             Form(
-                key: NPOForm,
+                key: npoForm,
                 autovalidateMode: _npoAVM,
                 child: SingleChildScrollView(
                   child: Column(
@@ -182,11 +182,11 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                                               initialEntryMode:
                                                   DatePickerEntryMode
                                                       .calendarOnly,
-                                              initialDate: cDate,
+                                              initialDate: cdate,
                                               firstDate:
                                                   DateTime.utc(1965, 1, 1),
                                               lastDate:
-                                                  DateTime(cDate.year + 1));
+                                                  DateTime(cdate.year + 1));
                                       if (pickedDate != null) {
                                         //get the picked date in the format => 2022-07-04 00:00:00.000
                                         String formattedDate =
@@ -224,11 +224,11 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                                               initialEntryMode:
                                                   DatePickerEntryMode
                                                       .calendarOnly,
-                                              initialDate: cDate,
+                                              initialDate: cdate,
                                               firstDate:
                                                   DateTime.utc(1965, 1, 1),
                                               lastDate:
-                                                  DateTime(cDate.year + 1));
+                                                  DateTime(cdate.year + 1));
                                       if (pickedDate != null) {
                                         //get the picked date in the format => 2022-07-04 00:00:00.000
                                         String formattedDate =

@@ -1,4 +1,4 @@
-import 'package:ashwani/model/iq_list.dart';
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
-import 'package:ashwani/authorizeUser/loginauth.dart';
-import 'package:ashwani/authorizeUser/signupauth.dart';
+import 'package:ashwani/Services/authorizeUser/loginauth.dart';
+import 'package:ashwani/Services/authorizeUser/signupauth.dart';
 import 'package:flutter/material.dart';
 
 class AuthorizePage extends StatefulWidget {

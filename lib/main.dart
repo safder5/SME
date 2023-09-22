@@ -1,9 +1,9 @@
-import 'package:ashwani/authorizeUser/authorise.dart';
-import 'package:ashwani/authorizeUser/more_user_details.dart';
+import 'package:ashwani/Services/authorizeUser/authorise.dart';
+import 'package:ashwani/Services/authorizeUser/more_user_details.dart';
 import 'package:ashwani/landingbypass.dart';
-import 'package:ashwani/providers/inventory_summary_provider.dart';
-import 'package:ashwani/providers/iq_list_provider.dart';
-import 'package:ashwani/providers/new_sales_order_provider.dart';
+import 'package:ashwani/Providers/inventory_summary_provider.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';

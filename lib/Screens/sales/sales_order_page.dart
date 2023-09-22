@@ -1,6 +1,6 @@
 import 'package:ashwani/Screens/sales/sales_page_helping_widgets.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/model/sales_order.dart';
+import 'package:ashwani/Models/sales_order.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
