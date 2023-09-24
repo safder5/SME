@@ -1,10 +1,11 @@
-import 'package:ashwani/Screens/newOrders/addItemto%20Order/add_order_item.dart';
+import 'package:ashwani/Screens/newOrders/addItemto%20Order/add_sales_order_item.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Models/sales_order.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Services/helper.dart';
+import 'package:ashwani/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
@@ -16,27 +17,28 @@ const List<String> paymentMethods = <String>[
   'one',
   'two'
 ];
-List<String> items = <String>[];
-List<String> quantities = <String>[];
 
 class NewSalesOrder extends StatefulWidget {
-  const NewSalesOrder({super.key});
-
+  const NewSalesOrder({
+    super.key,
+  });
   @override
   State<NewSalesOrder> createState() => _NewSalesOrderState();
 }
 
 class _NewSalesOrderState extends State<NewSalesOrder> {
   final GlobalKey<FormState> form = GlobalKey<FormState>();
-  // final GlobalKey<_NewSalesOrderState> _form = GlobalKey<_NewSalesOrderState>();
   final AutovalidateMode _fAVM = AutovalidateMode.onUserInteraction;
+
   String? customerName, shipmentDate, orderDate, notes, tandc;
-  DateTime cDate = DateTime.now();
+  final String status = 'open';
   String dropdownValue = paymentMethods.first;
+
   TextEditingController dateController = TextEditingController();
   TextEditingController dateShipmentController = TextEditingController();
-  final String status = 'open';
+  TextEditingController _controller = TextEditingController();
 
+  DateTime cDate = DateTime.now();
   var id = DateTime.now().microsecondsSinceEpoch;
   final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -44,27 +46,33 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
   Widget build(BuildContext context) {
     final itemProvider = Provider.of<ItemsProvider>(context);
     final salesProvider = Provider.of<NSOrderProvider>(context);
+    // final customerProvider = Provider.of<CustomerProvider>(context);
+    // final List<String> customers = customerProvider.getAllCustomerNames();
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
-          onTap: () {
+          onTap: () async {
             final newSalesOrder = SalesOrderModel(
                 orderID: int.parse(orderId),
-                customerName: customerName,
+                customerName: _controller.text,
                 orderDate: dateController.text,
                 shipmentDate: dateShipmentController.text,
                 paymentMethods: dropdownValue,
                 notes: notes,
                 tandC: tandc,
                 status: status,
-                items: itemProvider.items
-                );
-             salesProvider.addSalesOrder(newSalesOrder);
+                items: itemProvider.items);
+            await salesProvider.addSalesOrder(newSalesOrder);
+
             // update it to firebase
             itemProvider.clearItems();
+            // await Future.delayed(Duration(seconds: 1));
+
             //submit everything after validation is processed
-            Navigator.pop(context);
+            if (!context.mounted) return;
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const MyApp()));
           },
           child: Container(
             decoration: BoxDecoration(
@@ -137,13 +145,14 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                     child: Column(
                       children: [
                         TextFormField(
+                            controller: _controller,
                             cursorColor: blue,
                             cursorWidth: 1,
                             textCapitalization: TextCapitalization.words,
                             // validator: validateName,
-                            onChanged: (String? val) {
-                              customerName = val;
-                            },
+                            // onChanged: (String query) {
+                            //   customerProvider.filterCustomers(query);
+                            // },
                             textInputAction: TextInputAction.next,
                             decoration: getInputDecoration(
                                 hint: 'Customer Name', errorColor: Colors.red)),
@@ -165,7 +174,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                         ),
                         GestureDetector(
                           onTap: () {
-                         // why are there nested gesture detectors here
+                            // why are there nested gesture detectors here
                           },
                           child: GestureDetector(
                             onTap: () {
@@ -175,7 +184,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return const AddOrderItem();
+                                    return const AddSalesOrderItem();
                                   });
                             },
                             child: AbsorbPointer(
@@ -216,11 +225,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                             cursorWidth: 1,
                             readOnly: true,
                             initialValue: '#$orderId',
-                            // textCapitalization: TextCapitalization.words,
-
-                            // onChanged: (value) {
-                            //   orderId = value;
-                            // },
                             textInputAction: TextInputAction.next,
                             decoration: getInputDecoration(
                                 hint: 'Order No. #2304',
@@ -396,8 +400,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                         TextFormField(
                             cursorColor: blue,
                             cursorWidth: 1,
-                            // textCapitalization: TextCapitalization.words,
-                            // validator: validateName,
                             onChanged: (String? val) {
                               tandc = val;
                             },

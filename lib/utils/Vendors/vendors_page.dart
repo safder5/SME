@@ -1,32 +1,32 @@
-import 'package:ashwani/constantWidgets/boxes.dart';
+import 'package:ashwani/Utils/Vendors/add_vendors.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/Utils/customers/add_customer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-class CustomerPage extends StatefulWidget {
-  const CustomerPage({super.key});
+import '../../constantWidgets/boxes.dart';
 
-  @override
-  State<CustomerPage> createState() => _CustomerPageState();
-}
+class VendorPage extends StatelessWidget {
+  const VendorPage({super.key});
 
-class _CustomerPageState extends State<CustomerPage> {
-  final _auth = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+      final _auth = FirebaseAuth.instance.currentUser;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const AddCustomer()));
-        },
         backgroundColor: blue,
-        child: const Center( child: Icon(LineIcons.plus,),),
+        heroTag: '/vendor',
+        tooltip: 'Add Vendor',
+        onPressed: (() {
+          Navigator.push(
+              context, MaterialPageRoute(builder: ((context) => AddVendor())));
+        }),
+        child: Icon(
+          LineIcons.plus,
+          color: w,
+        ),
       ),
-      backgroundColor: w,
       body: SafeArea(
           child: SingleChildScrollView(
         child: Padding(
@@ -41,7 +41,7 @@ class _CustomerPageState extends State<CustomerPage> {
                       },
                       child: const Icon(LineIcons.angleLeft)),
                   const SizedBox(width: 10),
-                  const Text('Customers'),
+                  const Text('Vendors'),
                   const Spacer(),
                 ],
               ),
@@ -54,11 +54,11 @@ class _CustomerPageState extends State<CustomerPage> {
                     stream: FirebaseFirestore.instance
                         .collection('UserData')
                         .doc('${_auth!.email}')
-                        .collection('Customers')
+                        .collection('Vendors')
                         .snapshots(),
                     builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return CircularProgressIndicator(color: blue,);
                       }
                       final userCustomerSnapshot = snapshot.data?.docs;
                       if (userCustomerSnapshot!.isEmpty) {
@@ -76,7 +76,7 @@ class _CustomerPageState extends State<CustomerPage> {
                                     ['companyName']);
                           });
                     })),
-              ),
+              )
             ],
           ),
         ),

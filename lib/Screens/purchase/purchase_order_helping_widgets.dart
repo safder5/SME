@@ -1,17 +1,16 @@
-import 'package:ashwani/constantWidgets/boxes.dart';
-import 'package:ashwani/constants.dart';
-import 'package:ashwani/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 
-class SOPDetails extends StatelessWidget {
-   SOPDetails({
-    super.key,this.items
-  });
-  List<Item>? items;
+import '../../Models/iq_list.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+
+class POPDetails extends StatelessWidget {
+   POPDetails({super.key, this.items});
+   List<Item>? items;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: (MediaQuery.of(context).size.height * 0.66) - 70,
+      height: (MediaQuery.of(context).size.height * 0.65) - 70,
       color: w,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +28,7 @@ class SOPDetails extends StatelessWidget {
                   ),
                   Spacer(),
                   Text(
-                    'Items Packed',
+                    'Order Placed',
                     textScaleFactor: 1.2,
                     style: TextStyle(color: dg),
                   ),
@@ -62,30 +61,30 @@ class SOPDetails extends StatelessWidget {
   }
 }
 
-class SOPShipped extends StatefulWidget {
-  const SOPShipped({super.key});
+class POPRecieved extends StatefulWidget {
+  const POPRecieved({super.key});
 
   @override
-  State<SOPShipped> createState() => _SOPShippedState();
+  State<POPRecieved> createState() => _POPRecievedState();
 }
 
-class _SOPShippedState extends State<SOPShipped> {
+class _POPRecievedState extends State<POPRecieved> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Placeholder();
   }
 }
 
-class SOPReturns extends StatefulWidget {
-  const SOPReturns({super.key});
+class POPReturns extends StatefulWidget {
+  const POPReturns({super.key});
 
   @override
-  State<SOPReturns> createState() => _SOPReturnsState();
+  State<POPReturns> createState() => _POPReturnsState();
 }
 
-class _SOPReturnsState extends State<SOPReturns> {
+class _POPReturnsState extends State<POPReturns> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView();
+    return const Placeholder();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ashwani/Models/sales_order.dart';
 import 'package:ashwani/Screens/newOrders/new_sales_order.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
@@ -17,13 +18,37 @@ class SalesOrders extends StatefulWidget {
 }
 
 class _SalesOrdersState extends State<SalesOrders> {
+  final ClampingScrollPhysics controllScroll = const ClampingScrollPhysics();
+  List<SalesOrderModel> soList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch sales orders and update the list
+    fetchSalesOrders(context);
+  }
+
+  Future<void> fetchSalesOrders(BuildContext context) async {
+    final soProvider = Provider.of<NSOrderProvider>(context, listen: false);
+
+    try {
+      await soProvider.fetchSalesOrders();
+      setState(() {
+        soList = soProvider.som;
+      });
+    } catch (e) {
+      // Handle the error
+      print('Error fetching sales orders: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final soProvider = Provider.of<NSOrderProvider>(context);
+    // final soProvider = Provider.of<NSOrderProvider>(context);
     return Scaffold(
       backgroundColor: w,
       floatingActionButton: FloatingActionButton(
-        heroTag: null,
+          heroTag: null,
           // elevation: 0,
           tooltip: 'New Sales Order',
           backgroundColor: blue,
@@ -34,8 +59,8 @@ class _SalesOrdersState extends State<SalesOrders> {
             ),
           ),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true)
-                .push(MaterialPageRoute(builder: (context) => NewSalesOrder()));
+            Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(builder: (context) => const NewSalesOrder()));
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => NewSalesOrder()));
           }),
@@ -78,39 +103,29 @@ class _SalesOrdersState extends State<SalesOrders> {
             const SizedBox(
               height: 16,
             ),
-            FutureBuilder(
-                future: soProvider.fetchSalesOrders(),
-                builder: (context, snapshot) {
-                  // if (snapshot.connectionState == ConnectionState.waiting) {
-                  //   return const CircularProgressIndicator();
-                  // }
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Expanded(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: soProvider.som.length,
-                          itemBuilder: (context, index) {
-                            final salesOrder = soProvider.som[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => SalesOrderPage(
-                                            salesorder: salesOrder)));
-                              },
-                              child: ContainerSalesOrder(
-                                  orderID: salesOrder.orderID.toString(),
-                                  name: salesOrder.customerName!,
-                                  date: salesOrder.shipmentDate!,
-                                  status: salesOrder.status!),
-                            );
-                          }),
+            Expanded(
+              child: ListView.builder(
+                  // physics: controllScroll,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: soList.length,
+                  itemBuilder: (context, index) {
+                    final salesOrder = soList[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SalesOrderPage(salesorder: salesOrder)));
+                      },
+                      child: ContainerSalesOrder(
+                          orderID: salesOrder.orderID.toString(),
+                          name: salesOrder.customerName!,
+                          date: salesOrder.shipmentDate!,
+                          status: salesOrder.status!),
                     );
-                  }
-                }),
+                  }),
+            ),
           ],
         ),
       ),

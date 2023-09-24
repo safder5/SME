@@ -25,9 +25,7 @@ class _SalesReturnsState extends State<SalesReturns> {
           height: 100,
           width: double.infinity,
           decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(width: 0.1),
-            ),
+            
             color: Colors.transparent,
           ),
           child: Column(children: [

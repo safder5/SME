@@ -1,8 +1,14 @@
+import 'package:ashwani/Models/address_model.dart';
+import 'package:ashwani/Models/customer_model.dart';
+import 'package:ashwani/Providers/bs_address_provider.dart';
+import 'package:ashwani/Providers/customer_provider.dart';
+import 'package:ashwani/Utils/addAddressBillingShipping.dart/add_address.dart';
 import 'package:ashwani/Utils/customers/customers_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../Services/helper.dart';
@@ -16,7 +22,7 @@ class AddCustomer extends StatefulWidget {
 
 class _AddCustomerState extends State<AddCustomer> {
   final _auth = FirebaseAuth.instance.currentUser;
-  final _fs = FirebaseFirestore.instance;
+  bool isAddressSaved = false;
 
   String firstName = '';
   String lastName = '';
@@ -27,54 +33,68 @@ class _AddCustomerState extends State<AddCustomer> {
   String phoneNumber = '';
   String remarks = '';
   String type = 'business';
+  AddressModel? bill;
+  AddressModel? ship;
 
   bool _business = true;
 
   void shiftSelectiontobusiness() {
     if (_business != true) {
-      setState(() => {
-            _business = true,
-            type = 'business'
-          });
+      setState(() => {_business = true, type = 'business'});
     }
   }
 
   void shiftSelectiontoindividual() {
     if (_business == true) {
-      setState(() => {
-            _business = false,
-            type = 'individual'
-          });
+      setState(() => {_business = false, type = 'individual'});
     }
+  }
+  void setAddresSaved(bool saved){
+    setState(() {
+      isAddressSaved=saved;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final customerProvider = Provider.of<CustomerProvider>(context);
+    final addressPvdr = Provider.of<BSAddressProvider>(context);
     return Scaffold(
       backgroundColor: w,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
           onTap: () async {
-            //submit everything after validation is processed
-            await _fs
+            final docRef = FirebaseFirestore.instance
                 .collection('UserData')
                 .doc('${_auth!.email}')
                 .collection('Customers')
-                .doc(fullName)
-                .set({
-              'fullName': fullName,
-              'companyName': companyName,
-              'displayName': displayName,
-              'email': email,
-              'phoneNumber': phoneNumber,
-              'remarks': remarks,
-              'type':type
-            });
-            setState(() {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CustomerPage()));
-            });
+                .doc(fullName);
+            //submit everything after validation is processed
+            final customerdetails = CustomerModel(
+                name: fullName,
+                displayname: displayName,
+                companyName: companyName,
+                email: email,
+                phone: phoneNumber,
+                remarks: remarks,
+                business: _business);
+            if (addressPvdr.shipping != null) {
+              bill = addressPvdr.billing;
+              ship = addressPvdr.shipping;
+            }
+            await customerProvider.addCustomer(
+              customerdetails,
+              docRef,
+              bill,
+              ship,
+            );
+            addressPvdr.clearAddresses();
+            Navigator.pop(context);
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const CustomerPage()));
           },
           child: Container(
             decoration: BoxDecoration(
@@ -308,12 +328,11 @@ class _AddCustomerState extends State<AddCustomer> {
                     //add shipping details pop up menu here
                     //do it later
                     showModalBottomSheet<dynamic>(
+                        backgroundColor: t,
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return Container(
-                            height: MediaQuery.of(context).size.height * 0.6,
-                          );
+                          return AddBillingShippingAddress(onAddressSaved: setAddresSaved,);
                         });
                   },
                   child: AbsorbPointer(
@@ -329,11 +348,14 @@ class _AddCustomerState extends State<AddCustomer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            LineIcons.plusCircle,
+                            isAddressSaved? LineIcons.checkCircleAlt:LineIcons.plusCircle,
                             color: blue,
                           ),
+                          const SizedBox(width: 16,),
                           Text(
-                            '  Add Billing & Shipping Address',
+                           isAddressSaved
+                                ? 'Adress Saved'
+                                : 'Add Billing & Shipping Address',
                             style: TextStyle(
                                 color: blue, fontWeight: FontWeight.w300),
                             textScaleFactor: 1,

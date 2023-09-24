@@ -4,7 +4,7 @@ import 'package:ashwani/Utils/items/items_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../Utils/Vendors/vendor.dart';
+import '../Utils/Vendors/vendors_page.dart';
 import '../constantWidgets/boxes.dart';
 
 class MoreFromHomePage extends StatelessWidget {
@@ -26,11 +26,11 @@ class MoreFromHomePage extends StatelessWidget {
                       },
                       child: const Icon(LineIcons.angleLeft)),
                   const SizedBox(width: 10),
-                  const Text('Add Item'),
+                  const Text('More'),
                   const Spacer(),
                 ],
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(height: 32,),
               const ContainerHomeMore(
                     title: 'Items',
                     type: 0,

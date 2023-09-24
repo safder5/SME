@@ -192,7 +192,7 @@ class ContainerHomeMore extends StatelessWidget {
   }
 }
 
-class ContainerSalesOrder extends StatefulWidget {
+class ContainerSalesOrder extends StatelessWidget {
   const ContainerSalesOrder(
       {super.key,
       required this.orderID,
@@ -204,11 +204,6 @@ class ContainerSalesOrder extends StatefulWidget {
   final String date;
   final String status;
 
-  @override
-  State<ContainerSalesOrder> createState() => _ContainerSalesOrderState();
-}
-
-class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -239,7 +234,7 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                     width: 15,
                   ),
                   Text(
-                    '#${widget.orderID}',
+                    '#$orderID',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                     textScaleFactor: 0.9,
                   ),
@@ -259,7 +254,7 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name,
+                    name,
                     style: TextStyle(
                         fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
                     textScaleFactor: 0.8,
@@ -268,7 +263,7 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
                     height: 5.0,
                   ),
                   Text(
-                    widget.date,
+                    date,
                     style: TextStyle(
                         fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
                     textScaleFactor: 0.8,
@@ -389,6 +384,53 @@ class _ContainerSalesOrderState extends State<ContainerSalesOrder> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ContainerPurchaseOrder extends StatelessWidget {
+  const ContainerPurchaseOrder({super.key, required this.orderID, required this.name, required this.date, required this.status});
+  final String orderID;
+  final String name;
+  final String date;
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    //  double width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+       
+        width: double.maxFinite,
+         decoration: BoxDecoration(
+            color: f7.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(height: 8,width: 8,color: blue,),
+                      SizedBox(width: 10,),
+                      Text('#$orderID',),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Text('Name: $name',textScaleFactor: 0.8,style: TextStyle(color: b.withOpacity(0.5))),
+                      const Spacer(),
+                      Text(status.toUpperCase(),style: TextStyle(color: gn.withOpacity(0.8)),textScaleFactor: 0.9,)
+                    ],
+                  ),
+                  Text('Date: $date',textScaleFactor: 0.8,style: TextStyle(color: b.withOpacity(0.5)),),
+                ],
+              ),
+            ),
       ),
     );
   }

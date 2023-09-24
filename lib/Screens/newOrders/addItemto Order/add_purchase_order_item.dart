@@ -1,100 +1,35 @@
-import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Services/helper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ashwani/Utils/items/addItems.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
+import '../../../Models/iq_list.dart';
 import '../../../constants.dart';
-import '../../../Utils/items/addItems.dart';
 
-class AddOrderItem extends StatefulWidget {
-  const AddOrderItem({super.key});
+class AddPurchaseOrderItem extends StatefulWidget {
+  const AddPurchaseOrderItem({super.key, this.itemnames});
+  final List<String?>? itemnames;
 
   @override
-  State<AddOrderItem> createState() => _AddOrderItemState();
+  State<AddPurchaseOrderItem> createState() => _AddPurchaseOrderItemState();
 }
 
-class _AddOrderItemState extends State<AddOrderItem> {
+class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
   final TextEditingController itemnameController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
-  List<String> itemNames = [];
-
+  List<String> itemnames = [];
   final auth = FirebaseAuth.instance.currentUser;
-
-  String itemQuantity = '';
-  String itemName = '';
-  String itemUrl = '';
-
-  getItemNames() async {
-    try {
-      final QuerySnapshot result = await FirebaseFirestore.instance
-          .collection('UserData')
-          .doc(auth!.email)
-          .collection('Items')
-          .get();
-      for (var element in result.docs) {
-        itemNames.add(element.id);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<String> checkQuantityLimit() async {
-    String itemkanaam = itemnameController.text;
-    String itemLimit = '0';
-    if (itemkanaam.isNotEmpty) {
-      try {
-        var itemSS = await FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(auth!.email)
-            .collection('Items')
-            .doc(itemkanaam)
-            .get();
-        itemLimit = itemSS.data()?['sIh'];
-      } catch (e) {
-        return 'no';
-      }
-    }
-    return itemLimit;
-  }
-
-  getData() async {
-    String item = itemnameController.text;
-    if (item != '') {
-      try {
-        var itemSS = await FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(auth!.email)
-            .collection('Items')
-            .doc(item)
-            .get();
-
-        itemQuantity = itemSS.data()?['sIh'];
-        itemName = itemSS.data()?['item_name'];
-        itemUrl = itemSS.data()?['imageUrl'];
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getItemNames();
-    itemnameController.addListener(getData);
-  }
+  String itemQuantity ='';
 
   @override
   Widget build(BuildContext context) {
-    final itemProvider = Provider.of<ItemsProvider>(context);
+    final poItemsProvider = Provider.of<ItemsProvider>(context);
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
@@ -152,7 +87,7 @@ class _AddOrderItemState extends State<AddOrderItem> {
                   ),
                 ),
               ),
-              initialList: itemNames,
+              initialList: poItemsProvider.getItemNames(),
             ),
             const SizedBox(
               height: 24,
@@ -278,7 +213,7 @@ class _AddOrderItemState extends State<AddOrderItem> {
             GestureDetector(
               onTap: () async {
                 try {
-                  itemProvider.addItem(Item(
+                  poItemsProvider.addItem(Item(
                       itemName: itemnameController.text,
                       itemQuantity: int.parse(itemQuantity)));
                 } catch (e) {

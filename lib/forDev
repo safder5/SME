@@ -42,3 +42,16 @@ Uint8List imageInUnit8List = // store unit8List image here ;
 final tempDir = await getTemporaryDirectory();
 File file = await File('${tempDir.path}/image.png').create();
 file.writeAsBytesSync(imageInUnit8List);
+
+
+//for cellecting all customers data from firebase direvtly to customer provider list 
+await Provider.of<CustomerProvider>(context, listen: false).fetchAllCustomers();
+
+
+//item setup in firebase is by 
+item_name
+sIh
+
+using build context between async gaps 
+use 
+ if (!context.mounted) return;

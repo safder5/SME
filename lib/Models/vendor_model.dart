@@ -1,4 +1,4 @@
-import 'package:ashwani/Models/b_s_address.dart';
+import 'package:ashwani/Models/address_model.dart';
 
 class VendorModel {
   final String? name;

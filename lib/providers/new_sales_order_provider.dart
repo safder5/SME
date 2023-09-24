@@ -22,7 +22,7 @@ class NSOrderProvider with ChangeNotifier {
 
   Future<void> addSalesOrder(SalesOrderModel so) async {
     try {
-      final orderDoc = await _salesOrderCollection.add({
+      await _salesOrderCollection.doc(so.orderID.toString()).set({
         'orderID': so.orderID,
         'customerName': so.customerName,
         'orderDate': so.orderDate,
@@ -32,7 +32,8 @@ class NSOrderProvider with ChangeNotifier {
         'tandC': so.tandC,
         'status': so.status,
       });
-      final itemsCollection = orderDoc.collection('items');
+      final itemsCollection =
+          _salesOrderCollection.doc(so.orderID.toString()).collection('items');
 
       for (final item in so.items!) {
         await itemsCollection.add({
@@ -61,7 +62,6 @@ class NSOrderProvider with ChangeNotifier {
           notes: data['notes'],
           tandC: data['tandC'],
           status: data['status'],
-          items: null,
         );
 
         final itemsCollection = doc.reference.collection('items');

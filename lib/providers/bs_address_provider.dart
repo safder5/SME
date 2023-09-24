@@ -1,4 +1,4 @@
-import 'package:ashwani/Models/b_s_address.dart';
+import 'package:ashwani/Models/address_model.dart';
 import 'package:flutter/material.dart';
 
 class BSAddressProvider with ChangeNotifier {
@@ -9,7 +9,18 @@ class BSAddressProvider with ChangeNotifier {
   AddressModel? get billing => _billing;
   AddressModel? get shipping => _shipping;
 
-  void submitBSA(AddressModel bsatoSubmit) {
-    
+  void setAddress(AddressModel? ship, AddressModel? bill) {
+    if (ship != null) {
+      _shipping = ship;
+      _billing = bill;
+      notifyListeners();
+    }
+  }
+
+  void submitBSA(AddressModel bsatoSubmit) {}
+
+  void clearAddresses() {
+    _billing = null;
+    _shipping = null;
   }
 }
