@@ -11,20 +11,48 @@ import '../../../Models/iq_list.dart';
 import '../../../constants.dart';
 
 class AddPurchaseOrderItem extends StatefulWidget {
-  const AddPurchaseOrderItem({super.key, this.itemnames});
-  final List<String?>? itemnames;
+  const AddPurchaseOrderItem({super.key, this.items});
+  final List<Item>? items;
 
   @override
   State<AddPurchaseOrderItem> createState() => _AddPurchaseOrderItemState();
 }
 
 class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
-  final TextEditingController itemnameController = TextEditingController();
+  final TextEditingController _itemnameController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-
-  List<String> itemnames = [];
   final auth = FirebaseAuth.instance.currentUser;
-  String itemQuantity ='';
+  int itemQuantity = 0;
+  Item selectedItem = Item(itemName: '', itemQuantity: 0, quantityPurchase: 0);
+  String itemLimit = '';
+
+  getData() async {
+    String item = _itemnameController.text;
+    if (item != '') {
+      try {
+        for (var i in widget.items!) {
+          if (i.itemName! == item) {
+            setState(() {
+              selectedItem = i;
+              itemLimit =
+                  (i.itemQuantity! - i.quantitySales!).toString();
+              print('item limit $itemLimit');
+            });
+            break;
+          }
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _itemnameController.addListener(getData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +98,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
             TextFieldSearch(
               minStringLength: 1,
               label: 'Search Item',
-              controller: itemnameController,
+              controller: _itemnameController,
               decoration: getInputDecoration(hint: 'Search Item', errorColor: r)
                   .copyWith(
                 suffix: GestureDetector(
@@ -93,13 +121,16 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
               height: 24,
             ),
             TextFormField(
-              // validator: validateOrderNo,
+              keyboardType: TextInputType.number,
               cursorColor: blue,
               cursorWidth: 1,
+              onSaved: (value) {
+                selectedItem.quantityPurchase =
+                    (int.tryParse(value ?? ''));
+              },
               textInputAction: TextInputAction.next,
-              decoration:
-                  getInputDecoration(hint: '1.00', errorColor: Colors.red)
-                      .copyWith(
+              decoration: getInputDecoration(hint: '12', errorColor: Colors.red)
+                  .copyWith(
                 suffix: GestureDetector(
                   onTap: () {
                     // change type of unit
@@ -117,7 +148,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                 ),
               ),
               onChanged: (value) {
-                itemQuantity = value;
+                itemQuantity = int.parse(value);
                 // String limit = await checkQuantityLimit();
                 // print(limit);
               },
@@ -152,7 +183,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '200',
+                              selectedItem.itemQuantity.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.w300, color: blue),
                             ),
@@ -169,7 +200,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '55.0',
+                              selectedItem.quantityPurchase.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.w300, color: blue),
                             ),
@@ -177,31 +208,31 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                               height: 8,
                             ),
                             const Text(
-                              'Already Sold',
+                              'Already Purchased',
                               style: TextStyle(fontWeight: FontWeight.w300),
                               textScaleFactor: 0.8,
                             )
                           ],
                         ),
                         const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '145.0',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300, color: blue),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            const Text(
-                              'Available for sale',
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                              textScaleFactor: 0.8,
-                            )
-                          ],
-                        ),
+                        // Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text(
+                        //       (selectedItem.itemQuantity! + int.parse(selectedItem.quantityPurchase!)).toString(),
+                        //       style: TextStyle(
+                        //           fontWeight: FontWeight.w300, color: blue),
+                        //     ),
+                        //     const SizedBox(
+                        //       height: 8,
+                        //     ),
+                        //     const Text(
+                        //       'Available for sale',
+                        //       style: TextStyle(fontWeight: FontWeight.w300),
+                        //       textScaleFactor: 0.8,
+                        //     )
+                        //   ],
+                        // ),
                       ],
                     ),
                   )
@@ -213,9 +244,10 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
             GestureDetector(
               onTap: () async {
                 try {
-                  poItemsProvider.addItem(Item(
-                      itemName: itemnameController.text,
-                      itemQuantity: int.parse(itemQuantity)));
+                  poItemsProvider.addpoitem(Item(
+                    itemName: _itemnameController.text,
+                    quantityPurchase: itemQuantity,
+                  ));
                 } catch (e) {
                   //snackbar to show item not added
                   print(e);

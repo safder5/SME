@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Models/item_tracking_model.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/landingbypass.dart';
 import 'package:ashwani/Services/helper.dart';
@@ -9,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 class AddItems extends StatefulWidget {
   const AddItems({super.key});
@@ -21,6 +25,9 @@ class _AddItemsState extends State<AddItems> {
   final _auth = FirebaseAuth.instance.currentUser;
   final _fs = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  final int qfs = 0; //quantity for sale orders
+  final int qfp = 0; // quantity from purchase orders
+  TextEditingController itemQuantityCtrl = TextEditingController();
 
   // Uint8List? _image;
 
@@ -89,12 +96,18 @@ class _AddItemsState extends State<AddItems> {
 
   @override
   Widget build(BuildContext context) {
+    final itemProviderforAddingItem = Provider.of<ItemsProvider>(context);
     return Scaffold(
       backgroundColor: w,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
           onTap: () async {
+            CollectionReference collRef = _fs
+                .collection('UserData')
+                .doc('${_auth!.email}')
+                .collection('Items');
+
             //submit everything after validation is processed
             //         imageFile!.writeAsBytesSync(_image);
             //         Reference ref =
@@ -105,13 +118,19 @@ class _AddItemsState extends State<AddItems> {
             // });
 
             // imgUrl = await uploadImageAndUrl();
-            await _fs
-                .collection('UserData')
-                .doc('${_auth!.email}')
-                .collection('Items')
-                .doc(itemName)
-                .set({'item_name': itemName, 'sIh': sIh, 'imageUrl': imgUrl});
+            ItemTrackingModel itm = ItemTrackingModel(
+                orderID: _auth?.email,
+                quantity: int.parse(itemQuantityCtrl.text),
+                reason: 'u');
+            Item item = Item(
+                imageURL: imgUrl,
+                itemName: itemName,
+                quantityPurchase: qfp,
+                quantitySales: qfs,
+                itemQuantity: int.parse(itemQuantityCtrl.text),
+                itemTracks: [itm]);
 
+            await itemProviderforAddingItem.addItemtoFB(item, collRef);
             setState(() {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LandingBypass()));
@@ -141,7 +160,6 @@ class _AddItemsState extends State<AddItems> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
               Row(
                 children: [
@@ -176,17 +194,35 @@ class _AddItemsState extends State<AddItems> {
                                 maxRadius: 40,
                                 backgroundColor: t,
                                 child: Expanded(
-                                    child: Image(fit: BoxFit.contain,image: FileImage(imageFile!))),
+                                    child: Image(
+                                        fit: BoxFit.contain,
+                                        image: FileImage(imageFile!))),
                               ),
                             )
                           : Flexible(
-                            child: Container(height: 90,width: 90,decoration: BoxDecoration(color: t,borderRadius: BorderRadius.circular(5),border: Border.all(color: blue)),child: Center(child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                              Icon(LineIcons.plus,size: 12,),
-                              Text('Upload Image',style: TextStyle(fontSize: 8),)
-                            ],),),)
-                          )),
+                              child: Container(
+                              height: 90,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                  color: t,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: blue)),
+                              child: const Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      LineIcons.plus,
+                                      size: 12,
+                                    ),
+                                    Text(
+                                      'Upload Image',
+                                      style: TextStyle(fontSize: 8),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ))),
                 ],
               ),
               const SizedBox(
@@ -201,6 +237,7 @@ class _AddItemsState extends State<AddItems> {
                 height: 24,
               ),
               TextFormField(
+                controller: itemQuantityCtrl,
                 onChanged: (value) => sIh = value,
                 decoration: getInputDecoration(
                     hint: 'Stock  In Hand (SIH)', errorColor: r),

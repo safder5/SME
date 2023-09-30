@@ -8,6 +8,8 @@ import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../Providers/customer_provider.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final inventorySummaryProvider =
         Provider.of<InventorySummaryProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -58,9 +61,9 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     width: 15,
                   ),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'Company Name',
                         textScaleFactor: 1.2,
@@ -90,8 +93,8 @@ class _HomePageState extends State<HomePage> {
                 height: 32,
               ),
               //inventory Summary
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Text(
                     'Inventory Summary',
                     style: TextStyle(fontWeight: FontWeight.w500),

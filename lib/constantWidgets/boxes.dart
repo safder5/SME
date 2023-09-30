@@ -206,11 +206,10 @@ class ContainerSalesOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
-        height: 160.0,
+        height: 105.0,
         width: double.maxFinite,
         decoration: BoxDecoration(
             color: f7.withOpacity(0.7),
@@ -274,113 +273,6 @@ class ContainerSalesOrder extends StatelessWidget {
                 height: 16,
               ),
               //Triple Rows Start Here
-              const Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:  [
-                    Icon(
-                      LineIcons.box,
-                      size: 18,
-                    ),
-                    // Spacer(),
-                    Icon(
-                      LineIcons.shoppingCart,
-                      size: 18,
-                    ),
-                    // Spacer(),
-                    Icon(
-                      LineIcons.truck,
-                      size: 18,
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 1,
-                          width: width - 68.0,
-                          color: d9,
-                        ),
-                        Container(
-                          height: 1,
-                          width: (width - 68.0) / 2,
-                          color: gn,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          'Packed',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: b.withOpacity(0.82)),
-                          textScaleFactor: 0.8,
-                        ),
-                        Text(
-                          '20 Oct 2023',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: b.withOpacity(0.7)),
-                          textScaleFactor: 0.5,
-                        ),
-                      ],
-                    ),
-                    // Spacer(),
-                    Column(
-                      children: [
-                        Text(
-                          'Shipped',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: b.withOpacity(0.82)),
-                          textScaleFactor: 0.8,
-                        ),
-                        Text(
-                          '25 Oct 2023',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: b.withOpacity(0.7)),
-                          textScaleFactor: 0.5,
-                        ),
-                      ],
-                    ),
-                    // Spacer(),
-                    Column(
-                      children: [
-                        Text(
-                          'Delivered',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: b.withOpacity(0.82)),
-                          textScaleFactor: 0.8,
-                        ),
-                        Text(
-                          'Processing',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: b.withOpacity(0.7)),
-                          textScaleFactor: 0.5,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),
@@ -390,7 +282,12 @@ class ContainerSalesOrder extends StatelessWidget {
 }
 
 class ContainerPurchaseOrder extends StatelessWidget {
-  const ContainerPurchaseOrder({super.key, required this.orderID, required this.name, required this.date, required this.status});
+  const ContainerPurchaseOrder(
+      {super.key,
+      required this.orderID,
+      required this.name,
+      required this.date,
+      required this.status});
   final String orderID;
   final String name;
   final String date;
@@ -402,35 +299,54 @@ class ContainerPurchaseOrder extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-       
         width: double.maxFinite,
-         decoration: BoxDecoration(
+        decoration: BoxDecoration(
             color: f7.withOpacity(0.7),
             borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Container(height: 8,width: 8,color: blue,),
-                      SizedBox(width: 10,),
-                      Text('#$orderID',),
-                    ],
+                  Container(
+                    height: 8,
+                    width: 8,
+                    color: blue,
                   ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      Text('Name: $name',textScaleFactor: 0.8,style: TextStyle(color: b.withOpacity(0.5))),
-                      const Spacer(),
-                      Text(status.toUpperCase(),style: TextStyle(color: gn.withOpacity(0.8)),textScaleFactor: 0.9,)
-                    ],
+                  SizedBox(
+                    width: 10,
                   ),
-                  Text('Date: $date',textScaleFactor: 0.8,style: TextStyle(color: b.withOpacity(0.5)),),
+                  Text(
+                    '#$orderID',
+                  ),
                 ],
               ),
-            ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text('Name: $name',
+                      textScaleFactor: 0.8,
+                      style: TextStyle(color: b.withOpacity(0.5))),
+                  const Spacer(),
+                  Text(
+                    status.toUpperCase(),
+                    style: TextStyle(color: gn.withOpacity(0.8)),
+                    textScaleFactor: 0.9,
+                  )
+                ],
+              ),
+              Text(
+                'Date: $date',
+                textScaleFactor: 0.8,
+                style: TextStyle(color: b.withOpacity(0.5)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -625,7 +541,7 @@ class NewSalesOrderItemsTile extends StatelessWidget {
               const Spacer(),
               IconButton(
                   onPressed: () {
-                    itemProvider.removeItem(index);
+                    itemProvider.removesoItem(index);
                   },
                   icon: const Icon(
                     Icons.remove_circle_outline,
@@ -638,6 +554,77 @@ class NewSalesOrderItemsTile extends StatelessWidget {
     );
   }
 }
+class NewPurchaseOrderItemsTile extends StatelessWidget {
+  final String name;
+  final String quantity;
+  final int index;
+  const NewPurchaseOrderItemsTile(
+      {super.key,
+      required this.name,
+      required this.quantity,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final itemProvider = Provider.of<ItemsProvider>(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5), color: w),
+                child: null,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Units : ${quantity.toString()}',
+                    textScaleFactor: 0.8,
+                    style: TextStyle(
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              IconButton(
+                  onPressed: () {
+                    itemProvider.removepoItem(index);
+                  },
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    size: 18,
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class SOPDetailsItemTile extends StatelessWidget {
   final String name;

@@ -49,7 +49,7 @@ class SOPDetails extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return SOPDetailsItemTile(
                       name: items![index].itemName!,
-                      quantity: items![index].itemQuantity.toString(),
+                      quantity: items![index].quantitySales.toString(),
                       index: index);
                 },
                 itemCount: items?.length?? 0,

@@ -1,3 +1,5 @@
+import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Providers/customer_provider.dart';
 import 'package:ashwani/Screens/newOrders/addItemto%20Order/add_sales_order_item.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
@@ -30,22 +32,61 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
   final GlobalKey<FormState> form = GlobalKey<FormState>();
   final AutovalidateMode _fAVM = AutovalidateMode.onUserInteraction;
 
-  String? customerName, shipmentDate, orderDate, notes, tandc;
   final String status = 'open';
   String dropdownValue = paymentMethods.first;
 
   TextEditingController dateController = TextEditingController();
   TextEditingController dateShipmentController = TextEditingController();
-  TextEditingController _controller = TextEditingController();
+  TextEditingController nameSearchController = TextEditingController();
+  TextEditingController notesCtrl = TextEditingController();
+  TextEditingController tandcCtrl = TextEditingController();
 
   DateTime cDate = DateTime.now();
   var id = DateTime.now().microsecondsSinceEpoch;
   final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
+  List<String> customerNames = [];
+  List<String> suggestions = [];
+
+  Future<void> fetchCustomerNames(BuildContext context) async {
+    final customerProvider =
+        Provider.of<CustomerProvider>(context, listen: false);
+
+    try {
+      await customerProvider.fetchAllCustomers();
+      setState(() {
+        customerNames = customerProvider.getAllCustomerNames();
+      });
+    } catch (e) {
+      print('error fetching customer naams $e');
+    }
+  }
+
+  void _updateSuggestions(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        suggestions.clear();
+      });
+    }
+    setState(() {
+      suggestions = customerNames
+          .where((name) => name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCustomerNames(context);
+    suggestions = customerNames;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final itemProvider = Provider.of<ItemsProvider>(context);
+    final soItemsProvider = Provider.of<ItemsProvider>(context);
     final salesProvider = Provider.of<NSOrderProvider>(context);
+    final customerProvider = Provider.of<CustomerProvider>(context);
+
     // final customerProvider = Provider.of<CustomerProvider>(context);
     // final List<String> customers = customerProvider.getAllCustomerNames();
     return Scaffold(
@@ -55,18 +96,21 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
           onTap: () async {
             final newSalesOrder = SalesOrderModel(
                 orderID: int.parse(orderId),
-                customerName: _controller.text,
+                customerName: nameSearchController.text,
                 orderDate: dateController.text,
                 shipmentDate: dateShipmentController.text,
                 paymentMethods: dropdownValue,
-                notes: notes,
-                tandC: tandc,
+                notes: notesCtrl.text,
+                tandC: tandcCtrl.text,
                 status: status,
-                items: itemProvider.items);
+                items: soItemsProvider.soItems);
             await salesProvider.addSalesOrder(newSalesOrder);
+            await soItemsProvider.updateItemsSOandTrack(orderId);
+            await customerProvider.uploadOrderInCustomersProfile(
+                newSalesOrder, nameSearchController.text);
 
             // update it to firebase
-            itemProvider.clearItems();
+            soItemsProvider.clearsoItems();
             // await Future.delayed(Duration(seconds: 1));
 
             //submit everything after validation is processed
@@ -145,8 +189,9 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                     child: Column(
                       children: [
                         TextFormField(
-                            controller: _controller,
+                            controller: nameSearchController,
                             cursorColor: blue,
+                            onChanged: _updateSuggestions,
                             cursorWidth: 1,
                             textCapitalization: TextCapitalization.words,
                             // validator: validateName,
@@ -155,20 +200,54 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                             // },
                             textInputAction: TextInputAction.next,
                             decoration: getInputDecoration(
-                                hint: 'Customer Name', errorColor: Colors.red)),
+                                hint: 'Type Customer Name or Search',
+                                errorColor: Colors.red)),
+                        // const SizedBox(
+                        //   height: 24,
+                        // ),
+                        if (suggestions.isEmpty)
+                          Container()
+                        else
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.03),
+                                borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10))),
+                            height: 120,
+                            child: Expanded(
+                              child: ListView.builder(
+                                itemCount: suggestions.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        nameSearchController.text =
+                                            suggestions[index];
+                                        suggestions.clear();
+                                      });
+                                    },
+                                    child: ListTile(
+                                      title: Text(suggestions[index]),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         const SizedBox(
                           height: 24,
                         ),
                         SizedBox(
-                          height: itemProvider.items.length * 80,
+                          height: soItemsProvider.soItems.length * 80,
                           child: ListView.builder(
-                              itemCount: itemProvider.items.length,
+                              itemCount: soItemsProvider.soItems.length,
                               itemBuilder: (context, index) {
-                                final item = itemProvider.items[index];
+                                final item = soItemsProvider.soItems[index];
                                 return NewSalesOrderItemsTile(
                                   index: index,
                                   name: item.itemName ?? '',
-                                  quantity: item.itemQuantity.toString(),
+                                  quantity: item.quantitySales.toString(),
                                 );
                               }),
                         ),
@@ -177,14 +256,28 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                             // why are there nested gesture detectors here
                           },
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              await soItemsProvider.getItems();
+                              List<String> item_names = [];
+                              try {
+                                for (Item element in soItemsProvider.allItems) {
+                                  item_names.add(element.itemName!);
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
+                              // if the list of get items is empty dont show modal display message add items
+                              // or show modal and create items on the go not an organised way tho
                               //show BottomModalSheet
+                              if (!context.mounted) return;
                               showModalBottomSheet<dynamic>(
                                   backgroundColor: t,
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return const AddSalesOrderItem();
+                                    return AddSalesOrderItem(
+                                      items: soItemsProvider.allItems,
+                                    );
                                   });
                             },
                             child: AbsorbPointer(
@@ -239,9 +332,9 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           cursorWidth: 1,
                           textCapitalization: TextCapitalization.words,
                           // validator: validateDate,
-                          onSaved: (String? val) {
-                            orderDate = val;
-                          },
+                          // onSaved: (String? val) {
+                          //   orderDate = val;
+                          // },
                           textInputAction: TextInputAction.next,
                           decoration: getInputDecoration(
                                   hint: 'Order Date', errorColor: Colors.red)
@@ -286,9 +379,9 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           cursorWidth: 1,
                           textCapitalization: TextCapitalization.words,
                           // validator: validateDate,
-                          onSaved: (String? val) {
-                            shipmentDate = val;
-                          },
+                          // onSaved: (String? val) {
+                          //   shipmentDate = val;
+                          // },
                           textInputAction: TextInputAction.next,
                           decoration: getInputDecoration(
                                   hint: 'Expected Shipment date',
@@ -382,13 +475,14 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           height: 24,
                         ),
                         TextFormField(
+                          controller: notesCtrl,
                           cursorColor: blue,
                           cursorWidth: 1,
                           // textCapitalization: TextCapitalization.words,
                           // validator: validateName,
-                          onChanged: (String? val) {
-                            notes = val;
-                          },
+                          // onChanged: (String? val) {
+                          //   notes = val;
+                          // },
                           textInputAction: TextInputAction.next,
                           decoration: getInputDecoration(
                               hint: 'Notes From Customer',
@@ -398,11 +492,12 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           height: 24,
                         ),
                         TextFormField(
+                            controller: tandcCtrl,
                             cursorColor: blue,
                             cursorWidth: 1,
-                            onChanged: (String? val) {
-                              tandc = val;
-                            },
+                            // onChanged: (String? val) {
+                            //   tandc = val;
+                            // },
                             textInputAction: TextInputAction.next,
                             decoration: getInputDecoration(
                                 hint: 'Terms and Conditions',

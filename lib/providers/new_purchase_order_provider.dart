@@ -39,8 +39,8 @@ class NPOrderProvider with ChangeNotifier {
           .collection('items');
 
       for (final item in puchaseOrder.items!) {
-        await itemsCollection.add(
-            {'itemName': item.itemName, 'itemQuantity': item.itemQuantity});
+        await itemsCollection.doc(item.itemName).set(
+            {'itemName': item.itemName, 'itemQuantity': item.quantityPurchase});
       }
       notifyListeners();
     } catch (e) {

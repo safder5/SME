@@ -36,9 +36,9 @@ class NSOrderProvider with ChangeNotifier {
           _salesOrderCollection.doc(so.orderID.toString()).collection('items');
 
       for (final item in so.items!) {
-        await itemsCollection.add({
+        await itemsCollection.doc(item.itemName).set({
           'itemName': item.itemName,
-          'itemQuantity': item.itemQuantity,
+          'quantitySales': item.quantitySales,
         });
       }
       notifyListeners();

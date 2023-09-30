@@ -1,0 +1,36 @@
+
+Tracking Items
+
+• change the database for Items-
+    
+    add fields
+     - item_quantity_put_for_sales_orders
+     - item_quantity_to_recieve_from_purchase_orders
+     - list of tracking movement in item quantity 
+     - tracking model {
+        orderID: Salesorder ID, Purchase Order ID, 
+        quantity: integer
+        reason: sales order, sales return, purchase order, purchase return, waste ,user (so,sr,po,pr,w,u)
+     }
+// 27-sept-2023 - done 
+
+• during add item to order load the data for that item for the user to see
+
+• when an order gets created changes and establishments of data takes place in three locations 
+    - changes in quantities up for sale or coming from purchase in the original items list on fb and add tracks 
+    - creating that order in the database 
+    - adding necessary info for user under their customer/vendor details to track their import/export
+
+• order item tracking model for calculating and tracking chips of how much order is recieved 
+
+
+
+Doubts -
+• New Sales Order Add Order Modal Sheet - if the list of get items is empty dont show modal display message add items or show modal and create items on the go not an organised way tho
+
+Remember - 
+• item quantity ke jo values create hue hain order create krte waqt unko add subtract krna hai item ki purchase aur sales values se not directly (while order is not complete)
+
+
+
+add customers and vendors list in new orders and add tracks for for new orders under respective sales purchase profiles

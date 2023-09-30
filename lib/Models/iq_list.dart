@@ -1,8 +1,19 @@
+import 'package:ashwani/Models/item_tracking_model.dart';
 
 class Item {
-
   final String? itemName;
-  final int? itemQuantity;
+  int? itemQuantity;
+  int? quantityPurchase;
+  int? quantitySales;
+  List<ItemTrackingModel>? itemTracks;
+  String? imageURL;
 
-  Item({required this.itemName, required this.itemQuantity});
+  Item({
+    required this.itemName,
+    this.itemQuantity,
+    this.quantityPurchase,
+    this.quantitySales,
+    this.itemTracks,
+    this.imageURL,
+  });
 }

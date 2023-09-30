@@ -1,6 +1,7 @@
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/Providers/vendor_provider.dart';
 import 'package:ashwani/Screens/newOrders/addItemto%20Order/add_purchase_order_item.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
@@ -9,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../Providers/customer_provider.dart';
 import '../../Services/helper.dart';
 import '../../main.dart';
 
@@ -23,6 +25,8 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
   final GlobalKey<FormState> npoForm = GlobalKey<FormState>();
   final AutovalidateMode _npoAVM = AutovalidateMode.onUserInteraction;
   DateTime cdate = DateTime.now();
+  List<String> vendorNames = [];
+  List<String> suggestions = [];
 
   final TextEditingController _vendorName = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -34,10 +38,46 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
   final String status = 'Order Placed';
   final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
+  Future<void> fetchVendorNames(BuildContext context) async {
+    final vendorProvider = Provider.of<VendorProvider>(context, listen: false);
+
+    try {
+      await vendorProvider.fetchAllVendors();
+      setState(() {
+        vendorNames = vendorProvider.getAllVendorNames();
+      });
+    } catch (e) {
+      print('error fetching customer naams $e');
+    }
+  }
+
+  void _updateSuggestions(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        suggestions.clear();
+      });
+    }
+    setState(() {
+      suggestions = vendorNames
+          .where((name) => name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // for vendor names ??
+    fetchVendorNames(context);
+    suggestions = vendorNames;
+  }
+
   @override
   Widget build(BuildContext context) {
     final poItemsProvider = Provider.of<ItemsProvider>(context);
     final purchaseProvider = Provider.of<NPOrderProvider>(context);
+    final vendorProvider = Provider.of<VendorProvider>(context);
     return Scaffold(
       backgroundColor: w,
       bottomNavigationBar: Padding(
@@ -54,9 +94,12 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                 notes: _notesController.text,
                 tandc: _termsController.text,
                 status: status,
-                items: poItemsProvider.items);
+                items: poItemsProvider.poItems);
             await purchaseProvider.addPurchaseOrder(newPurchaseOrder);
-            poItemsProvider.clearItems();
+            await poItemsProvider.updateItemsPOandTrack(orderId);
+            await vendorProvider.uploadOrderInVendorsProfile(
+                newPurchaseOrder, _vendorName.text);
+            poItemsProvider.clearpoItems();
             // submit final purchase order
             if (!context.mounted) return;
             Navigator.pushReplacement(context,
@@ -133,6 +176,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                         TextFormField(
                             controller: _vendorName,
                             cursorColor: blue,
+                            onChanged: _updateSuggestions,
                             cursorWidth: 1,
                             textCapitalization: TextCapitalization.words,
                             validator: (value) {
@@ -144,19 +188,48 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                             textInputAction: TextInputAction.next,
                             decoration: getInputDecoration(
                                 hint: 'Vendor Name', errorColor: Colors.red)),
+                        if (suggestions.isEmpty)
+                          Container()
+                        else
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.02),
+                                borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10))),
+                            height: 120,
+                            child: Expanded(
+                              child: ListView.builder(
+                                itemCount: suggestions.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _vendorName.text = suggestions[index];
+                                        suggestions.clear();
+                                      });
+                                    },
+                                    child: ListTile(
+                                      title: Text(suggestions[index]),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         const SizedBox(
                           height: 24,
                         ),
                         SizedBox(
-                          height: poItemsProvider.items.length * 80,
+                          height: poItemsProvider.poItems.length * 80,
                           child: ListView.builder(
-                              itemCount: poItemsProvider.items.length,
+                              itemCount: poItemsProvider.poItems.length,
                               itemBuilder: (context, index) {
-                                final item = poItemsProvider.items[index];
-                                return NewSalesOrderItemsTile(
+                                final item = poItemsProvider.poItems[index];
+                                return NewPurchaseOrderItemsTile(
                                   index: index,
                                   name: item.itemName ?? '',
-                                  quantity: item.itemQuantity.toString(),
+                                  quantity: item.quantityPurchase.toString(),
                                 );
                               }),
                         ),
@@ -171,7 +244,9 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                                 isScrollControlled: true,
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const AddPurchaseOrderItem();
+                                  return AddPurchaseOrderItem(
+                                    items: poItemsProvider.allItems,
+                                  );
                                 });
                           },
                           child: AbsorbPointer(
@@ -205,7 +280,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                         const SizedBox(
                           height: 24,
                         ),
-                         TextFormField(
+                        TextFormField(
                             cursorColor: blue,
                             cursorWidth: 1,
                             readOnly: true,

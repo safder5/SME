@@ -12,75 +12,69 @@ import '../../../constants.dart';
 import '../../../Utils/items/addItems.dart';
 
 class AddSalesOrderItem extends StatefulWidget {
-  const AddSalesOrderItem({super.key});
+  const AddSalesOrderItem({super.key, this.items});
+  final List<Item>? items;
 
   @override
   State<AddSalesOrderItem> createState() => _AddSalesOrderItemState();
 }
 
 class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
-  final TextEditingController itemnameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _itemnameController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-
-  List<String> itemNames = [];
 
   final auth = FirebaseAuth.instance.currentUser;
 
-  String itemQuantity = '';
+  Item selectedItem =
+      Item(itemName: 'itemName', itemQuantity: 0, quantitySales: 0);
+
+  int quantitySales = 0;
   String itemName = '';
   String itemUrl = '';
-
-  getItemNames() async {
-    try {
-      final QuerySnapshot result = await FirebaseFirestore.instance
-          .collection('UserData')
-          .doc(auth!.email)
-          .collection('Items')
-          .get();
-      for (var element in result.docs) {
-        itemNames.add(element.id);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<String> checkQuantityLimit() async {
-    String itemkanaam = itemnameController.text;
-    String itemLimit = '0';
-    if (itemkanaam.isNotEmpty) {
-      try {
-        var itemSS = await FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(auth!.email)
-            .collection('Items')
-            .doc(itemkanaam)
-            .get();
-        itemLimit = itemSS.data()?['sIh'];
-      } catch (e) {
-        return 'no';
-      }
-    }
-    return itemLimit;
-  }
+  String itemLimit = '';
 
   getData() async {
-    String item = itemnameController.text;
+    String item = _itemnameController.text;
     if (item != '') {
       try {
-        var itemSS = await FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(auth!.email)
-            .collection('Items')
-            .doc(item)
-            .get();
-
-        itemQuantity = itemSS.data()?['sIh'];
-        itemName = itemSS.data()?['item_name'];
-        itemUrl = itemSS.data()?['imageUrl'];
+        for (var i in widget.items!) {
+          if (i.itemName! == item) {
+            setState(() {
+              selectedItem = i;
+              itemLimit = (i.itemQuantity! - i.quantitySales!).toString();
+              print(itemLimit);
+            });
+            break;
+          }
+        }
       } catch (e) {
         print(e);
       }
+    }
+  }
+
+  String? validateSOIQ(String? value) {
+    if (selectedItem.itemName!.isEmpty) {
+      return null;
+    }
+    if (value == null || value.isEmpty) {
+      return 'Please enter some quantity';
+    }
+
+    int v = int.parse(value);
+    if (v > int.parse(itemLimit)) {
+      return 'Quantity cannot exceed inventory quantity (${int.parse(itemLimit)}).';
+    }
+    return null;
+  }
+
+  bool? validateForm() {
+    final FormState form = _formKey.currentState!;
+    if (form.validate()) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -88,8 +82,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getItemNames();
-    itemnameController.addListener(getData);
+    _itemnameController.addListener(getData);
   }
 
   @override
@@ -103,209 +96,221 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Text('Add items & quantity'),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            CircleAvatar(
-              backgroundColor: t,
-              maxRadius: 22,
-              child: const Image(
-                width: 44,
-                height: 44,
-                image: AssetImage('lib/images/itemimage.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            TextFieldSearch(
-              minStringLength: 1,
-              label: 'Search Item',
-              controller: itemnameController,
-              decoration: getInputDecoration(hint: 'Search Item', errorColor: r)
-                  .copyWith(
-                suffix: GestureDetector(
-                  onTap: () {
-                    // add a unique item to items list
-                    Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                            builder: (context) => const AddItems()));
-                  },
-                  child: Icon(
-                    LineIcons.plus,
-                    size: 18,
-                    color: blue,
-                  ),
-                ),
-              ),
-              initialList: itemNames,
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            TextFormField(
-              // validator: validateOrderNo,
-              cursorColor: blue,
-              cursorWidth: 1,
-              textInputAction: TextInputAction.next,
-              decoration:
-                  getInputDecoration(hint: '1.00', errorColor: Colors.red)
-                      .copyWith(
-                suffix: GestureDetector(
-                  onTap: () {
-                    // change type of unit
-                    // Navigator.of(context,
-                    //         rootNavigator: true)
-                    //     .push(MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             AddItems()));
-                  },
-                  child: Icon(
-                    LineIcons.box,
-                    size: 18,
-                    color: blue,
-                  ),
-                ),
-              ),
-              onChanged: (value) {
-                itemQuantity = value;
-                // String limit = await checkQuantityLimit();
-                // print(limit);
-              },
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            Container(
-              padding: const EdgeInsets.all(18),
-              height: 120,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: f7,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  const Text(
-                    'Item Stock Details',
-                    style: TextStyle(fontWeight: FontWeight.w300),
+                  const Text('Add items & quantity'),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
                   ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '200',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300, color: blue),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            const Text('Total stock',
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                                textScaleFactor: 0.8)
-                          ],
-                        ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '55.0',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300, color: blue),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            const Text(
-                              'Already Sold',
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                              textScaleFactor: 0.8,
-                            )
-                          ],
-                        ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '145.0',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300, color: blue),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            const Text(
-                              'Available for sale',
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                              textScaleFactor: 0.8,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
                 ],
               ),
-            ),
-            const Spacer(),
-            // const SizedBox(height: 24,),
-            GestureDetector(
-              onTap: () async {
-                try {
-                  itemProvider.addItem(Item(
-                      itemName: itemnameController.text,
-                      itemQuantity: int.parse(itemQuantity)));
-                } catch (e) {
-                  //snackbar to show item not added
-                  print(e);
-                }
-                // add items and pass the item and quantity to the list in sales order
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: blue,
-                ),
-                width: double.infinity,
-                height: 48,
-                child: Center(
-                    child: Text(
-                  'Add Item',
-                  style: TextStyle(
-                    color: w,
-                  ),
-                  textScaleFactor: 1.2,
-                )),
+              const SizedBox(
+                height: 24,
               ),
-            ),
-          ],
+              CircleAvatar(
+                backgroundColor: t,
+                maxRadius: 22,
+                child: const Image(
+                  width: 44,
+                  height: 44,
+                  image: AssetImage('lib/images/itemimage.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFieldSearch(
+                minStringLength: 1,
+                label: 'Search Item',
+                controller: _itemnameController,
+                decoration:
+                    getInputDecoration(hint: 'Search Item', errorColor: r)
+                        .copyWith(
+                  suffix: GestureDetector(
+                    onTap: () {
+                      // add a unique item to items list
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => const AddItems()));
+                    },
+                    child: Icon(
+                      LineIcons.plus,
+                      size: 18,
+                      color: blue,
+                    ),
+                  ),
+                ),
+                initialList: itemProvider.getItemNames(),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextFormField(
+                // validator: validateOrderNo,
+                validator: validateSOIQ,
+                cursorColor: blue,
+                cursorWidth: 1,
+                textInputAction: TextInputAction.next,
+                decoration:
+                    getInputDecoration(hint: '1.00', errorColor: Colors.red)
+                        .copyWith(
+                  suffix: GestureDetector(
+                    onTap: () {
+                      // change type of unit
+                      // Navigator.of(context,
+                      //         rootNavigator: true)
+                      //     .push(MaterialPageRoute(
+                      //         builder: (context) =>
+                      //             AddItems()));
+                    },
+                    child: Icon(
+                      LineIcons.box,
+                      size: 18,
+                      color: blue,
+                    ),
+                  ),
+                ),
+                onChanged: (value) {
+                  quantitySales = int.parse(value);
+                  // String limit = await checkQuantityLimit();
+                  // print(limit);
+                },
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding: const EdgeInsets.all(18),
+                height: 120,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: f7,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Item Stock Details',
+                      style: TextStyle(fontWeight: FontWeight.w300),
+                    ),
+                    const SizedBox(
+                      height: 18,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                selectedItem.itemQuantity.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, color: blue),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              const Text('Total stock',
+                                  style: TextStyle(fontWeight: FontWeight.w300),
+                                  textScaleFactor: 0.8)
+                            ],
+                          ),
+                          const Spacer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                selectedItem.quantitySales.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, color: blue),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              const Text(
+                                'Already Sold',
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                                textScaleFactor: 0.8,
+                              )
+                            ],
+                          ),
+                          const Spacer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                (selectedItem.itemQuantity! -
+                                        selectedItem.quantitySales!)
+                                    .toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, color: blue),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              const Text(
+                                'Available for sale',
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                                textScaleFactor: 0.8,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const Spacer(),
+              // const SizedBox(height: 24,),
+              GestureDetector(
+                onTap: () async {
+                  try {
+                    if (validateForm() == true) {
+                      itemProvider.addsoItem(Item(
+                          itemName: _itemnameController.text,
+                          quantitySales: quantitySales));
+                           Navigator.pop(context);
+                    } else {
+                      print('error');
+                    }
+                  } catch (e) {
+                    //snackbar to show item not added
+                    print(e);
+                  }
+                  // add items and pass the item and quantity to the list in sales order
+                 
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: blue,
+                  ),
+                  width: double.infinity,
+                  height: 48,
+                  child: Center(
+                      child: Text(
+                    'Add Item',
+                    style: TextStyle(
+                      color: w,
+                    ),
+                    textScaleFactor: 1.2,
+                  )),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -34,8 +34,8 @@ class InventorySummaryProvider with ChangeNotifier {
       _inventoryItems = querySnapshot.docs.map((doc) {
         final data = doc.data();
         return Item(
-          itemName: data['item_name'],
-          itemQuantity: int.parse(data['sIh']),
+          itemName: data['itemName'],
+          itemQuantity: data['itemQuantity'],
         );
       }).toList();
 
@@ -47,7 +47,7 @@ class InventorySummaryProvider with ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print('Error fetching items: $e');
+      print('Error fetching in hand items: $e');
     }
   }
 

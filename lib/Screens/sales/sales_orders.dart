@@ -10,6 +10,8 @@ import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
+import '../../Providers/customer_provider.dart';
+
 class SalesOrders extends StatefulWidget {
   const SalesOrders({super.key});
 
@@ -20,13 +22,29 @@ class SalesOrders extends StatefulWidget {
 class _SalesOrdersState extends State<SalesOrders> {
   final ClampingScrollPhysics controllScroll = const ClampingScrollPhysics();
   List<SalesOrderModel> soList = [];
+  List<String> customerNames = [];
 
   @override
   void initState() {
     super.initState();
     // Fetch sales orders and update the list
     fetchSalesOrders(context);
+    // fetchCustomerNames(context);
   }
+
+  // Future<void> fetchCustomerNames(BuildContext context) async {
+  //   final customerProvider =
+  //       Provider.of<CustomerProvider>(context, listen: false);
+
+  //   try {
+  //     customerProvider.fetchAllCustomers();
+  //     setState(() {
+  //       customerNames = customerProvider.getAllCustomerNames();
+  //     });
+  //   } catch (e) {
+  //     print('error fetching customer naams $e');
+  //   }
+  // }
 
   Future<void> fetchSalesOrders(BuildContext context) async {
     final soProvider = Provider.of<NSOrderProvider>(context, listen: false);
@@ -59,8 +77,8 @@ class _SalesOrdersState extends State<SalesOrders> {
             ),
           ),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(builder: (context) => const NewSalesOrder()));
+            Navigator.of(context, rootNavigator: true)
+                .push(MaterialPageRoute(builder: (context) => NewSalesOrder()));
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => NewSalesOrder()));
           }),

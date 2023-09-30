@@ -1,11 +1,20 @@
 import 'package:ashwani/Models/address_model.dart';
 import 'package:ashwani/Models/customer_model.dart';
+import 'package:ashwani/Models/sales_order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CustomerProvider with ChangeNotifier {
   List<CustomerModel> _customers = [];
+  List<String> _customerNames = [];
   List<CustomerModel> get customer => _customers;
+  List<String> get customerNames => _customerNames;
+
+  final CollectionReference cR = FirebaseFirestore.instance
+      .collection('UserData')
+      .doc(FirebaseAuth.instance.currentUser!.email)
+      .collection('Customers');
 
   Future<void> addCustomer(CustomerModel customerData, DocumentReference docRef,
       AddressModel? bill, AddressModel? ship) async {
@@ -54,9 +63,9 @@ class CustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAllCustomers(CollectionReference collRef) async {
+  Future<void> fetchAllCustomers() async {
     try {
-      final customerSnapshot = await collRef.get();
+      final customerSnapshot = await cR.get();
       _customers = customerSnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return CustomerModel(
@@ -66,21 +75,22 @@ class CustomerProvider with ChangeNotifier {
           email: data['email'],
           phone: data['phone'],
           remarks: data['remarks'],
-          business: null,
+          business: data['business'],
         );
       }).toList();
       notifyListeners();
     } catch (e) {
-      print(e);
+      print('error getting fetch all customers $e');
     }
   }
+
   List<String> getAllCustomerNames() {
     return _customers.map((customer) => customer.name!).toList();
   }
+
   void filterCustomers(String query) {
     _customers = _customers
-        .where((customer) =>
-            customer.toString().contains(query.toLowerCase()))
+        .where((customer) => customer.toString().contains(query.toLowerCase()))
         .toList();
     notifyListeners();
   }
@@ -88,6 +98,22 @@ class CustomerProvider with ChangeNotifier {
   Future<void> removeCustomer() async {
     try {} catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> uploadOrderInCustomersProfile(
+      SalesOrderModel so, String customerName) async {
+    try {
+      await cR
+          .doc(customerName)
+          .collection('salesOrderIds')
+          .doc((so.orderID).toString())
+          .set({
+        'orderId': so.orderID,
+      });
+      notifyListeners();
+    } catch (e) {
+      print('error uploadOrderinCustomerProfile $e');
     }
   }
 }

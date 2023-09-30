@@ -75,15 +75,15 @@ class _ItemsPageState extends State<ItemsPage> {
                                       MaterialPageRoute(
                                           builder: (context) => ItemScreen(
                                                 itemname: userItemsSnapshot[index]
-                                                    ["item_name"],
+                                                    ["itemName"],
                                                 sIh: userItemsSnapshot[index]
-                                                    ["sIh"],
+                                                    ["itemQuantity"].toString(),
                                               )));
                                 },
                                 child: ItemsPageContainer(
                                     itemName: userItemsSnapshot[index]
-                                        ["item_name"],
-                                    sku: userItemsSnapshot[index]["sIh"]),
+                                        ["itemName"],
+                                    sku: userItemsSnapshot[index]["itemQuantity"].toString()),
                               );
                             });
                       }),

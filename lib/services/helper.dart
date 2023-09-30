@@ -38,6 +38,7 @@ String? validateDate(String? value) {
   return null;
 }
 
+
 InputDecoration getInputDecoration(
     {required String hint, required Color errorColor}) {
   return InputDecoration(
