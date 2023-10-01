@@ -31,20 +31,21 @@ class InventorySummaryProvider with ChangeNotifier {
     try {
       // sotre all items in inventory items
       final querySnapshot = await inHandRef.get();
-      _inventoryItems = querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return Item(
-          itemName: data['itemName'],
-          itemQuantity: data['itemQuantity'],
-        );
-      }).toList();
+      if (querySnapshot.docs.isNotEmpty) {
+        _inventoryItems = querySnapshot.docs.map((doc) {
+          final data = doc.data();
+          return Item(
+            itemName: data['itemName'],
+            itemQuantity: data['itemQuantity'],
+          );
+        }).toList();
 
-      // calculate sum of all items
-      _inHand = _inventoryItems
-          .map((item) => item.itemQuantity ?? 0)
-          .reduce((sum, quantity) => sum + quantity);
-      // print(_inHand);
-
+        // calculate sum of all items
+        _inHand = _inventoryItems
+            .map((item) => item.itemQuantity ?? 0)
+            .reduce((sum, quantity) => sum + quantity);
+        // print(_inHand);}
+      }
       notifyListeners();
     } catch (e) {
       print('Error fetching in hand items: $e');

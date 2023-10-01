@@ -17,3 +17,17 @@ class Item {
     this.imageURL,
   });
 }
+
+class ItemTracking {
+  String itemName;
+  int quantityShipped;
+  int quantityReturned;
+  String date;
+
+  ItemTracking({
+    required this.itemName,
+    this.quantityShipped = 0,
+    this.quantityReturned = 0,
+    required this.date,
+  });
+}

@@ -554,6 +554,7 @@ class NewSalesOrderItemsTile extends StatelessWidget {
     );
   }
 }
+
 class NewPurchaseOrderItemsTile extends StatelessWidget {
   final String name;
   final String quantity;
@@ -625,7 +626,6 @@ class NewPurchaseOrderItemsTile extends StatelessWidget {
   }
 }
 
-
 class SOPDetailsItemTile extends StatelessWidget {
   final String name;
   final String quantity;
@@ -639,7 +639,7 @@ class SOPDetailsItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14.0),
+      padding: const EdgeInsets.only(bottom: 0.0),
       child: Container(
         height: 66,
         width: MediaQuery.of(context).size.width,

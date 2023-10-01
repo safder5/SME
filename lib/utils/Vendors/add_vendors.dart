@@ -80,7 +80,7 @@ class _AddVendorState extends State<AddVendor> {
             height: 48,
             child: Center(
                 child: Text(
-              'Add as Customer',
+              'Add Vendor',
               style: TextStyle(
                 color: w,
               ),

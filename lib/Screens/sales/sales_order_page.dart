@@ -1,3 +1,4 @@
+import 'package:ashwani/Screens/sales/sales_order_transaction.dart';
 import 'package:ashwani/Screens/sales/sales_page_helping_widgets.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Models/sales_order.dart';
@@ -20,6 +21,41 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: w,
+      floatingActionButton: Visibility(
+        visible: isSelected[0] ? false : true,
+        child: FloatingActionButton(
+          onPressed: () {
+            if (isSelected[1]) {
+               showModalBottomSheet<dynamic>(
+                                  backgroundColor: t,
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SalesOrderTransactionsShipped(
+                                      items: widget.salesorder.items,
+                                      orderId: widget.salesorder.orderID!,
+                                    );
+                                  });
+            }
+            if (isSelected[2]) {
+              //  showModalBottomSheet<dynamic>(
+              //                     backgroundColor: t,
+              //                     isScrollControlled: true,
+              //                     context: context,
+              //                     builder: (BuildContext context) {
+              //                       return AddSalesOrderItem(
+              //                         items: soItemsProvider.allItems,
+              //                       );
+              //                     });
+            }
+          },
+          backgroundColor: blue,
+          child: Icon(
+            Icons.add,
+            color: w,
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Container(

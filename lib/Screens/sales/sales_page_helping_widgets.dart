@@ -14,7 +14,7 @@ class SOPDetails extends StatelessWidget {
       height: (MediaQuery.of(context).size.height * 0.66) - 70,
       color: w,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0,left: 16,right: 16),
         child: Column(
           children: [
             Padding(
@@ -29,7 +29,7 @@ class SOPDetails extends StatelessWidget {
                   ),
                   Spacer(),
                   Text(
-                    'Items Packed',
+                    'Ready to pack',
                     textScaleFactor: 1.2,
                     style: TextStyle(color: dg),
                   ),

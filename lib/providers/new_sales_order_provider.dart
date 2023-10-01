@@ -72,6 +72,8 @@ class NSOrderProvider with ChangeNotifier {
             return Item(
               itemName: itemData['itemName'],
               itemQuantity: itemData['itemQuantity'],
+              quantityPurchase: itemData['quantityPurchase'],
+              quantitySales: itemData['quantitySales'],
             );
           }).toList();
         }

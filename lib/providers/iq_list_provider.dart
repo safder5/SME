@@ -8,10 +8,12 @@ class ItemsProvider with ChangeNotifier {
   List<Item> _soItems = [];
   List<Item> _allItems = [];
   List<Item> _poItems = [];
+  List<Item> _salesDelivered = [];
 
   List<Item> get soItems => _soItems;
   List<Item> get allItems => _allItems;
   List<Item> get poItems => _poItems;
+  List<Item> get salesDelivered => _salesDelivered;
 
   void addsoItem(Item newItem) {
     _soItems.add(newItem);
@@ -52,6 +54,25 @@ class ItemsProvider with ChangeNotifier {
     _poItems.clear();
     notifyListeners();
   }
+   void addsditem(Item newSDtem) {
+    _salesDelivered.add(newSDtem);
+    notifyListeners();
+  }
+
+  void updatesdItem(int index, Item updatedItem) {
+    _salesDelivered[index] = updatedItem;
+    notifyListeners();
+  }
+
+  void removesdItem(int index) {
+    _salesDelivered.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearsdItems() {
+    _salesDelivered.clear();
+    notifyListeners();
+  }
 
   Future<void> getItems() async {
     try {
@@ -70,7 +91,19 @@ class ItemsProvider with ChangeNotifier {
           itemQuantity: data['itemQuantity'],
           quantityPurchase: data['quantityPurchase'],
           quantitySales: data['quantitySales'],
+          itemTracks: [],
+          imageURL: data['imageURL'],
         );
+
+        final trackSnapshot = await doc.reference.collection('tracks').get();
+        for (final trackDoc in trackSnapshot.docs) {
+          final trackData = trackDoc.data();
+          final itemTrack = ItemTrackingModel(
+              orderID: trackData['orderID'],
+              quantity: trackData['quantity'],
+              reason: trackData['reason']);
+          item.itemTracks!.add(itemTrack);
+        }
         _allItems.add(item);
       }
       notifyListeners();
@@ -111,7 +144,7 @@ class ItemsProvider with ChangeNotifier {
       final quantityPurchaseTotal =
           updatedItem.quantityPurchase! + existingItem.quantityPurchase!;
       final ItemTrackingModel track = ItemTrackingModel(
-          orderID: existingItem.itemName,
+          orderID: orderId,
           quantity: updatedItem.quantityPurchase,
           reason: 'po');
 
@@ -151,9 +184,7 @@ class ItemsProvider with ChangeNotifier {
       final quantitySalesTotal =
           updatedItem.quantitySales! + existingItem.quantitySales!;
       final ItemTrackingModel track = ItemTrackingModel(
-          orderID: existingItem.itemName,
-          quantity: updatedItem.quantitySales,
-          reason: 'so');
+          orderID: orderId, quantity: updatedItem.quantitySales, reason: 'so');
 
       try {
         final auth = FirebaseAuth.instance.currentUser;
@@ -187,5 +218,9 @@ class ItemsProvider with ChangeNotifier {
 
   List<String?> getItemNames() {
     return _allItems.map((item) => item.itemName).toList();
+  }
+
+  Future<void> addSalesDeliveredItemsToFirebase(CollectionReference collRef)async{
+    
   }
 }

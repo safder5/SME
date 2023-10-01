@@ -34,3 +34,16 @@ Remember -
 
 
 add customers and vendors list in new orders and add tracks for for new orders under respective sales purchase profiles
+
+
+check if there are customer and vendor profiles made before they make a order 
+also add items during order should redirect back to the order page which creates a badstate for app 
+
+
+• in item page show tracks of that item 
+• sales return and purchase return systems 
+
+quantity delivered in provider and also to update it to firebase
+
+- crete pop up for selecting item and quantity 
+- selected item quantity to be updated on save in two places : sales order trackings , item inventory trackings
