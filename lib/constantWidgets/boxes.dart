@@ -238,12 +238,6 @@ class ContainerSalesOrder extends StatelessWidget {
                     textScaleFactor: 0.9,
                   ),
                   const Spacer(),
-                  // Text(
-                  //   'Unit : 30 box',
-                  //   style: TextStyle(
-                  //       fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                  //   textScaleFactor: 0.8,
-                  // )
                 ],
               ),
               const SizedBox(
@@ -273,6 +267,101 @@ class ContainerSalesOrder extends StatelessWidget {
                 height: 16,
               ),
               //Triple Rows Start Here
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ContainerSalesReturn extends StatelessWidget {
+  const ContainerSalesReturn(
+      {super.key,
+      required this.itemname,
+      required this.orderId,
+      required this.quantity,
+      required this.toInventory});
+  final String itemname;
+  final int orderId;
+  final int quantity;
+  final bool toInventory;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        height: 80.0,
+        width: MediaQuery.of(context).size.width - 64,
+        decoration: BoxDecoration(
+            color: f7.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      color: blue,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    '#$orderId',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    textScaleFactor: 0.9,
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemname,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
+                    textScaleFactor: 0.8,
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Container(
+                    height: 12,
+                    width: 1,
+                    color: b32,
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Text(
+                    'Units: $quantity',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
+                    textScaleFactor: 0.8,
+                  ),
+                  Spacer(),
+                  Text(
+                    toInventory ? 'In Inventory' : 'Wasted',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: toInventory ? gn : r),
+                    textScaleFactor: 0.8,
+                  )
+                ],
+              ),
             ],
           ),
         ),
@@ -639,7 +728,7 @@ class SOPDetailsItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 0.0),
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
         height: 66,
         width: MediaQuery.of(context).size.width,
@@ -680,6 +769,164 @@ class SOPDetailsItemTile extends StatelessWidget {
                 ],
               ),
               const Spacer(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SOPShippedItemsTile extends StatelessWidget {
+  final String quantity;
+  final String itemName;
+  final int index;
+  int? quantityReturned;
+  SOPShippedItemsTile(
+      {super.key,
+      required this.quantity,
+      required this.itemName,
+      required this.index,
+      this.quantityReturned});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemName,
+                    style: const TextStyle(fontWeight: FontWeight.w300),
+                    textScaleFactor: 1,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Units : ${quantity.toString()}',
+                        textScaleFactor: 0.7,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 0.5, // Width of the vertical line
+                        height:
+                            12, // Height to fill the available vertical space
+                        color: b32, // Color of the line
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        quantityReturned == 0
+                            ? ''
+                            : 'Returned: ${quantityReturned.toString()}',
+                        textScaleFactor: 0.7,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                'Delivered',
+                style: TextStyle(color: gn, fontWeight: FontWeight.w300),
+                textScaleFactor: 0.8,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SOReturnsItemTile extends StatelessWidget {
+  final String quantity;
+  final String itemName;
+  final int index;
+  const SOReturnsItemTile(
+      {super.key,
+      required this.quantity,
+      required this.itemName,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemName,
+                    style: const TextStyle(fontWeight: FontWeight.w300),
+                    textScaleFactor: 1,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Units : ${quantity.toString()}',
+                        textScaleFactor: 0.7,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                'Returned',
+                style: TextStyle(color: blue, fontWeight: FontWeight.w300),
+                textScaleFactor: 0.8,
+              )
             ],
           ),
         ),

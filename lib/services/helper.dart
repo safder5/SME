@@ -77,3 +77,37 @@ String generateSalesOrderID() {
   // id += '$day''$month''$time''$min';
   return id;
 }
+
+class LoadingOverlay extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color:t,
+      child: Center(
+        child: CircularProgressIndicator(
+          color: blue,
+          strokeWidth: 1,
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingOverlayHome extends StatelessWidget {
+  const LoadingOverlayHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        color:w.withOpacity(0.75),
+        child: Center(
+          child: CircularProgressIndicator(
+            color: blue,
+            strokeWidth: 1.5,
+          ),
+        ),
+      ),
+    );
+  }
+}

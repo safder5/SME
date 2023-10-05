@@ -108,6 +108,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
             await soItemsProvider.updateItemsSOandTrack(orderId);
             await customerProvider.uploadOrderInCustomersProfile(
                 newSalesOrder, nameSearchController.text);
+                
 
             // update it to firebase
             soItemsProvider.clearsoItems();

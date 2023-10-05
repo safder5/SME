@@ -1,3 +1,4 @@
+import 'package:ashwani/Screens/sales/sales_order_return_transaction.dart';
 import 'package:ashwani/Screens/sales/sales_order_transaction.dart';
 import 'package:ashwani/Screens/sales/sales_page_helping_widgets.dart';
 import 'package:ashwani/constants.dart';
@@ -26,27 +27,28 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
         child: FloatingActionButton(
           onPressed: () {
             if (isSelected[1]) {
-               showModalBottomSheet<dynamic>(
-                                  backgroundColor: t,
-                                  isScrollControlled: true,
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return SalesOrderTransactionsShipped(
-                                      items: widget.salesorder.items,
-                                      orderId: widget.salesorder.orderID!,
-                                    );
-                                  });
+              showModalBottomSheet<dynamic>(
+                  backgroundColor: t,
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SalesOrderTransactionsShipped(
+                      items: widget.salesorder.items,
+                      orderId: widget.salesorder.orderID!,
+                    );
+                  });
             }
             if (isSelected[2]) {
-              //  showModalBottomSheet<dynamic>(
-              //                     backgroundColor: t,
-              //                     isScrollControlled: true,
-              //                     context: context,
-              //                     builder: (BuildContext context) {
-              //                       return AddSalesOrderItem(
-              //                         items: soItemsProvider.allItems,
-              //                       );
-              //                     });
+              showModalBottomSheet<dynamic>(
+                  backgroundColor: t,
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SalesOrderReturnTransactions(
+                      itemsDelivered: widget.salesorder.itemsDelivered,
+                      orderId: widget.salesorder.orderID!,
+                    );
+                  });
             }
           },
           backgroundColor: blue,
@@ -266,8 +268,14 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
             SOPDetails(
               items: widget.salesorder.items,
             ),
-          if (isSelected[1]) SOPShipped(),
-          if (isSelected[2]) SOPReturns(),
+          if (isSelected[1])
+            SOPShipped(
+              itemsDelivered: widget.salesorder.itemsDelivered,
+            ),
+          if (isSelected[2])
+            SOPReturns(
+              itemsReturned: widget.salesorder.itemsReturned,
+            ),
           // Container(
           //   height: MediaQuery.of(context).size.height*0.6,
           //   width: double.maxFinite,

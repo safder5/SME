@@ -10,6 +10,9 @@ class SalesOrderModel {
   final String? tandC;
   final String? status;
   List<Item>? items;
+  List<ItemTracking>? tracks;
+  List<Item>? itemsDelivered;
+  List<Item>? itemsReturned;
 
   SalesOrderModel({
     required this.orderID,
@@ -21,6 +24,8 @@ class SalesOrderModel {
     required this.tandC,
     required this.status,
     this.items,
+    this.tracks,
+    this.itemsDelivered,
   });
 }
 

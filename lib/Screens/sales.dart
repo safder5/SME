@@ -1,3 +1,6 @@
+import 'package:ashwani/Screens/bom.dart';
+import 'package:ashwani/Screens/purchase.dart';
+import 'package:ashwani/Screens/purchase/purchase_orders.dart';
 import 'package:ashwani/Screens/sales/sales_orders.dart';
 import 'package:ashwani/Screens/sales/sales_returns.dart';
 import 'package:ashwani/constants.dart';

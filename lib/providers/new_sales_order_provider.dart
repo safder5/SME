@@ -77,8 +77,42 @@ class NSOrderProvider with ChangeNotifier {
             );
           }).toList();
         }
+        final tracksCollection = doc.reference.collection('tracks');
+        final trackDocs = await tracksCollection.get();
+        if (trackDocs.docs.isNotEmpty) {
+          salesOrder.tracks = trackDocs.docs.map((trackDoc) {
+            final trackData = trackDoc.data();
+            return ItemTracking(
+                itemName: trackData['itemName'],
+                quantityReturned: trackData['quantityReturned'] ?? 0,
+                quantityShipped: trackData['quantityShipped'] ?? 0,
+                date: trackData['date'] ?? '');
+          }).toList();
+        }
+        final itemsDeliveredCollection =
+            doc.reference.collection('itemsDelivered');
+        final itemDeliveredDocs = await itemsDeliveredCollection.get();
+        if (itemDeliveredDocs.docs.isNotEmpty) {
+          salesOrder.itemsDelivered = itemDeliveredDocs.docs.map((e) {
+            final itemDeliveredData = e.data();
+            return Item(
+                itemName: itemDeliveredData['itemName'],
+                quantitySalesDelivered:
+                    itemDeliveredData['quantitySalesDelivered'],quantitySalesReturned: itemDeliveredData['quantitySalesReturned']?? 0);
+          }).toList();
+        }
+        final salesReturnsCollection = doc.reference.collection('returns');
+        final salesReturnsDocs = await salesReturnsCollection.get();
+        if (salesReturnsDocs.docs.isNotEmpty) {
+          salesOrder.itemsReturned = salesReturnsDocs.docs.map((e) {
+            final itemReturned = e.data();
+            return Item(itemName: itemReturned['itemName'],
+            quantitySalesReturned: itemReturned['quantitySalesReturned']);
+          }).toList();
+        }
         _so.add(salesOrder);
       }
+      // _so.reversed;
       notifyListeners();
     } catch (e) {
       print('Error fetching sales orders: $e');

@@ -97,68 +97,86 @@ class _ItemScreenState extends State<ItemScreen> {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.only(top: 32.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: b.withOpacity(0.03)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Item History',
+                  textScaleFactor: 1,
+                  style: TextStyle(fontWeight: FontWeight.w300, color: b),
+                ),
+              ),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Expanded(
-              child: ListView.builder(
-                  // physics: controllScroll,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: widget.item.itemTracks!.length,
-                  itemBuilder: (context, index) {
-                    final itemTrack = widget.item.itemTracks![index];
-                    if (itemTrack.reason == 'so') {
-                      text = 'Sales Order';
-                      c = gn;
-                    } else if (itemTrack.reason == 'po') {
-                      text = 'Purchase Order';
-                      c = blue;
-                    } else if (itemTrack.reason == 'u') {
-                      text = 'By User';
-                      c = b;
-                    } else {
-                      text = 'Waste';
-                      c = r;
-                    }
+            child: ListView.builder(
+                // physics: controllScroll,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: widget.item.itemTracks!.length,
+                itemBuilder: (context, index) {
+                  final itemTrack = widget.item.itemTracks![index];
+                  if (itemTrack.reason == 'so') {
+                    text = 'Sales Order';
+                    c = gn;
+                  } else if (itemTrack.reason == 'po') {
+                    text = 'Purchase Order';
+                    c = blue;
+                  } else if (itemTrack.reason == 'u') {
+                    text = 'By User';
+                    c = b;
+                  } else if (itemTrack.reason == 'Sales Return') {
+                    text = 'Sales Return';
+                    c = Color(colorPrimary);
+                  } else {
+                    text = 'Waste';
+                    c = r;
+                  }
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            color: f7, borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    itemTrack.orderID.toString(),
-                                    textScaleFactor: 0.9,
-                                  ),
-                                  Text(
-                                    text,
-                                    textScaleFactor: 0.8,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Text(
-                                itemTrack.quantity.toString(),
-                                textScaleFactor: 1.2,
-                                style: TextStyle(color: c,fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          ),
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: f7, borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  itemTrack.orderID.toString(),
+                                  textScaleFactor: 0.9,
+                                ),
+                                Text(
+                                  text,
+                                  textScaleFactor: 0.8,
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            Text(
+                              itemTrack.quantity.toString(),
+                              textScaleFactor: 1.2,
+                              style: TextStyle(
+                                  color: c, fontWeight: FontWeight.w300),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  }),
-            ),
+                    ),
+                  );
+                }),
           ),
         ],
       ),

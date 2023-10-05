@@ -1,4 +1,5 @@
 import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Models/item_tracking_model.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/main.dart';
@@ -6,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 class SalesOrderTransactionsShipped extends StatefulWidget {
@@ -29,12 +29,49 @@ class _SalesOrderTransactionsShippedState
   Item selectedItem =
       Item(itemName: 'itemName', itemQuantity: 0, quantitySales: 0);
 
-  int quantityRecieved = 0;
+  int quantityShipped = 0;
   int? itemQuantity = 0;
   String itemName = '';
   String itemUrl = '';
   String itemLimit = '';
   final now = DateTime.now();
+  bool _isLoading = false;
+  ItemTracking track = ItemTracking(itemName: 'itemName');
+  bool prevData = false;
+
+  Future<void> _executeFutures(ItemTracking track) async {
+    await checkPrevItemDeliveredData();
+
+    await addItemtoSalesDelivered();
+    // add track in sales order
+    await uploadTrack(track);
+    // update items list sales quantity in sales order
+    await uploadtoSalesOrder();
+    // make updates in inventory items
+    await uploadToInventory();
+    // update in inventory items
+    await uploadItemInventorytracks();
+    // upload ttracks in inventory items
+  }
+
+  void _handleSubmit() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true; // Show loading overlay
+      });
+    }
+    //  await  Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      await _executeFutures(track).then((_) {
+        setState(() {
+          _isLoading = false; // Hide loading overlay
+        });
+      });
+    }
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MyApp()));
+  }
 
   Future<void> uploadTrack(ItemTracking track) async {
     await FirebaseFirestore.instance
@@ -51,6 +88,7 @@ class _SalesOrderTransactionsShippedState
       'date': track.date,
       'quantityShipped': track.quantityShipped,
     });
+    print('1');
   }
 
   Future<void> uploadtoSalesOrder() async {
@@ -65,10 +103,35 @@ class _SalesOrderTransactionsShippedState
           .collection('items')
           .doc(_itemnameController.text)
           .update({
-        'quantitySales': (selectedItem.quantitySales! - quantityRecieved),
+        'quantitySales': (selectedItem.quantitySales! - quantityShipped),
       });
     } catch (e) {
       print(e);
+    }
+    print('2');
+  }
+
+  Future<void> uploadItemInventorytracks() async {
+    try {
+      ItemTrackingModel itemTracking = ItemTrackingModel(
+          orderID: widget.orderId.toString(),
+          quantity: quantityShipped,
+          reason: 'Sales Order');
+
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('Items')
+          .doc(_itemnameController.text)
+          .collection('tracks')
+          .doc(widget.orderId.toString())
+          .set({
+        "orderID": itemTracking.orderID,
+        'quantity': itemTracking.quantity,
+        'reason': itemTracking.reason,
+      });
+    } catch (e) {
+      print('error uploading item inventory tracks');
     }
   }
 
@@ -89,11 +152,67 @@ class _SalesOrderTransactionsShippedState
           .collection('Items')
           .doc(_itemnameController.text)
           .update({
-        'itemQuantity': (itemQuantity! - quantityRecieved),
-        'quantitySales': (selectedItem.quantitySales! - quantityRecieved),
+        'itemQuantity': (itemQuantity! - quantityShipped),
+        'quantitySales': (selectedItem.quantitySales! - quantityShipped),
       });
+      print('3');
     } catch (e) {
       print('error uploading to inventory $e');
+    }
+  }
+
+  Future<void> addItemtoSalesDelivered() async {
+    try {
+      if (prevData == false) {
+        DocumentReference docRref = FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('orders')
+            .doc('sales')
+            .collection('sales_orders')
+            .doc(widget.orderId.toString())
+            .collection('itemsDelivered')
+            .doc(_itemnameController.text);
+       await docRref.set({
+          'itemName': _itemnameController.text,
+          'quantitySalesDelivered': quantityShipped,
+        });
+        print('0');
+      }
+    } catch (e) {
+      print('yeh wala hai kya $e');
+    }
+  }
+
+  checkPrevItemDeliveredData() async {
+    try {
+      final String orderId = widget.orderId.toString();
+      final String item =
+          _itemnameController.text; // Trim to remove leading/trailing spaces
+
+      if (orderId.isNotEmpty && item.isNotEmpty) {
+        final CollectionReference cRef = FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('orders')
+            .doc('sales')
+            .collection('sales_orders')
+            .doc(orderId)
+            .collection('itemsDelivered');
+
+        // final QuerySnapshot snapshot = await cRef.limit(1).get();
+        DocumentSnapshot docSnap = await cRef.doc(item).get();
+        if (docSnap.exists) {
+          setState(() => prevData = true);
+          int previousDeliveryQuantity = docSnap.get('quantitySalesDelivered');
+          await cRef.doc(item).update({
+            'quantitySalesDelivered':
+                (previousDeliveryQuantity + quantityShipped),
+          });
+        }
+      }
+    } catch (e) {
+      print("error checking data :$e");
     }
   }
 
@@ -153,203 +272,125 @@ class _SalesOrderTransactionsShippedState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
-      decoration: BoxDecoration(
-          color: w,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return Stack(children: [
+      Positioned(
+        bottom: 0, // Adjust the position as needed
+        left: 0, // Adjust the position as needed
+        right: 0,
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.85,
+          decoration: BoxDecoration(
+              color: w,
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Select Items and Quantities Delivered'),
+                  Row(
+                    children: [
+                      const Text('Select Items and Quantities Delivered'),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  CircleAvatar(
+                    backgroundColor: t,
+                    maxRadius: 22,
+                    child: const Image(
+                      width: 44,
+                      height: 44,
+                      image: AssetImage('lib/images/itemimage.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  TextFieldSearch(
+                    minStringLength: 1,
+                    label: 'Search Item',
+                    controller: _itemnameController,
+                    decoration:
+                        getInputDecoration(hint: 'Search Item', errorColor: r),
+                    initialList: getItemNames(),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  TextFormField(
+                    // validator: validateOrderNo,
+                    validator: validateSOIQ,
+                    cursorColor: blue,
+                    cursorWidth: 1,
+                    textInputAction: TextInputAction.next,
+                    decoration: getInputDecoration(
+                        hint: '1.00', errorColor: Colors.red),
+                    onChanged: (value) {
+                      quantityShipped = int.parse(value);
+                      // String limit = await checkQuantityLimit();
+                      // print(limit);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
                   const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
+                  // const SizedBox(height: 24,),
+                  GestureDetector(
+                    onTap: () async {
+                      try {
+                        if (validateForm() == true) {
+                          track = ItemTracking(
+                              itemName: _itemnameController.text,
+                              date: DateFormat('dd-MM-yyyy').format(now),
+                              quantityShipped: quantityShipped);
+
+                          _isLoading ? null : _handleSubmit();
+
+                          // if (!context.mounted) return;
+                        } else {
+                          print('error validating form');
+                        }
+                      } catch (e) {
+                        //snackbar to show item not added
+                        print('error on final addition $e');
+                      }
+                      // add items and pass the item and quantity to the list in sales order
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: blue,
+                      ),
+                      width: double.infinity,
+                      height: 48,
+                      child: Center(
+                          child: Text(
+                        'Add Item',
+                        style: TextStyle(
+                          color: w,
+                        ),
+                        textScaleFactor: 1.2,
+                      )),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 24,
-              ),
-              CircleAvatar(
-                backgroundColor: t,
-                maxRadius: 22,
-                child: const Image(
-                  width: 44,
-                  height: 44,
-                  image: AssetImage('lib/images/itemimage.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              TextFieldSearch(
-                minStringLength: 1,
-                label: 'Search Item',
-                controller: _itemnameController,
-                decoration:
-                    getInputDecoration(hint: 'Search Item', errorColor: r)
-                        .copyWith(
-                  suffix: GestureDetector(
-                    onTap: () {
-                      // add a unique item to items list
-                      // Navigator.of(context, rootNavigator: true).push(
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const AddItems()));
-                    },
-                    child: Icon(
-                      LineIcons.plus,
-                      size: 18,
-                      color: blue,
-                    ),
-                  ),
-                ),
-                initialList: getItemNames(),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              TextFormField(
-                // validator: validateOrderNo,
-                validator: validateSOIQ,
-                cursorColor: blue,
-                cursorWidth: 1,
-                textInputAction: TextInputAction.next,
-                decoration:
-                    getInputDecoration(hint: '1.00', errorColor: Colors.red)
-                        .copyWith(
-                  suffix: GestureDetector(
-                    onTap: () {
-                      // change type of unit
-                      // Navigator.of(context,
-                      //         rootNavigator: true)
-                      //     .push(MaterialPageRoute(
-                      //         builder: (context) =>
-                      //             AddItems()));
-                    },
-                    child: Icon(
-                      LineIcons.box,
-                      size: 18,
-                      color: blue,
-                    ),
-                  ),
-                ),
-                onChanged: (value) {
-                  quantityRecieved = int.parse(value);
-                  // String limit = await checkQuantityLimit();
-                  // print(limit);
-                },
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const Spacer(),
-              // const SizedBox(height: 24,),
-              GestureDetector(
-                onTap: () async {
-                  try {
-                    if (validateForm() == true) {
-                      final track = ItemTracking(
-                          itemName: _itemnameController.text,
-                          date: DateFormat('dd-MM-yyyy').format(now),
-                          quantityShipped: quantityRecieved);
-
-                      // add track in sales order
-                      // await FirebaseFirestore.instance
-                      //     .collection('UserData')
-                      //     .doc(auth!.email)
-                      //     .collection('orders')
-                      //     .doc('sales')
-                      //     .collection('sales_orders')
-                      //     .doc(widget.orderId.toString())
-                      //     .collection('tracks')
-                      //     .doc(now.microsecondsSinceEpoch.toString())
-                      //     .set({
-                      //   'itemName': track.itemName,
-                      //   'date': track.date,
-                      //   'quantityShipped': track.quantityShipped,
-                      // });
-                      await uploadTrack(track);
-
-                      // update items list sales quantity in sales order
-                      // await FirebaseFirestore.instance
-                      //     .collection('UserData')
-                      //     .doc(auth!.email)
-                      //     .collection('orders')
-                      //     .doc('sales')
-                      //     .collection('sales_orders')
-                      //     .doc(widget.orderId.toString())
-                      //     .collection('items')
-                      //     .doc(_itemnameController.text)
-                      //     .update({
-                      //   'quantitySales':
-                      //       (selectedItem.quantitySales! - quantityRecieved),
-                      // });
-                      await uploadtoSalesOrder();
-                      // make updates in inventory items
-                      // await FirebaseFirestore.instance
-                      //     .collection('UserData')
-                      //     .doc(auth!.email)
-                      //     .collection('Items')
-                      //     .doc(_itemnameController.text)
-                      //     .update({
-                      //   'itemQuantity':
-                      //       (selectedItem.itemQuantity! + quantityRecieved),
-                      //   'quantitySales':
-                      //       (selectedItem.quantitySales! - quantityRecieved),
-                      // });
-                      await uploadToInventory();
-
-                      // .where('itemName',
-                      //     isEqualTo: _itemnameController.text).get();
-
-                      // snap.docs.where((element) => false);
-
-                      // update in inventory items
-                      if (!context.mounted) return;
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyApp()));
-                    } else {
-                      print('error validating form');
-                    }
-                  } catch (e) {
-                    //snackbar to show item not added
-                    print('error on final addition $e');
-                  }
-                  // add items and pass the item and quantity to the list in sales order
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: blue,
-                  ),
-                  width: double.infinity,
-                  height: 48,
-                  child: Center(
-                      child: Text(
-                    'Add Item',
-                    style: TextStyle(
-                      color: w,
-                    ),
-                    textScaleFactor: 1.2,
-                  )),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
-    );
+      if (_isLoading) LoadingOverlay()
+    ]);
   }
 }

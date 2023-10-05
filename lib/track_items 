@@ -1,4 +1,6 @@
 
+    Development Process
+
 Tracking Items
 
 • change the database for Items-
@@ -47,3 +49,32 @@ quantity delivered in provider and also to update it to firebase
 
 - crete pop up for selecting item and quantity 
 - selected item quantity to be updated on save in two places : sales order trackings , item inventory trackings
+
+
+in databsae reduce nesting
+
+
+ref no ,order id, itemname, date ,item quantity returned ,
+
+
+create pop up with fields -
+item name, quantity ,reference no,date , to inventory bool 
+
+load items deliverted into the popup 
+the load items have to come from sales order so load fetch sales order for returns 
+ 
+
+ when clicked on confirm return 
+ add sales return items in sales order
+ add sales return ticket using return item tracking model
+ make inventory changes for add to inventory or send to waste bucket through waste model
+
+
+
+ Purchase (Orders and Returns) -
+
+    • create model and provider for everything so you can disect when to call data and when to not call data 
+    • begin with vendors adding 
+    • check if all orders has been received by supplier then change status to complete ( also do this for sales)
+    
+    CACHING for all the data to be loaded on the pages 

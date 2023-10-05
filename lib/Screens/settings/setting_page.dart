@@ -1,3 +1,4 @@
+import 'package:ashwani/Services/authorizeUser/loginauth.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     print('error');
                   }
                   Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(builder: (context) => const MyApp()));
+                      MaterialPageRoute(builder: (context) => const LoginAuthPage()));
                 },
                 child: Container(
                     decoration: BoxDecoration(
