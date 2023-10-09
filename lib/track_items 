@@ -75,6 +75,6 @@ the load items have to come from sales order so load fetch sales order for retur
 
     • create model and provider for everything so you can disect when to call data and when to not call data 
     • begin with vendors adding 
-    • check if all orders has been received by supplier then change status to complete ( also do this for sales)
+    • check if all orders have been received by supplier then change status to complete ( also do this for sales)
     
-    CACHING for all the data to be loaded on the pages 
+    CACHING for all the data to be loaded on the pages (using providers)

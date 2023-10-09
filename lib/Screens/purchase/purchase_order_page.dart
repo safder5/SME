@@ -1,5 +1,6 @@
 import 'package:ashwani/Models/purchase_order.dart';
-import 'package:ashwani/Screens/purchase/purchase_order_helping_widgets.dart';
+import 'package:ashwani/Screens/purchase/purchase_order_recieved_items.dart';
+import 'package:ashwani/Screens/purchase/purchase_order_sub_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
@@ -21,6 +22,45 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: w,
+      floatingActionButton: Visibility(
+          visible: isSelected[0] ? false : true,
+          child: FloatingActionButton(
+            onPressed: () {
+              if (isSelected[1]) {
+                // show modal sheet to add items that have been recieved
+                try {
+                  showModalBottomSheet<dynamic>(
+                      backgroundColor: t,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PurchaseOrderRecievedItems(
+                          itemsofOrder: widget.purchaseOrder.items,
+                            orderId: widget.purchaseOrder.orderID!);
+                      });
+                } catch (e) {
+                  print('yeh hua hai $e');
+                }
+              }
+              if (isSelected[2]) {
+                // show modal sheet to add items for returned orders #DONOT
+                //forget the reason why it was returned
+
+                //  showModalBottomSheet<dynamic>(
+                //   backgroundColor: t,
+                //   isScrollControlled: true,
+                //   context: context,
+                //   builder: (BuildContext context) {
+                //     return ;
+                //   });
+              }
+            },
+            backgroundColor: blue,
+            child: Icon(
+              Icons.add,
+              color: w,
+            ),
+          )),
       body: Column(
         children: [
           Container(

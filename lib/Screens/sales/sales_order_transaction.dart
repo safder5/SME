@@ -249,7 +249,7 @@ class _SalesOrderTransactionsShippedState
 
     int v = int.parse(value);
     if (v > int.parse(itemLimit)) {
-      return 'Quantity cannot exceed inventory quantity (${int.parse(itemLimit)}).';
+      return 'Quantity cannot exceed sales quantity (${int.parse(itemLimit)}).';
     }
     return null;
   }
