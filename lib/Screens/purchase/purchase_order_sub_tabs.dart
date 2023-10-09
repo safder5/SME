@@ -5,8 +5,8 @@ import '../../constantWidgets/boxes.dart';
 import '../../constants.dart';
 
 class POPDetails extends StatelessWidget {
-   POPDetails({super.key, this.items});
-   List<Item>? items;
+   const POPDetails({super.key, required this.items});
+   final List<Item>? items;
   @override
   Widget build(BuildContext context) {
     return Container(

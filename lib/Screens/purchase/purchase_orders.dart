@@ -37,7 +37,7 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
     try {
       await poProvider.fetchPurchaseOrders();
       setState(() {
-        poList = poProvider.po;
+        poList = poProvider.po.reversed.toList();
         isLloading = false;
       });
     } catch (e) {

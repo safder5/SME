@@ -55,3 +55,8 @@ sIh
 using build context between async gaps 
 use 
  if (!context.mounted) return;
+
+
+ this will pop all the routes until the main default route and push to your destination route.
+
+ Navigator.pushNamedAndRemoveUntil(context, "destination_route", ModalRoute.withName('/')); 
