@@ -53,3 +53,17 @@ class ReturnItemTracking {
       this.quantitySalesReturned,
       this.toInventory});
 }
+
+class ItemTrackingPurchaseOrder {
+  String itemName;
+  int quantityRecieved;
+  int quantityReturned;
+  String? date;
+
+  ItemTrackingPurchaseOrder({
+    required this.itemName,
+    this.quantityRecieved = 0,
+    this.quantityReturned = 0,
+    this.date,
+  });
+}

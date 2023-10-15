@@ -1,9 +1,13 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Services/helper.dart';
+import 'package:ashwani/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:textfield_search/textfield_search.dart';
 
+import '../../Models/item_tracking_model.dart';
 import '../../constants.dart';
 
 class PurchaseOrderRecievedItems extends StatefulWidget {
@@ -21,16 +25,228 @@ class _PurchaseOrderRecievedItemsState
     extends State<PurchaseOrderRecievedItems> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _itemnameController = TextEditingController();
+  final TextEditingController _quantityCtrl = TextEditingController();
   final TextEditingController _refCtrl = TextEditingController();
   final auth = FirebaseAuth.instance.currentUser;
 
   bool _isLoading = false;
-  String itemLimit = '';
+  int itemLimit = 0;
   String refNumber = '';
   int quantityRecieved = 0;
   final now = DateTime.now();
+  bool prevData = false;
+  int? itemQuantity = 0;
 
+  ItemTrackingPurchaseOrder track =
+      ItemTrackingPurchaseOrder(itemName: 'itemName');
   Item selectedItem = Item(itemName: ' ', itemQuantity: 0, quantityPurchase: 0);
+
+  void _handleSubmit() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true; // Show loading overlay
+      });
+    }
+    //  await  Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      await _executeFutures(track).then((_) {
+        setState(() {
+          _isLoading = false; // Hide loading overlay
+        });
+      });
+    }
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const MyApp()));
+  }
+
+  Future<void> _executeFutures(ItemTrackingPurchaseOrder track) async {
+    await prevItemsRecievedData();
+    // checks what quantity has been recieved earlier and marks #prevdata = true (if it has data). done
+
+    await uploadItemsRecieved();
+    // uploads item recieved creating a new items column in there if prevData = false .done
+
+    await updatePurchaseOrderItemDetails();
+    // subtracts what values have been recieved and reduces the purchase quantity to be recieved
+
+    await uploadPurchaseActivity(track);
+    // uploads an activity track in purchase activity. done
+
+    await uploadOrderTrack(track);
+    // uploads a track inside the purchase order for future use if client wants. done
+
+    await updateInventory();
+    // updates and makes necessary changes in inventory items. done
+
+    await updateItemTrack();
+    // updates item track/activity in main inventory. done
+  }
+
+  Future<void> prevItemsRecievedData() async {
+    try {
+      final String orderId = widget.orderId.toString();
+      final String item = _itemnameController.text;
+
+      if (orderId.isNotEmpty && item.isNotEmpty) {
+        final CollectionReference cRef = FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('orders')
+            .doc('purchases')
+            .collection('purchase_orders')
+            .doc(orderId)
+            .collection('itemsRecieved');
+
+        DocumentSnapshot docSnap = await cRef.doc(item).get();
+        if (docSnap.exists) {
+          print('yes it exists');
+          int previousRecievedQuantity = docSnap.get('quantityRecieved');
+          await cRef.doc(item).update({
+            'quantityRecieved': (previousRecievedQuantity + quantityRecieved)
+          });
+
+          setState(() => prevData = true);
+        }
+      }
+    } catch (e) {
+      print("error checking prevData $e");
+    }
+  }
+
+  Future<void> uploadItemsRecieved() async {
+    final String orderId = widget.orderId.toString();
+    final String item = _itemnameController.text;
+    try {
+      if (prevData == false) {
+        DocumentReference docRref = FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('orders')
+            .doc('purchases')
+            .collection('purchase_orders')
+            .doc(orderId)
+            .collection('itemsRecieved')
+            .doc(item);
+        await docRref.set({
+          'itemName': _itemnameController.text,
+          'quantityRecieved': quantityRecieved,
+        });
+      }
+    } catch (e) {
+      print('error while uploading items recieved to firebastore $e');
+    }
+  }
+
+  Future<void> updatePurchaseOrderItemDetails() async {
+    final String orderId = widget.orderId.toString();
+    final String item = _itemnameController.text;
+    try {
+      CollectionReference cRref = FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('purchases')
+          .collection('purchase_orders')
+          .doc(orderId)
+          .collection('items');
+      DocumentSnapshot docSnap = await cRref.doc(item).get();
+      int prevItemQuantity = docSnap.get('itemQuantity');
+      await cRref
+          .doc(item)
+          .update({'itemQuantity': prevItemQuantity - quantityRecieved});
+    } catch (e) {
+      print('error while updating purchase order details');
+    }
+  }
+
+  Future<void> uploadPurchaseActivity(ItemTrackingPurchaseOrder track) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('purchase_activities')
+          .doc(now.millisecondsSinceEpoch.toString())
+          .set({
+        'itemName': track.itemName,
+        'date': track.date,
+        'quantityRecieved': track.quantityRecieved
+      });
+    } catch (e) {
+      print('error while uploading purchase activities $e');
+    }
+  }
+
+  Future<void> uploadOrderTrack(ItemTrackingPurchaseOrder track) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('purchases')
+          .collection('purchase_orders')
+          .doc(widget.orderId.toString())
+          .collection('tracks')
+          .doc(now.millisecondsSinceEpoch.toString())
+          .set({
+        'itemName': track.itemName,
+        'date': track.date,
+        'quantityRecieved': track.quantityRecieved,
+        'referenceNo': _refCtrl.text.toString(),
+      });
+    } catch (e) {
+      print('error while uploading order track $e');
+    }
+  }
+
+  Future<void> updateInventory() async {
+    try {
+      DocumentReference docRef = FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('Items')
+          .doc(_itemnameController.text);
+      DocumentSnapshot snapshot = await docRef.get();
+      if (snapshot.exists && snapshot.data() != null) {
+        itemQuantity = snapshot.get('itemQuantity');
+        await FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('Items')
+            .doc(_itemnameController.text)
+            .update({
+          'itemQuantity': (itemQuantity! + quantityRecieved),
+          'quantityPurchase': (itemLimit - quantityRecieved),
+        });
+      }
+    } catch (e) {
+      print('error while updating inventory $e');
+    }
+  }
+
+  Future<void> updateItemTrack() async {
+    try {
+      ItemTrackingModel itemTracking = ItemTrackingModel(
+          orderID: widget.orderId.toString(),
+          quantity: quantityRecieved,
+          reason: 'Purchase Recieved');
+
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('Items')
+          .doc(_itemnameController.text)
+          .collection('tracks')
+          .doc(now.millisecondsSinceEpoch.toString())
+          .set({
+        "orderID": itemTracking.orderID,
+        'quantity': itemTracking.quantity,
+        'reason': itemTracking.reason,
+      });
+    } catch (e) {
+      print('error uploading item inventory tracks');
+    }
+  }
 
   List<String?> getItemNames() {
     return widget.itemsofOrder!.map((item) => item.itemName).toList();
@@ -44,13 +260,13 @@ class _PurchaseOrderRecievedItemsState
           if (i.itemName == itemName) {
             setState(() {
               selectedItem = i;
-              itemLimit = i.quantityPurchase.toString();
+              itemLimit = i.itemQuantity!;
             });
             break;
           }
         }
       } catch (e) {
-        print(e);
+        print('get data error $e');
       }
     }
   }
@@ -63,8 +279,8 @@ class _PurchaseOrderRecievedItemsState
       return ' Please enter some Quantity';
     }
     int v = int.parse(value);
-    if (v > int.parse(itemLimit)) {
-      return 'Recieved Quantity cannot exceed Purchased Quantity ($itemLimit)';
+    if (v > itemLimit) {
+      return 'Cannot exceed Purchased Quantity ($itemLimit)';
     }
     return null;
   }
@@ -145,6 +361,7 @@ class _PurchaseOrderRecievedItemsState
                       ),
                       TextFormField(
                         // validator: validateOrderNo,
+                        controller: _quantityCtrl,
                         validator: validatePOIQ,
                         cursorColor: blue,
                         cursorWidth: 1,
@@ -169,22 +386,23 @@ class _PurchaseOrderRecievedItemsState
                         decoration: getInputDecoration(
                             hint: 'Reference number/ Bill number',
                             errorColor: Colors.red),
-                        onChanged: (value) {
-                          refNumber = value;
-                        },
+                        // onChanged: (value) {
+                        //   refNumber = int.parse(value.replaceAll(RegExp(r'[^0-9]'),''));
+                        // },
                       ),
                       const Spacer(),
-                      // const SizedBox(height: 24,),
                       GestureDetector(
                         onTap: () async {
                           try {
+                            // validateForm();
                             if (validateForm() == true) {
-                              // track = ItemTracking(
-                              //     itemName: _itemnameController.text,
-                              //     date: DateFormat('dd-MM-yyyy').format(now),
-                              //     quantityShipped: quantityRecieved);
+                              print(true);
+                              track = ItemTrackingPurchaseOrder(
+                                  itemName: _itemnameController.text,
+                                  date: DateFormat('dd-MM-yyyy').format(now),
+                                  quantityRecieved: quantityRecieved);
 
-                              // _isLoading ? null : _handleSubmit();
+                              _isLoading ? null : _handleSubmit();
 
                               // if (!context.mounted) return;
                             } else {
@@ -192,7 +410,7 @@ class _PurchaseOrderRecievedItemsState
                             }
                           } catch (e) {
                             //snackbar to show item not added
-                            print('error on final addition $e');
+                            print('error $e');
                           }
                           // add items and pass the item and quantity to the list in sales order
                         },
@@ -223,3 +441,6 @@ class _PurchaseOrderRecievedItemsState
     );
   }
 }
+
+// i need to validate the form then make changes -
+//

@@ -934,3 +934,98 @@ class SOReturnsItemTile extends StatelessWidget {
     );
   }
 }
+
+
+
+
+class PORecievedItemTile extends StatelessWidget {
+  final String quantity;
+  final String itemName;
+  final int index;
+  int? quantityReturned;
+  PORecievedItemTile(
+      {super.key,
+      required this.quantity,
+      required this.itemName,
+      required this.index,
+      this.quantityReturned});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemName,
+                    style: const TextStyle(fontWeight: FontWeight.w300),
+                    textScaleFactor: 1,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Units : $quantity',
+                        textScaleFactor: 0.7,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 0.5, // Width of the vertical line
+                        height:
+                            12, // Height to fill the available vertical space
+                        color: b32, // Color of the line
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        quantityReturned == 0
+                            ? ''
+                            : 'Returned: ${quantityReturned.toString()}',
+                        textScaleFactor: 0.7,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                'Delivered',
+                style: TextStyle(color: gn, fontWeight: FontWeight.w300),
+                textScaleFactor: 0.8,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

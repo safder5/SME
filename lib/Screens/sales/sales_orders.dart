@@ -33,7 +33,7 @@ class _SalesOrdersState extends State<SalesOrders> {
         setState(() {
           isLoading = false;
           hasData = true;
-          soList = soProvider.som;
+          soList = soProvider.som.reversed.toList();
         });
       }
     }
@@ -46,7 +46,7 @@ class _SalesOrdersState extends State<SalesOrders> {
       await soProvider.fetchSalesOrders();
       if (!_isDisposed && !hasData) {
         setState(() {
-          soList = soProvider.som;
+          soList = soProvider.som.reversed.toList();
           isLoading = false;
         });
       }

@@ -11,6 +11,9 @@ class PurchaseOrderModel {
   final String? deliveryMethod;
   final String? status;
   List<Item>? items;
+    List<ItemTrackingPurchaseOrder>? tracks;
+  List<ItemTrackingPurchaseOrder>? itemsRecieved;
+  List<ItemTrackingPurchaseOrder>? itemsReturned;
 
   PurchaseOrderModel({
     required this.orderID,
@@ -23,5 +26,8 @@ class PurchaseOrderModel {
     required this.tandc,
     required this.status,
     this.items,
+    this.itemsRecieved,
+    this.itemsReturned,
+    this.tracks,
   });
 }

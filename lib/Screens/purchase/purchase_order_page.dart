@@ -1,5 +1,6 @@
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Screens/purchase/purchase_order_recieved_items.dart';
+import 'package:ashwani/Screens/purchase/purchase_order_return_items.dart';
 import 'package:ashwani/Screens/purchase/purchase_order_sub_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,6 +21,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
   List<String> toggleButtons = [('Details'), ('Recieved'), ('Returns')];
   @override
   Widget build(BuildContext context) {
+    // print(widget.purchaseOrder.itemsRecieved!.length);
     return Scaffold(
       backgroundColor: w,
       floatingActionButton: Visibility(
@@ -35,7 +37,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return PurchaseOrderRecievedItems(
-                          itemsofOrder: widget.purchaseOrder.items,
+                            itemsofOrder: widget.purchaseOrder.items,
                             orderId: widget.purchaseOrder.orderID!);
                       });
                 } catch (e) {
@@ -43,16 +45,17 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                 }
               }
               if (isSelected[2]) {
-                // show modal sheet to add items for returned orders #DONOT
+                // show modal sheet to add items for returned order
+                // #DONOT
                 //forget the reason why it was returned
 
-                //  showModalBottomSheet<dynamic>(
-                //   backgroundColor: t,
-                //   isScrollControlled: true,
-                //   context: context,
-                //   builder: (BuildContext context) {
-                //     return ;
-                //   });
+                 showModalBottomSheet<dynamic>(
+                  backgroundColor: t,
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return PurchaseOrderReturnItems(itemsRecieved: widget.purchaseOrder.itemsRecieved,orderId: widget.purchaseOrder.orderID,);
+                  });
               }
             },
             backgroundColor: blue,
@@ -211,6 +214,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                     for (var i = 0; i < isSelected.length; i++)
                       GestureDetector(
                         onTap: () {
+                          
                           setState(() {
                             for (var buttonIndex = 0;
                                 buttonIndex < isSelected.length;
@@ -248,7 +252,10 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
             POPDetails(
               items: widget.purchaseOrder.items,
             ),
-          if (isSelected[1]) POPRecieved(),
+          if (isSelected[1])
+            POPRecieved(
+              itemsRecieved: widget.purchaseOrder.itemsRecieved,
+            ),
           if (isSelected[2]) POPReturns(),
         ],
       ),

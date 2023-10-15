@@ -61,17 +61,46 @@ class POPDetails extends StatelessWidget {
   }
 }
 
-class POPRecieved extends StatefulWidget {
-  const POPRecieved({super.key});
+class POPRecieved extends StatelessWidget {
+   List<ItemTrackingPurchaseOrder>? itemsRecieved;
+   POPRecieved({super.key,this.itemsRecieved});
 
-  @override
-  State<POPRecieved> createState() => _POPRecievedState();
-}
-
-class _POPRecievedState extends State<POPRecieved> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    itemsRecieved ??= [];
+    itemsRecieved = itemsRecieved!.reversed.toList();
+    return Container(
+      height: (MediaQuery.of(context).size.height * 0.66) - 110,
+      color: w,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
+        child: Column(
+          children: [
+            Divider(
+              height: 0,
+              color: b32,
+              thickness: 0.2,
+            ),
+            Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return PORecievedItemTile(
+                      quantity: itemsRecieved![index]
+                          .quantityRecieved
+                          .toString(),
+                      itemName: itemsRecieved![index].itemName,
+                      quantityReturned: itemsRecieved![index].quantityReturned,
+                      index: index);
+                },
+                itemCount: itemsRecieved?.length ?? 0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

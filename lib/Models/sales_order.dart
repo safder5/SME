@@ -26,6 +26,7 @@ class SalesOrderModel {
     this.items,
     this.tracks,
     this.itemsDelivered,
+    this.itemsReturned,
   });
 }
 

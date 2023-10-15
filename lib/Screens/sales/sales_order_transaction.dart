@@ -116,7 +116,7 @@ class _SalesOrderTransactionsShippedState
       ItemTrackingModel itemTracking = ItemTrackingModel(
           orderID: widget.orderId.toString(),
           quantity: quantityShipped,
-          reason: 'Sales Order');
+          reason: 'Sales Delivered');
 
       await FirebaseFirestore.instance
           .collection('UserData')
@@ -145,17 +145,16 @@ class _SalesOrderTransactionsShippedState
       DocumentSnapshot snapshot = await docRef.get();
       if (snapshot.exists && snapshot.data() != null) {
         itemQuantity = snapshot.get('itemQuantity');
+        await FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('Items')
+            .doc(_itemnameController.text)
+            .update({
+          'itemQuantity': (itemQuantity! - quantityShipped),
+          'quantitySales': (selectedItem.quantitySales! - quantityShipped),
+        });
       }
-      await FirebaseFirestore.instance
-          .collection('UserData')
-          .doc(auth!.email)
-          .collection('Items')
-          .doc(_itemnameController.text)
-          .update({
-        'itemQuantity': (itemQuantity! - quantityShipped),
-        'quantitySales': (selectedItem.quantitySales! - quantityShipped),
-      });
-      print('3');
     } catch (e) {
       print('error uploading to inventory $e');
     }
@@ -173,7 +172,7 @@ class _SalesOrderTransactionsShippedState
             .doc(widget.orderId.toString())
             .collection('itemsDelivered')
             .doc(_itemnameController.text);
-       await docRref.set({
+        await docRref.set({
           'itemName': _itemnameController.text,
           'quantitySalesDelivered': quantityShipped,
         });
@@ -184,7 +183,7 @@ class _SalesOrderTransactionsShippedState
     }
   }
 
-  checkPrevItemDeliveredData() async {
+ Future<void> checkPrevItemDeliveredData() async {
     try {
       final String orderId = widget.orderId.toString();
       final String item =

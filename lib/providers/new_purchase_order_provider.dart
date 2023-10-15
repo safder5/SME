@@ -75,6 +75,43 @@ class NPOrderProvider with ChangeNotifier {
                 itemQuantity: itemData['itemQuantity']);
           }).toList();
         }
+
+        final tracksCollection = doc.reference.collection('tracks');
+        final trackDocs = await tracksCollection.get();
+        if (trackDocs.docs.isNotEmpty) {
+          purchaseOrder.tracks = trackDocs.docs.map((tdoc) {
+            final trackData = tdoc.data();
+            return ItemTrackingPurchaseOrder(
+                itemName: trackData['itemName'],
+                quantityRecieved: trackData['quantityRecieved'] ?? 0,
+                quantityReturned: trackData['quantityReturned'] ?? 0,
+                date: trackData['date'] ?? '');
+          }).toList();
+        }
+        final itemsRecievedCollection =
+            doc.reference.collection('itemsRecieved');
+        final recieveDocs = await itemsRecievedCollection.get();
+        if (recieveDocs.docs.isNotEmpty) {
+          purchaseOrder.itemsRecieved = recieveDocs.docs.map((recieved) {
+            final itemRecievedData = recieved.data();
+            return ItemTrackingPurchaseOrder(
+              itemName: itemRecievedData['itemName'],
+              quantityRecieved: itemRecievedData['quantityRecieved'] ?? 0,
+              quantityReturned: itemRecievedData['quantityReturned'] ?? 0,
+            );
+          }).toList();
+        }
+        final itemReturnedCollection = doc.reference.collection('returns');
+        final itemsReturnedDocs = await itemReturnedCollection.get();
+        if (itemsReturnedDocs.docs.isNotEmpty) {
+          purchaseOrder.itemsReturned = itemsReturnedDocs.docs.map((e) {
+            final itemReturned = e.data();
+            return ItemTrackingPurchaseOrder(
+              itemName: itemReturned['itemName'],
+              quantityReturned: itemReturned['quantityReturned'] ?? 0,
+            );
+          }).toList();
+        }
         _po.add(purchaseOrder);
       }
       notifyListeners();
