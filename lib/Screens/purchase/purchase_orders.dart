@@ -22,12 +22,27 @@ class PurchaseOrders extends StatefulWidget {
 class _PurchaseOrdersState extends State<PurchaseOrders> {
   final ClampingScrollPhysics controllScroll = const ClampingScrollPhysics();
   List<PurchaseOrderModel> poList = [];
-  bool isLloading = true;
+  bool isloading = true;
+  bool isDisposed = false;
+  bool hasData = false;
+  checkProviderforData() {
+    final poProvider = Provider.of<NPOrderProvider>(context, listen: false);
+    if (poProvider.po.isNotEmpty) {
+      if (!isDisposed) {
+        setState(() {
+          isloading = false;
+          hasData = true;
+          poList = poProvider.po.reversed.toList();
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     // Fetch sales orders and update the list
+    checkProviderforData();
     fetchPurchaseOrders(context);
   }
 
@@ -36,12 +51,19 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
 
     try {
       await poProvider.fetchPurchaseOrders();
-      setState(() {
-        poList = poProvider.po.reversed.toList();
-        isLloading = false;
-      });
+      if (!isDisposed && !hasData) {
+        setState(() {
+          poList = poProvider.po.reversed.toList();
+          isloading = false;
+        });
+      }
     } catch (e) {
       // Handle the error
+      if (!isDisposed) {
+        setState(() {
+          isloading = false;
+        });
+      }
       print('Error fetching sales orders: $e');
     }
   }
@@ -135,7 +157,7 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
               ],
             ),
           ),
-          if(isLloading) LoadingOverlay()
+          if (isloading) LoadingOverlay()
         ],
       ),
     );

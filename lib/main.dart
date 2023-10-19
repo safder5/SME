@@ -1,6 +1,7 @@
 import 'package:ashwani/Providers/bs_address_provider.dart';
 import 'package:ashwani/Providers/customer_provider.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Providers/vendor_provider.dart';
 import 'package:ashwani/Services/authorizeUser/authorise.dart';
@@ -85,6 +86,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(create: (context) => BSAddressProvider()),
         ChangeNotifierProvider(create: (context) => VendorProvider()),
         ChangeNotifierProvider(create: (context) => SalesReturnsProvider()),
+         ChangeNotifierProvider(create: (context) => PurchaseReturnsProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

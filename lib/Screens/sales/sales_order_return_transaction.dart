@@ -32,7 +32,7 @@ class _SalesOrderReturnTransactionsState
   Item selectedItem =
       Item(itemName: 'itemName', itemQuantity: 0, quantitySalesReturned: 0);
 
-  ReturnItemTracking rit = ReturnItemTracking(
+  SalesReturnItemTracking rit = SalesReturnItemTracking(
     orderId: 0,
     itemname: 'itemname',
   );
@@ -152,21 +152,25 @@ class _SalesOrderReturnTransactionsState
   }
 
   Future<void> uploadTrack(ItemTracking track) async {
-    await FirebaseFirestore.instance
-        .collection('UserData')
-        .doc(auth!.email)
-        .collection('orders')
-        .doc('sales')
-        .collection('sales_orders')
-        .doc(widget.orderId.toString())
-        .collection('tracks')
-        .doc(now.microsecondsSinceEpoch.toString())
-        .set({
-      'itemName': track.itemName,
-      'date': track.date,
-      'quantityReturned': track.quantityReturned,
-    });
-    print('1');
+    try {
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('sales')
+          .collection('sales_orders')
+          .doc(widget.orderId.toString())
+          .collection('tracks')
+          .doc(now.microsecondsSinceEpoch.toString())
+          .set({
+        'itemName': track.itemName,
+        'date': track.date,
+        'quantityReturned': track.quantityReturned,
+      });
+      print('1');
+    } catch (e) {
+      print('error uploading Track $e');
+    }
   }
 
   Future<void> createSalesReturn() async {
@@ -280,7 +284,8 @@ class _SalesOrderReturnTransactionsState
           if (i.itemName == itemname) {
             setState(() {
               selectedItem = i;
-              itemLimit = i.quantitySalesDelivered.toString();
+              itemLimit = (i.quantitySalesDelivered! - i.quantitySalesReturned!)
+                  .toString();
             });
             break;
           }
@@ -395,8 +400,14 @@ class _SalesOrderReturnTransactionsState
                       decoration: getInputDecoration(
                           hint: '1.00', errorColor: Colors.red),
                       onChanged: (value) {
-                        quantityReturned = int.parse(value);
-                        rit.quantitySalesReturned = int.parse(value);
+                        try {
+                          quantityReturned = int.parse(value);
+                          rit.quantitySalesReturned = int.parse(value);
+                        } catch (e) {
+                          quantityReturned = int.parse('0');
+                          rit.quantitySalesReturned = int.parse('0');
+                        }
+
                         // String limit = await checkQuantityLimit();
                         // print(limit);
                       },
@@ -458,7 +469,7 @@ class _SalesOrderReturnTransactionsState
                                 date: DateFormat('dd-MM-yyyy').format(now),
                                 quantityReturned: quantityReturned);
 
-                            rit = ReturnItemTracking(
+                            rit = SalesReturnItemTracking(
                                 orderId: widget.orderId,
                                 itemname: _itemnameController.text,
                                 referenceNo: _referencenoCtrl.text,

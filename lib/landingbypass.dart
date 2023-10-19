@@ -20,8 +20,8 @@ class _LandingBypassState extends State<LandingBypass> {
     PersistentTabController controller;
     controller = PersistentTabController(initialIndex: 0);
     List<Widget> buildScreens() {
-      return [const HomePage(), const SalesPage(), const PurchasePage(), const BOM()];
-    }
+      return [const HomePage(), const SalesPage(), const PurchasePage(),];
+    }// const BOM()
 
     List<PersistentBottomNavBarItem> navBarItems() {
       return [
@@ -61,18 +61,18 @@ class _LandingBypassState extends State<LandingBypass> {
             title: 'Purchase',
             activeColorPrimary: blue,
             activeColorSecondary: blue),
-        PersistentBottomNavBarItem(
-            inactiveIcon: Icon(
-              LineIcons.pieChart,
-              color: b32,
-            ),
-            icon: Icon(
-              LineIcons.pieChart,
-              color: blue,
-            ),
-            title: 'BOM',
-            activeColorPrimary: blue,
-            activeColorSecondary: blue)
+        // PersistentBottomNavBarItem(
+        //     inactiveIcon: Icon(
+        //       LineIcons.pieChart,
+        //       color: b32,
+        //     ),
+        //     icon: Icon(
+        //       LineIcons.pieChart,
+        //       color: blue,
+        //     ),
+        //     title: 'BOM',
+        //     activeColorPrimary: blue,
+        //     activeColorSecondary: blue)
       ];
     }
 

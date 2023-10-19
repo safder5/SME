@@ -183,7 +183,7 @@ class _SalesOrderTransactionsShippedState
     }
   }
 
- Future<void> checkPrevItemDeliveredData() async {
+  Future<void> checkPrevItemDeliveredData() async {
     try {
       final String orderId = widget.orderId.toString();
       final String item =
@@ -335,8 +335,11 @@ class _SalesOrderTransactionsShippedState
                     decoration: getInputDecoration(
                         hint: '1.00', errorColor: Colors.red),
                     onChanged: (value) {
-                      quantityShipped = int.parse(value);
-                      // String limit = await checkQuantityLimit();
+                      try {
+                        quantityShipped = int.parse(value);
+                      } catch (e) {
+                        quantityShipped = int.parse('0');
+                      } // String limit = await checkQuantityLimit();
                       // print(limit);
                     },
                   ),

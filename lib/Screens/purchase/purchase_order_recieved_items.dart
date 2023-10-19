@@ -369,7 +369,11 @@ class _PurchaseOrderRecievedItemsState
                         decoration: getInputDecoration(
                             hint: '1.00', errorColor: Colors.red),
                         onChanged: (value) {
-                          quantityRecieved = int.parse(value);
+                          try {
+                        quantityRecieved = int.parse(value);
+                      } catch (e) {
+                        quantityRecieved = int.parse('0');
+                      } 
                           // String limit = await checkQuantityLimit();
                           // print(limit);
                         },

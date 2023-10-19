@@ -275,6 +275,95 @@ class ContainerSalesOrder extends StatelessWidget {
   }
 }
 
+class ContainerPurchaseReturn extends StatelessWidget {
+  const ContainerPurchaseReturn({super.key, required this.itemname, required this.orderId, required this.quantity});
+  final String itemname;
+  final int orderId;
+  final int quantity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        height: 80.0,
+        width: MediaQuery.of(context).size.width - 64,
+        decoration: BoxDecoration(
+            color: f7.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      color: blue,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    '#$orderId',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    textScaleFactor: 0.9,
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemname,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
+                    textScaleFactor: 0.8,
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Container(
+                    height: 12,
+                    width: 1,
+                    color: b32,
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Text(
+                    'Units: $quantity',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
+                    textScaleFactor: 0.8,
+                  ),
+                  Spacer(),
+                  // Text(
+                  //   toInventory ? 'In Inventory' : 'Wasted',
+                  //   style: TextStyle(
+                  //       fontWeight: FontWeight.w300,
+                  //       color: toInventory ? gn : r),
+                  //   textScaleFactor: 0.8,
+                  // )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class ContainerSalesReturn extends StatelessWidget {
   const ContainerSalesReturn(
       {super.key,
@@ -1018,8 +1107,71 @@ class PORecievedItemTile extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Delivered',
+                'Recieved',
                 style: TextStyle(color: gn, fontWeight: FontWeight.w300),
+                textScaleFactor: 0.8,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class POReturnsTile extends StatelessWidget {
+   final String itemName;
+  final int index;
+  int? quantityReturned;
+   POReturnsTile({super.key, required this.itemName, required this.index,this.quantityReturned});
+
+  @override
+  Widget build(BuildContext context) {
+ return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemName,
+                    style: const TextStyle(fontWeight: FontWeight.w300),
+                    textScaleFactor: 1,
+                  ),
+                  Text(
+                    quantityReturned == 0
+                        ? ''
+                        : 'Returned: ${quantityReturned.toString()}',
+                    textScaleFactor: 0.7,
+                    style: TextStyle(
+                        color: b.withOpacity(0.5),
+                        fontWeight: FontWeight.w300),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                'Returned',
+                style: TextStyle(color: r, fontWeight: FontWeight.w300),
                 textScaleFactor: 0.8,
               )
             ],

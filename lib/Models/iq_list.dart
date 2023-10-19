@@ -37,7 +37,7 @@ class ItemTracking {
   });
 }
 
-class ReturnItemTracking {
+class SalesReturnItemTracking {
   String? referenceNo;
   int orderId;
   String itemname;
@@ -45,7 +45,7 @@ class ReturnItemTracking {
   String? date;
   bool? toInventory;
 
-  ReturnItemTracking(
+  SalesReturnItemTracking(
       {required this.orderId,
       required this.itemname,
       this.referenceNo,
@@ -66,4 +66,21 @@ class ItemTrackingPurchaseOrder {
     this.quantityReturned = 0,
     this.date,
   });
+}
+
+class PurchaseReturnItemTracking {
+  String? referenceNo;
+  int orderId;
+  String itemname;
+  int? quantity;
+  String? date;
+  bool? toSeller;
+
+  PurchaseReturnItemTracking(
+      {required this.orderId,
+      required this.itemname,
+      this.referenceNo,
+      this.date,
+      this.quantity,
+      this.toSeller});
 }

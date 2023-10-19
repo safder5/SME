@@ -49,13 +49,16 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                 // #DONOT
                 //forget the reason why it was returned
 
-                 showModalBottomSheet<dynamic>(
-                  backgroundColor: t,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return PurchaseOrderReturnItems(itemsRecieved: widget.purchaseOrder.itemsRecieved,orderId: widget.purchaseOrder.orderID,);
-                  });
+                showModalBottomSheet<dynamic>(
+                    backgroundColor: t,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return PurchaseOrderReturnItems(
+                        itemsRecieved: widget.purchaseOrder.itemsRecieved,
+                        orderId: widget.purchaseOrder.orderID,
+                      );
+                    });
               }
             },
             backgroundColor: blue,
@@ -214,7 +217,6 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                     for (var i = 0; i < isSelected.length; i++)
                       GestureDetector(
                         onTap: () {
-                          
                           setState(() {
                             for (var buttonIndex = 0;
                                 buttonIndex < isSelected.length;
@@ -256,7 +258,10 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
             POPRecieved(
               itemsRecieved: widget.purchaseOrder.itemsRecieved,
             ),
-          if (isSelected[2]) POPReturns(),
+          if (isSelected[2])
+            POPReturns(
+              itemsReturned: widget.purchaseOrder.itemsReturned,
+            ),
         ],
       ),
     );

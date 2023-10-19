@@ -39,16 +39,25 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                   });
             }
             if (isSelected[2]) {
-              showModalBottomSheet<dynamic>(
-                  backgroundColor: t,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SalesOrderReturnTransactions(
-                      itemsDelivered: widget.salesorder.itemsDelivered,
-                      orderId: widget.salesorder.orderID!,
-                    );
-                  });
+              if (widget.salesorder.itemsDelivered?.length== 0) {
+                showDialog(
+                    context: context,
+                    builder: (ctx) => const AlertDialog(
+                        title: Text("No Items Recieved"),
+                        // content: Text("This")
+                        ));
+              } else {
+                showModalBottomSheet<dynamic>(
+                    backgroundColor: t,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SalesOrderReturnTransactions(
+                        itemsDelivered: widget.salesorder.itemsDelivered,
+                        orderId: widget.salesorder.orderID!,
+                      );
+                    });
+              }
             }
           },
           backgroundColor: blue,
