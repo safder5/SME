@@ -1,5 +1,8 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
+import 'package:ashwani/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/Providers/purchase_returns_provider.dart';
+import 'package:ashwani/Screens/purchase/purchase_order_page.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/main.dart';
@@ -7,12 +10,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 class PurchaseOrderReturnItems extends StatefulWidget {
-  const PurchaseOrderReturnItems({super.key, this.itemsRecieved, this.orderId});
+  const PurchaseOrderReturnItems(
+      {super.key,
+      this.itemsRecieved,
+      required this.orderId,
+      required this.vendor});
   final List<ItemTrackingPurchaseOrder>? itemsRecieved;
-  final int? orderId;
+  final int orderId;
+  final String vendor;
 
   @override
   State<PurchaseOrderReturnItems> createState() =>
@@ -52,26 +61,52 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
       });
     }
     if (!context.mounted) return;
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MyApp()));
+    {
+      try {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        final order = Provider.of<NPOrderProvider>(context, listen: false)
+            .lastUpdatedPurchaseOrder;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PurchaseOrderPage(purchaseOrder: order)));
+      } catch (e) {
+        print('error loading to new purchase order page $e');
+      }
+    }
+
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => const MyApp()));
   }
 
   Future<void> _executeFutures(ItemTrackingPurchaseOrder track) async {
-    await updateItemRecievedforReturns();
-    // update the items recieved and returned values for the purchase order
-    await createItemReturned();
-    // checks if the return of that item is already available and then accordingly updates value or creates a new return in the returns list
-    // returns list has to with the orders in DB
-    await itemreturnedPurchaseOrder();
+    try {
+      await updateItemRecievedforReturns();
+      // update the items recieved and returned values for the purchase order
+      await createItemReturned();
+      // checks if the return of that item is already available and then accordingly updates value or creates a new return in the returns list
+      // returns list has to with the orders in DB
+      await itemreturnedPurchaseOrder();
 
-    await uploadOrderTrack();
-    // it does something i dont completely get it
-    await purchaseActivity();
-    // create activity track for purchase activity
-    await updateInventoryItems();
-    // make changes in inventory items
-    await trackInventoryItems();
-    // create track for inventory item transacted with.
+      await uploadOrderTrack();
+      // it does something i dont completely get it
+      await purchaseActivity();
+      // create activity track for purchase activity
+      await updateInventoryItems();
+      // make changes in inventory items
+      await trackInventoryItems();
+      // create track for inventory item transacted with.
+      updateRespectiveProviders();
+    } catch (e) {
+      print('error executing futures $e');
+    }
+  }
+
+  void updateRespectiveProviders() {
+    final porProvider = Provider.of<NPOrderProvider>(context, listen: false);
+    porProvider.purchaseReturnProviderUpdate(widget.orderId,
+        _itemnameController.text, int.parse(_quantityCtrl.text));
   }
 
   Future<void> updateItemRecievedforReturns() async {
@@ -155,7 +190,7 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
           'quantityReturned': track.quantityReturned,
         });
       } else {
-        // error hai yahan kyunki doc milliseconds wala change hojayega so take care of that 
+        // error hai yahan kyunki doc milliseconds wala change hojayega so take care of that
         await FirebaseFirestore.instance
             .collection('UserData')
             .doc(auth!.email)
@@ -167,11 +202,13 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
             .doc(track.itemName)
             .update({
           'itemName': track.itemName,
-          'quantityReturned': (selectedItem.quantityReturned + track.quantityReturned),
+          'quantityReturned':
+              (selectedItem.quantityReturned + track.quantityReturned),
         });
       }
     } catch (e) {
-      print('error wwhile creating itemReturns Purchase Order $e ${selectedItem.quantityReturned}');
+      print(
+          'error wwhile creating itemReturns Purchase Order $e ${selectedItem.quantityReturned}');
     }
   }
 
@@ -208,7 +245,8 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
           .set({
         'itemName': track.itemName,
         'date': track.date,
-        'quantityRecieved': track.quantityRecieved
+        'quantityReturned': track.quantityReturned,
+        'vendor': track.vendor
       });
     } catch (e) {
       print('error while uploading purchase activities $e');
@@ -276,7 +314,7 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
           if (i.itemName == itemName) {
             setState(() {
               selectedItem = i;
-              itemLimit = i.quantityRecieved ;
+              itemLimit = i.quantityRecieved;
             });
             break;
           }
@@ -421,7 +459,8 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
                               track = ItemTrackingPurchaseOrder(
                                   itemName: _itemnameController.text,
                                   date: DateFormat('dd-MM-yyyy').format(now),
-                                  quantityReturned: quantityReturned);
+                                  quantityReturned: quantityReturned,
+                                  vendor: widget.vendor);
 
                               prit = PurchaseReturnItemTracking(
                                   orderId: widget.orderId!,
@@ -429,6 +468,13 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
                                   referenceNo: _refCtrl.text,
                                   date: DateFormat('dd-MM-yyyy').format(now),
                                   quantity: quantityReturned);
+
+                              final providerforReturns =
+                                  Provider.of<PurchaseReturnsProvider>(
+                                      context,
+                                      listen: false);
+                              providerforReturns.clearPurchaseReturns();
+
 
                               isLoading ? null : _handleSubmit();
 

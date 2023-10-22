@@ -1,6 +1,4 @@
-import 'package:ashwani/Screens/bom.dart';
-import 'package:ashwani/Screens/purchase.dart';
-import 'package:ashwani/Screens/purchase/purchase_orders.dart';
+import 'package:ashwani/Screens/sales/sales_activity.dart';
 import 'package:ashwani/Screens/sales/sales_orders.dart';
 import 'package:ashwani/Screens/sales/sales_returns.dart';
 import 'package:ashwani/constants.dart';
@@ -18,7 +16,7 @@ class _SalesPageState extends State<SalesPage> {
   Widget build(BuildContext context) {
     // double widthofTabBarPadding = MediaQuery.of(context).size.width/8;
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: w,
@@ -32,16 +30,33 @@ class _SalesPageState extends State<SalesPage> {
                     labelColor: b,
                     // dividerColor: Colors.black,
                     // labelPadding: EdgeInsets.symmetric(horizontal: widthofTabBarPadding),
-                    tabs: [
+                    tabs: const [
                       Tab(
                         child: SizedBox(
-                          width:  MediaQuery.of(context).size.width*0.4,
-                          child: Center(child: Text("Sales Orders",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
+                            child: Center(
+                                child: Text(
+                          "Sales Activity",
+                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ))),
                       ),
                       Tab(
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width*0.4,
-                          child: Center(child: Text("Sales Returns",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
+                            child: Center(
+                                child: Text(
+                          "Sales Orders",
+                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ))),
+                      ),
+                      Tab(
+                        child: SizedBox(
+                            child: Center(
+                                child: Text(
+                          "Sales Returns",
+                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ))),
                       ),
                       // Tab(
                       //  child: Text("Items",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),),
@@ -50,6 +65,7 @@ class _SalesPageState extends State<SalesPage> {
           ),
           body: const TabBarView(
             children: <Widget>[
+              SalesActivity(),
               SalesOrders(),
               SalesReturns(),
               // ItemsPage()

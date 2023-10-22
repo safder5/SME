@@ -1,8 +1,12 @@
+
+
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/purchase_order.dart';
+import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final _auth = FirebaseAuth.instance.currentUser;
 String? uid = _auth!.email;
@@ -10,6 +14,19 @@ String? uid = _auth!.email;
 class NPOrderProvider with ChangeNotifier {
   final List<PurchaseOrderModel> _po = [];
   List<PurchaseOrderModel> get po => _po;
+  final List<ItemTrackingPurchaseOrder> _pa = [];
+  List<ItemTrackingPurchaseOrder> get pa => _pa;
+  PurchaseOrderModel _lastUpdatedPurchaseOrder = PurchaseOrderModel(
+      orderID: 000000,
+      vendorName: 'vendorName',
+      purchaseDate: 'purchaseDate',
+      deliveryDate: 'deliveryDate',
+      paymentTerms: 'paymentTerms',
+      deliveryMethod: 'deliveryMethod',
+      notes: 'notes',
+      tandc: 'tandc',
+      status: 'status');
+  PurchaseOrderModel get lastUpdatedPurchaseOrder => _lastUpdatedPurchaseOrder;
 
   final CollectionReference _purchaseOrderCollection = FirebaseFirestore
       .instance
@@ -18,6 +35,10 @@ class NPOrderProvider with ChangeNotifier {
       .collection('orders')
       .doc('purchases')
       .collection('purchase_orders');
+  final _cref = FirebaseFirestore.instance
+      .collection('UserData')
+      .doc(uid)
+      .collection('purchase_activities');
 
   Future<void> addPurchaseOrder(PurchaseOrderModel puchaseOrder) async {
     try {
@@ -118,5 +139,70 @@ class NPOrderProvider with ChangeNotifier {
     } catch (e) {
       print("Error fetching orders");
     }
+  }
+
+  Future<void> fetchPurchaseActivity() async {
+    try {
+      final snapshot = await _cref.get();
+      _pa.clear();
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+        final purchaseActivity = ItemTrackingPurchaseOrder(
+            itemName: data['itemName'],
+            quantityRecieved: data['quantityRecieved'] ?? 0,
+            quantityReturned: data['quantityReturned'] ?? 0,
+            date: data['date'] ?? '',
+            vendor: data['vendor'] ?? '');
+        _pa.add(purchaseActivity);
+      }
+      notifyListeners();
+    } catch (e) {
+      print('error fetching purhcase activity $e');
+    }
+  }
+
+  void purchaseReturnProviderUpdate(
+      int orderId, String itemName, int quantityReturned) {
+    PurchaseOrderModel? foundOrder =
+        _po.firstWhere((order) => order.orderID == orderId);
+    if (foundOrder.orderID != 0) {
+      final itemReturnedList = foundOrder.itemsReturned;
+
+      ItemTrackingPurchaseOrder? itemReturned = itemReturnedList!
+          .firstWhere((element) => element.itemName == itemName);
+      // int prevReturnQuantity = itemReturned.quantityReturned;
+      itemReturned.quantityReturned += quantityReturned;
+
+      final itemRecievedList = foundOrder.itemsRecieved;
+
+      ItemTrackingPurchaseOrder? itemRecieved = itemRecievedList!
+          .firstWhere((element) => element.itemName == itemName);
+      itemRecieved.quantityRecieved -= quantityReturned;
+      itemRecieved.quantityReturned += quantityReturned;
+
+      _lastUpdatedPurchaseOrder = foundOrder;
+      _pa.clear();
+    }
+    notifyListeners();
+  }
+
+  void purchaseRecievedProviderUpdate(
+      int orderId, String itemName, int quantityRecieved) {
+    PurchaseOrderModel? foundOrder =
+        _po.firstWhere((order) => order.orderID == orderId);
+    if (foundOrder.orderID != 0) {
+      final itemRecievedList = foundOrder.itemsRecieved;
+      ItemTrackingPurchaseOrder? itemRecieved = itemRecievedList!
+          .firstWhere((element) => element.itemName == itemName);
+      itemRecieved.quantityRecieved += quantityRecieved;
+
+      final itemsList = foundOrder.items;
+      Item? item =
+          itemsList!.firstWhere((element) => element.itemName == itemName);
+      item.itemQuantity = item.itemQuantity! - quantityRecieved;
+      _lastUpdatedPurchaseOrder = foundOrder;
+      _pa.clear();
+    }
+    notifyListeners();
   }
 }

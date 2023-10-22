@@ -1,7 +1,7 @@
 import 'package:ashwani/Models/iq_list.dart';
 
 class PurchaseOrderModel {
-  final int? orderID;
+  final int orderID;
   final String? vendorName;
   final String? purchaseDate;
   final String? deliveryDate;

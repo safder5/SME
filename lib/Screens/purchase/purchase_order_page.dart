@@ -37,8 +37,9 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return PurchaseOrderRecievedItems(
+                          vendor: widget.purchaseOrder.vendorName!,
                             itemsofOrder: widget.purchaseOrder.items,
-                            orderId: widget.purchaseOrder.orderID!);
+                            orderId: widget.purchaseOrder.orderID);
                       });
                 } catch (e) {
                   print('yeh hua hai $e');
@@ -56,7 +57,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                     builder: (BuildContext context) {
                       return PurchaseOrderReturnItems(
                         itemsRecieved: widget.purchaseOrder.itemsRecieved,
-                        orderId: widget.purchaseOrder.orderID,
+                        orderId: widget.purchaseOrder.orderID, vendor: widget.purchaseOrder.vendorName!,
                       );
                     });
               }

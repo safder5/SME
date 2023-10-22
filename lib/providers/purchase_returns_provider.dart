@@ -35,4 +35,9 @@ class PurchaseReturnsProvider with ChangeNotifier {
       print('error fetching purchase returns');
     }
   }
+
+  void clearPurchaseReturns() {
+    _pr.clear();
+    notifyListeners();
+  }
 }

@@ -35,11 +35,12 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                     return SalesOrderTransactionsShipped(
                       items: widget.salesorder.items,
                       orderId: widget.salesorder.orderID!,
+                      customer: widget.salesorder.customerName!,
                     );
                   });
             }
             if (isSelected[2]) {
-              if (widget.salesorder.itemsDelivered?.length== 0) {
+              if (widget.salesorder.itemsDelivered?.length == 0) {
                 showDialog(
                     context: context,
                     builder: (ctx) => const AlertDialog(
@@ -55,6 +56,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                       return SalesOrderReturnTransactions(
                         itemsDelivered: widget.salesorder.itemsDelivered,
                         orderId: widget.salesorder.orderID!,
+                        customer: widget.salesorder.customerName!,
                       );
                     });
               }

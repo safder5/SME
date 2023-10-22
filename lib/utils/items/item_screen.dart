@@ -112,8 +112,7 @@ class _ItemScreenState extends State<ItemScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          Expanded(
             child: ListView.builder(
                 // physics: controllScroll,
                 shrinkWrap: true,
@@ -137,7 +136,7 @@ class _ItemScreenState extends State<ItemScreen> {
                     text = 'Waste';
                     c = r;
                   }
-
+          
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(

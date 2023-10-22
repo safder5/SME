@@ -38,14 +38,6 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Fetch sales orders and update the list
-    checkProviderforData();
-    fetchPurchaseOrders(context);
-  }
-
   Future<void> fetchPurchaseOrders(BuildContext context) async {
     final poProvider = Provider.of<NPOrderProvider>(context, listen: false);
 
@@ -59,13 +51,23 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
       }
     } catch (e) {
       // Handle the error
-      if (!isDisposed) {
+      if(mounted){
+        if (!isDisposed) {
         setState(() {
           isloading = false;
         });
       }
+      }
+      
       print('Error fetching sales orders: $e');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkProviderforData();
+    fetchPurchaseOrders(context);
   }
 
   @override

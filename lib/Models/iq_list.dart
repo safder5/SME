@@ -23,17 +23,19 @@ class Item {
   });
 }
 
-class ItemTracking {
+class ItemTrackingSalesOrder {
   String itemName;
   int quantityShipped;
   int quantityReturned;
   String? date;
+  String? customer;
 
-  ItemTracking({
+  ItemTrackingSalesOrder({
     required this.itemName,
     this.quantityShipped = 0,
     this.quantityReturned = 0,
     this.date,
+    this.customer,
   });
 }
 
@@ -59,12 +61,14 @@ class ItemTrackingPurchaseOrder {
   int quantityRecieved;
   int quantityReturned;
   String? date;
+  String? vendor;
 
   ItemTrackingPurchaseOrder({
     required this.itemName,
     this.quantityRecieved = 0,
     this.quantityReturned = 0,
     this.date,
+    this.vendor,
   });
 }
 

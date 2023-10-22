@@ -1,3 +1,4 @@
+import 'package:ashwani/Screens/purchase/purchase_activity.dart';
 import 'package:ashwani/Screens/purchase/purchase_orders.dart';
 import 'package:ashwani/Screens/purchase/purchase_returns.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: w,
@@ -27,17 +28,23 @@ class _PurchasePageState extends State<PurchasePage> {
                     unselectedLabelColor: b32,
                     indicatorColor: blue,
                     labelColor: b,
+                    tabAlignment: TabAlignment.center,
                     // dividerColor: Colors.black,
                     // labelPadding: EdgeInsets.symmetric(horizontal: widthofTabBarPadding),
-                    tabs: [
+                    tabs: const [
                       Tab(
                         child: SizedBox(
-                          width:  MediaQuery.of(context).size.width*0.4,
+
+                          child: Center(child: Text("Purchase Activity",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
+                      ),
+                      Tab(
+                        child: SizedBox(
+
                           child: Center(child: Text("Purchase Orders",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
                       ),
                       Tab(
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width*0.4,
+
                           child: Center(child: Text("Purchase Returns",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
                       ),
                       // Tab(
@@ -47,6 +54,7 @@ class _PurchasePageState extends State<PurchasePage> {
           ),
           body: const TabBarView(
             children: <Widget>[
+              PurchaseActivity(),
               PurchaseOrders(),
               PurchaseReturns()
               // ItemsPage()

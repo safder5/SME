@@ -4,9 +4,15 @@ import '../../Models/iq_list.dart';
 import '../../constantWidgets/boxes.dart';
 import '../../constants.dart';
 
-class POPDetails extends StatelessWidget {
-   const POPDetails({super.key, required this.items});
-   final List<Item>? items;
+class POPDetails extends StatefulWidget {
+  const POPDetails({super.key, required this.items});
+  final List<Item>? items;
+
+  @override
+  State<POPDetails> createState() => _POPDetailsState();
+}
+
+class _POPDetailsState extends State<POPDetails> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,13 +32,13 @@ class POPDetails extends StatelessWidget {
                     textScaleFactor: 1.2,
                     style: TextStyle(color: b.withOpacity(0.6)),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     'Order Placed',
                     textScaleFactor: 1.2,
                     style: TextStyle(color: dg),
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             ),
@@ -47,11 +53,11 @@ class POPDetails extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return SOPDetailsItemTile(
-                      name: items![index].itemName!,
-                      quantity: items![index].itemQuantity.toString(),
+                      name: widget.items![index].itemName!,
+                      quantity: widget.items![index].itemQuantity.toString(),
                       index: index);
                 },
-                itemCount: items?.length?? 0,
+                itemCount: widget.items?.length ?? 0,
               ),
             ),
           ],
@@ -61,14 +67,24 @@ class POPDetails extends StatelessWidget {
   }
 }
 
-class POPRecieved extends StatelessWidget {
-   List<ItemTrackingPurchaseOrder>? itemsRecieved;
-   POPRecieved({super.key,this.itemsRecieved});
+class POPRecieved extends StatefulWidget {
+  final List<ItemTrackingPurchaseOrder>? itemsRecieved;
+  const POPRecieved({super.key, this.itemsRecieved});
+
+  @override
+  State<POPRecieved> createState() => _POPRecievedState();
+}
+
+class _POPRecievedState extends State<POPRecieved> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    itemsRecieved ??= [];
-    itemsRecieved = itemsRecieved!.reversed.toList();
+    final itemsRecieved = widget.itemsRecieved ?? [];
+    final reversedItems = itemsRecieved.reversed.toList();
     return Container(
       height: (MediaQuery.of(context).size.height * 0.66) - 110,
       color: w,
@@ -87,14 +103,13 @@ class POPRecieved extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return PORecievedItemTile(
-                      quantity: itemsRecieved![index]
-                          .quantityRecieved
-                          .toString(),
-                      itemName: itemsRecieved![index].itemName,
-                      quantityReturned: itemsRecieved![index].quantityReturned,
+                      quantity:
+                          reversedItems[index].quantityRecieved.toString(),
+                      itemName: reversedItems[index].itemName,
+                      quantityReturned: reversedItems[index].quantityReturned,
                       index: index);
                 },
-                itemCount: itemsRecieved?.length ?? 0,
+                itemCount: itemsRecieved.length,
               ),
             ),
           ],
@@ -104,14 +119,25 @@ class POPRecieved extends StatelessWidget {
   }
 }
 
-class POPReturns extends StatelessWidget {
-  List<ItemTrackingPurchaseOrder>? itemsReturned;
-   POPReturns({super.key,this.itemsReturned});
+class POPReturns extends StatefulWidget {
+  final List<ItemTrackingPurchaseOrder>? itemsReturned;
+  const POPReturns({super.key, this.itemsReturned});
+
+  @override
+  State<POPReturns> createState() => _POPReturnsState();
+}
+
+class _POPReturnsState extends State<POPReturns> {
+  
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-   itemsReturned ??= [];
-    itemsReturned = itemsReturned!.reversed.toList();
+    final itemsReturned = widget.itemsReturned ?? [];
+    final itemsReversed = itemsReturned.reversed.toList();
     return Container(
       height: (MediaQuery.of(context).size.height * 0.66) - 110,
       color: w,
@@ -130,11 +156,11 @@ class POPReturns extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return POReturnsTile(
-                      itemName: itemsReturned![index].itemName,
-                      quantityReturned: itemsReturned![index].quantityReturned,
+                      itemName: itemsReversed[index].itemName,
+                      quantityReturned: itemsReversed[index].quantityReturned,
                       index: index);
                 },
-                itemCount: itemsReturned?.length ?? 0,
+                itemCount: itemsReturned.length,
               ),
             ),
           ],

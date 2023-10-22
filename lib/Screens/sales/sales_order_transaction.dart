@@ -1,5 +1,7 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
+import 'package:ashwani/Providers/new_sales_order_provider.dart';
+import 'package:ashwani/Screens/sales/sales_order_page.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/main.dart';
@@ -7,13 +9,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 class SalesOrderTransactionsShipped extends StatefulWidget {
   const SalesOrderTransactionsShipped(
-      {super.key, this.items, required this.orderId});
+      {super.key, this.items, required this.orderId, required this.customer});
   final List<Item>? items;
   final int orderId;
+  final String customer;
 
   @override
   State<SalesOrderTransactionsShipped> createState() =>
@@ -24,6 +28,7 @@ class _SalesOrderTransactionsShippedState
     extends State<SalesOrderTransactionsShipped> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _itemnameController = TextEditingController();
+  final TextEditingController _quantityCtrl = TextEditingController();
   final auth = FirebaseAuth.instance.currentUser;
 
   Item selectedItem =
@@ -36,11 +41,12 @@ class _SalesOrderTransactionsShippedState
   String itemLimit = '';
   final now = DateTime.now();
   bool _isLoading = false;
-  ItemTracking track = ItemTracking(itemName: 'itemName');
+  ItemTrackingSalesOrder track = ItemTrackingSalesOrder(itemName: 'itemName');
   bool prevData = false;
 
-  Future<void> _executeFutures(ItemTracking track) async {
-    await checkPrevItemDeliveredData();
+  Future<void> _executeFutures(ItemTrackingSalesOrder track) async {
+    await checkPrevItemDeliveredData(); // its already available in the
+    // sales order data so REMOVE IT
 
     await addItemtoSalesDelivered();
     // add track in sales order
@@ -52,6 +58,9 @@ class _SalesOrderTransactionsShippedState
     // update in inventory items
     await uploadItemInventorytracks();
     // upload ttracks in inventory items
+    await addActivity();
+    // update sales activity
+    updateInProvider();
   }
 
   void _handleSubmit() async {
@@ -69,11 +78,47 @@ class _SalesOrderTransactionsShippedState
       });
     }
     if (!context.mounted) return;
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MyApp()));
+    {
+      try {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        final order = Provider.of<NSOrderProvider>(context, listen: false)
+            .lastUpdatedSalesOrder;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SalesOrderPage(salesorder: order)));
+      } catch (e) {
+        print('error loading to new purchase order page $e');
+      }
+    }
   }
 
-  Future<void> uploadTrack(ItemTracking track) async {
+  void updateInProvider() {
+    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
+    sorProvider.updateSalesItemsDeliveredProviders(widget.orderId,
+        _itemnameController.text, int.parse(_quantityCtrl.text));
+  }
+
+  Future<void> addActivity() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('sales_activities')
+          .doc(now.millisecondsSinceEpoch.toString())
+          .set({
+        'itemName': track.itemName,
+        'date': track.date,
+        'quantityShipped': track.quantityShipped,
+        'customer': track.customer
+      });
+    } catch (e) {
+      print('error while uploading sales activities $e');
+    }
+  }
+
+  Future<void> uploadTrack(ItemTrackingSalesOrder track) async {
     await FirebaseFirestore.instance
         .collection('UserData')
         .doc(auth!.email)
@@ -124,7 +169,7 @@ class _SalesOrderTransactionsShippedState
           .collection('Items')
           .doc(_itemnameController.text)
           .collection('tracks')
-          .doc(widget.orderId.toString())
+          .doc(now.millisecondsSinceEpoch.toString())
           .set({
         "orderID": itemTracking.orderID,
         'quantity': itemTracking.quantity,
@@ -328,6 +373,7 @@ class _SalesOrderTransactionsShippedState
                   ),
                   TextFormField(
                     // validator: validateOrderNo,
+                    controller: _quantityCtrl,
                     validator: validateSOIQ,
                     cursorColor: blue,
                     cursorWidth: 1,
@@ -352,10 +398,11 @@ class _SalesOrderTransactionsShippedState
                     onTap: () async {
                       try {
                         if (validateForm() == true) {
-                          track = ItemTracking(
+                          track = ItemTrackingSalesOrder(
                               itemName: _itemnameController.text,
                               date: DateFormat('dd-MM-yyyy').format(now),
-                              quantityShipped: quantityShipped);
+                              quantityShipped: quantityShipped,
+                              customer: widget.customer);
 
                           _isLoading ? null : _handleSubmit();
 

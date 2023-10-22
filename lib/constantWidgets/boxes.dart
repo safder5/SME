@@ -1,3 +1,4 @@
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:flutter/material.dart';
@@ -276,7 +277,11 @@ class ContainerSalesOrder extends StatelessWidget {
 }
 
 class ContainerPurchaseReturn extends StatelessWidget {
-  const ContainerPurchaseReturn({super.key, required this.itemname, required this.orderId, required this.quantity});
+  const ContainerPurchaseReturn(
+      {super.key,
+      required this.itemname,
+      required this.orderId,
+      required this.quantity});
   final String itemname;
   final int orderId;
   final int quantity;
@@ -346,7 +351,7 @@ class ContainerPurchaseReturn extends StatelessWidget {
                         fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
                     textScaleFactor: 0.8,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   // Text(
                   //   toInventory ? 'In Inventory' : 'Wasted',
                   //   style: TextStyle(
@@ -441,7 +446,7 @@ class ContainerSalesReturn extends StatelessWidget {
                         fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
                     textScaleFactor: 0.8,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     toInventory ? 'In Inventory' : 'Wasted',
                     style: TextStyle(
@@ -493,7 +498,7 @@ class ContainerPurchaseOrder extends StatelessWidget {
                     width: 8,
                     color: blue,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -501,7 +506,7 @@ class ContainerPurchaseOrder extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -522,6 +527,159 @@ class ContainerPurchaseOrder extends StatelessWidget {
                 textScaleFactor: 0.8,
                 style: TextStyle(color: b.withOpacity(0.5)),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PurchaseActivityTile extends StatelessWidget {
+  const PurchaseActivityTile({super.key, required this.activity});
+  final ItemTrackingPurchaseOrder? activity;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            color: f7.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 8,
+                        width: 8,
+                        color: blue,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(activity!.itemName,
+                          textScaleFactor: 01,
+                          style: TextStyle(color: b.withOpacity(0.8))),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    activity!.date!,
+                    textScaleFactor: 0.8,
+                    style: TextStyle(color: b.withOpacity(0.5)),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    activity!.vendor!,
+                    textScaleFactor: 0.8,
+                    style: TextStyle(color: b.withOpacity(0.5)),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              activity!.quantityRecieved == 0
+                  ? Text(
+                      activity!.quantityReturned.toString(),
+                      style: TextStyle(
+                          color: r.withOpacity(0.8),
+                          fontWeight: FontWeight.w300),
+                      textScaleFactor: 1.4,
+                    )
+                  : Text(
+                      activity!.quantityRecieved.toString(),
+                      style: TextStyle(
+                          color: gn.withOpacity(0.8),
+                          fontWeight: FontWeight.w300),
+                      textScaleFactor: 1.4,
+                    )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SalesActivityTile extends StatelessWidget {
+  const SalesActivityTile({super.key, this.activity});
+  final ItemTrackingSalesOrder? activity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            color: f7.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 8,
+                        width: 8,
+                        color: blue,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(activity!.itemName,
+                          textScaleFactor: 01,
+                          style: TextStyle(color: b.withOpacity(0.8))),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    activity!.date!,
+                    textScaleFactor: 0.8,
+                    style: TextStyle(color: b.withOpacity(0.5)),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    activity!.customer!,
+                    textScaleFactor: 0.8,
+                    style: TextStyle(color: b.withOpacity(0.5)),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              activity!.quantityReturned == 0
+                  ? Text(
+                      activity!.quantityShipped.toString(),
+                      style: TextStyle(
+                          color: r.withOpacity(0.8),
+                          fontWeight: FontWeight.w300),
+                      textScaleFactor: 1.4,
+                    )
+                  : Text(
+                      activity!.quantityReturned.toString(),
+                      style: TextStyle(
+                          color: gn.withOpacity(0.8),
+                          fontWeight: FontWeight.w300),
+                      textScaleFactor: 1.4,
+                    )
             ],
           ),
         ),
@@ -1024,9 +1182,6 @@ class SOReturnsItemTile extends StatelessWidget {
   }
 }
 
-
-
-
 class PORecievedItemTile extends StatelessWidget {
   final String quantity;
   final String itemName;
@@ -1120,14 +1275,18 @@ class PORecievedItemTile extends StatelessWidget {
 }
 
 class POReturnsTile extends StatelessWidget {
-   final String itemName;
+  final String itemName;
   final int index;
   int? quantityReturned;
-   POReturnsTile({super.key, required this.itemName, required this.index,this.quantityReturned});
+  POReturnsTile(
+      {super.key,
+      required this.itemName,
+      required this.index,
+      this.quantityReturned});
 
   @override
   Widget build(BuildContext context) {
- return Padding(
+    return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
         height: 66,
@@ -1160,8 +1319,7 @@ class POReturnsTile extends StatelessWidget {
                         : 'Returned: ${quantityReturned.toString()}',
                     textScaleFactor: 0.7,
                     style: TextStyle(
-                        color: b.withOpacity(0.5),
-                        fontWeight: FontWeight.w300),
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
                   ),
                   const SizedBox(
                     width: 5,

@@ -36,4 +36,9 @@ class SalesReturnsProvider with ChangeNotifier {
       print('Error fetching sales returns $e');
     }
   }
+
+  void clearSalesReturns() {
+    _sr.clear();
+    notifyListeners();
+  }
 }

@@ -10,15 +10,33 @@ String? uid = _auth!.email;
 
 class NSOrderProvider with ChangeNotifier {
   final List<SalesOrderModel> _so = [];
+  final List<ItemTrackingSalesOrder> _sa = [];
 
   List<SalesOrderModel> get som => _so;
+  List<ItemTrackingSalesOrder> get sa => _sa;
 
+  SalesOrderModel _lastUpdatedSalesOrder = SalesOrderModel(
+      orderID: 0,
+      customerName: 'customerName',
+      orderDate: 'orderDate',
+      shipmentDate: 'shipmentDate',
+      paymentMethods: 'paymentMethods',
+      notes: 'notes',
+      tandC: 'tandC',
+      status: 'status');
+
+  SalesOrderModel get lastUpdatedSalesOrder => _lastUpdatedSalesOrder;
   final CollectionReference _salesOrderCollection = FirebaseFirestore.instance
       .collection('UserData')
       .doc(uid)
       .collection('orders')
       .doc('sales')
       .collection('sales_orders');
+
+  final activityRef = FirebaseFirestore.instance
+      .collection('UserData')
+      .doc(uid)
+      .collection('sales_activities');
 
   Future<void> addSalesOrder(SalesOrderModel so) async {
     try {
@@ -82,7 +100,7 @@ class NSOrderProvider with ChangeNotifier {
         if (trackDocs.docs.isNotEmpty) {
           salesOrder.tracks = trackDocs.docs.map((trackDoc) {
             final trackData = trackDoc.data();
-            return ItemTracking(
+            return ItemTrackingSalesOrder(
                 itemName: trackData['itemName'],
                 quantityReturned: trackData['quantityReturned'] ?? 0,
                 quantityShipped: trackData['quantityShipped'] ?? 0,
@@ -98,7 +116,9 @@ class NSOrderProvider with ChangeNotifier {
             return Item(
                 itemName: itemDeliveredData['itemName'],
                 quantitySalesDelivered:
-                    itemDeliveredData['quantitySalesDelivered'],quantitySalesReturned: itemDeliveredData['quantitySalesReturned']?? 0);
+                    itemDeliveredData['quantitySalesDelivered'],
+                quantitySalesReturned:
+                    itemDeliveredData['quantitySalesReturned'] ?? 0);
           }).toList();
         }
         final salesReturnsCollection = doc.reference.collection('returns');
@@ -106,8 +126,9 @@ class NSOrderProvider with ChangeNotifier {
         if (salesReturnsDocs.docs.isNotEmpty) {
           salesOrder.itemsReturned = salesReturnsDocs.docs.map((e) {
             final itemReturned = e.data();
-            return Item(itemName: itemReturned['itemName'],
-            quantitySalesReturned: itemReturned['quantitySalesReturned']);
+            return Item(
+                itemName: itemReturned['itemName'],
+                quantitySalesReturned: itemReturned['quantitySalesReturned']);
           }).toList();
         }
         _so.add(salesOrder);
@@ -152,6 +173,78 @@ class NSOrderProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchActivity() async {
+    try {
+      final snapshot = await activityRef.get();
+      _sa.clear();
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+        final salesActivity = ItemTrackingSalesOrder(
+          itemName: data['itemName'],
+          quantityReturned: data['quantityReturned'] ?? 0,
+          quantityShipped: data['quantityShipped'] ?? 0,
+          date: data['date'],
+          customer: data['customer'],
+        );
+        _sa.add(salesActivity);
+      }
+      notifyListeners();
+    } catch (e) {
+      print('Error loading sales Activity $e');
+    }
+  }
+
+  void updateSalesItemsDeliveredProviders( int orderId, String itemName, int quantitydelivered) {
+    SalesOrderModel? foundOrder =
+        _so.firstWhere((order) => order.orderID == orderId);
+    if (foundOrder.orderID != 0) {
+      final itemsList = foundOrder.items;
+      Item? item = itemsList!
+          .firstWhere((element) => element.itemName == itemName);
+      item.quantitySales =
+          item.quantitySales! - quantitydelivered;
+
+      final itemDeliveredList = foundOrder.itemsDelivered;
+      Item? itemDelivered = itemDeliveredList!
+          .firstWhere((element) => element.itemName == itemName);
+      itemDelivered.quantitySalesDelivered =
+          itemDelivered.quantitySalesDelivered! + quantitydelivered;
+      _lastUpdatedSalesOrder = foundOrder;
+      _sa.clear();
+    }
+    notifyListeners();
+  }
+  void updateSalesItemsReturnedProviders(
+      int orderId, String itemName, int quantityReturned) {
+    SalesOrderModel? foundOrder =
+        _so.firstWhere((order) => order.orderID == orderId);
+    if (foundOrder.orderID != 0) {
+      final itemReturnedList = foundOrder.itemsReturned;
+      Item? itemReturned = itemReturnedList!
+          .firstWhere((element) => element.itemName == itemName);
+      itemReturned.quantitySalesReturned =
+          itemReturned.quantitySalesReturned! + quantityReturned;
+
+      final itemDeliveredList = foundOrder.itemsDelivered;
+      Item? itemDelivered = itemDeliveredList!
+          .firstWhere((element) => element.itemName == itemName);
+      itemDelivered.quantitySalesDelivered =
+          itemDelivered.quantitySalesDelivered! - quantityReturned;
+      itemDelivered.quantitySalesReturned =
+          itemDelivered.quantitySalesReturned! - quantityReturned;
+      _lastUpdatedSalesOrder = foundOrder;
+      _sa.clear();
+    }
+    notifyListeners();
+  }
+  void addSalesReturnInProvider(int orderId, String itemName,){
+    SalesOrderModel? foundOrder =
+        _so.firstWhere((order) => order.orderID == orderId);
+    if (foundOrder.orderID != 0) {
+     
+    }
+    notifyListeners();
+  }
+
   // make a function to open close status of sales order
 }
-

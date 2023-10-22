@@ -10,7 +10,7 @@ class SalesOrderModel {
   final String? tandC;
   final String? status;
   List<Item>? items;
-  List<ItemTracking>? tracks;
+  List<ItemTrackingSalesOrder>? tracks;
   List<Item>? itemsDelivered;
   List<Item>? itemsReturned;
 

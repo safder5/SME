@@ -1,10 +1,13 @@
 import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/Screens/purchase/purchase_order_page.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 import '../../Models/item_tracking_model.dart';
@@ -12,9 +15,13 @@ import '../../constants.dart';
 
 class PurchaseOrderRecievedItems extends StatefulWidget {
   const PurchaseOrderRecievedItems(
-      {super.key, this.itemsofOrder, required this.orderId});
+      {super.key,
+      this.itemsofOrder,
+      required this.orderId,
+      required this.vendor});
   final List<Item>? itemsofOrder;
   final int orderId;
+  final String vendor;
 
   @override
   State<PurchaseOrderRecievedItems> createState() =>
@@ -56,31 +63,54 @@ class _PurchaseOrderRecievedItemsState
       });
     }
     if (!context.mounted) return;
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MyApp()));
+    {
+      try {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        final order = Provider.of<NPOrderProvider>(context, listen: false)
+            .lastUpdatedPurchaseOrder;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PurchaseOrderPage(purchaseOrder: order)));
+      } catch (e) {
+        print('error loading to new purchase order page $e');
+      }
+    }
   }
 
   Future<void> _executeFutures(ItemTrackingPurchaseOrder track) async {
-    await prevItemsRecievedData();
-    // checks what quantity has been recieved earlier and marks #prevdata = true (if it has data). done
+    try {
+      await prevItemsRecievedData();
+      // checks what quantity has been recieved earlier and marks #prevdata = true (if it has data). done
 
-    await uploadItemsRecieved();
-    // uploads item recieved creating a new items column in there if prevData = false .done
+      await uploadItemsRecieved();
+      // uploads item recieved creating a new items column in there if prevData = false .done
 
-    await updatePurchaseOrderItemDetails();
-    // subtracts what values have been recieved and reduces the purchase quantity to be recieved
+      await updatePurchaseOrderItemDetails();
+      // subtracts what values have been recieved and reduces the purchase quantity to be recieved
 
-    await uploadPurchaseActivity(track);
-    // uploads an activity track in purchase activity. done
+      await uploadPurchaseActivity(track);
+      // uploads an activity track in purchase activity. done
 
-    await uploadOrderTrack(track);
-    // uploads a track inside the purchase order for future use if client wants. done
+      await uploadOrderTrack(track);
+      // uploads a track inside the purchase order for future use if client wants. done
 
-    await updateInventory();
-    // updates and makes necessary changes in inventory items. done
+      await updateInventory();
+      // updates and makes necessary changes in inventory items. done
 
-    await updateItemTrack();
-    // updates item track/activity in main inventory. done
+      await updateItemTrack();
+      // updates item track/activity in main inventory. done
+      updateRespectiveProviders();
+    } catch (e) {
+      print('Error executing futures $e');
+    }
+  }
+
+  updateRespectiveProviders() {
+    final porProvider = Provider.of<NPOrderProvider>(context, listen: false);
+    porProvider.purchaseRecievedProviderUpdate(widget.orderId,
+        _itemnameController.text, int.parse(_quantityCtrl.text));
   }
 
   Future<void> prevItemsRecievedData() async {
@@ -170,7 +200,8 @@ class _PurchaseOrderRecievedItemsState
           .set({
         'itemName': track.itemName,
         'date': track.date,
-        'quantityRecieved': track.quantityRecieved
+        'quantityRecieved': track.quantityRecieved,
+        'vendor': track.vendor
       });
     } catch (e) {
       print('error while uploading purchase activities $e');
@@ -370,10 +401,10 @@ class _PurchaseOrderRecievedItemsState
                             hint: '1.00', errorColor: Colors.red),
                         onChanged: (value) {
                           try {
-                        quantityRecieved = int.parse(value);
-                      } catch (e) {
-                        quantityRecieved = int.parse('0');
-                      } 
+                            quantityRecieved = int.parse(value);
+                          } catch (e) {
+                            quantityRecieved = int.parse('0');
+                          }
                           // String limit = await checkQuantityLimit();
                           // print(limit);
                         },
@@ -404,7 +435,8 @@ class _PurchaseOrderRecievedItemsState
                               track = ItemTrackingPurchaseOrder(
                                   itemName: _itemnameController.text,
                                   date: DateFormat('dd-MM-yyyy').format(now),
-                                  quantityRecieved: quantityRecieved);
+                                  quantityRecieved: quantityRecieved,
+                                  vendor: widget.vendor);
 
                               _isLoading ? null : _handleSubmit();
 

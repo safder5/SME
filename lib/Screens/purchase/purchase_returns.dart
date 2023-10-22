@@ -22,8 +22,6 @@ class _PurchaseReturnsState extends State<PurchaseReturns> {
   bool isDisposed = false;
   bool hasData = false;
 
- 
-
   checkProviderForData() {
     final prProvider =
         Provider.of<PurchaseReturnsProvider>(context, listen: false);
@@ -32,21 +30,12 @@ class _PurchaseReturnsState extends State<PurchaseReturns> {
         setState(() {
           isLoading = false;
           hasData = true;
-          prList = prProvider.pr.reversed.toList();
+          prList = prProvider.pr;
         });
       }
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Fetch sales orders and update the list
-    checkProviderForData();
-    fetchPurchaseReturns(context);
-    // fetchCustomerNames(context);
-  } 
-  
   Future<void> fetchPurchaseReturns(BuildContext context) async {
     final prProvider =
         Provider.of<PurchaseReturnsProvider>(context, listen: false);
@@ -68,6 +57,15 @@ class _PurchaseReturnsState extends State<PurchaseReturns> {
       // Handle the error
       print('Error fetching sales returns: $e');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch sales orders and update the list
+    checkProviderForData();
+    fetchPurchaseReturns(context);
+    // fetchCustomerNames(context);
   }
 
   @override
