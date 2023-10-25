@@ -194,15 +194,15 @@ class NSOrderProvider with ChangeNotifier {
     }
   }
 
-  void updateSalesItemsDeliveredProviders( int orderId, String itemName, int quantitydelivered) {
+  void updateSalesItemsDeliveredProviders(
+      int orderId, String itemName, int quantitydelivered) {
     SalesOrderModel? foundOrder =
         _so.firstWhere((order) => order.orderID == orderId);
     if (foundOrder.orderID != 0) {
       final itemsList = foundOrder.items;
-      Item? item = itemsList!
-          .firstWhere((element) => element.itemName == itemName);
-      item.quantitySales =
-          item.quantitySales! - quantitydelivered;
+      Item? item =
+          itemsList!.firstWhere((element) => element.itemName == itemName);
+      item.quantitySales = item.quantitySales! - quantitydelivered;
 
       final itemDeliveredList = foundOrder.itemsDelivered;
       Item? itemDelivered = itemDeliveredList!
@@ -214,6 +214,7 @@ class NSOrderProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
   void updateSalesItemsReturnedProviders(
       int orderId, String itemName, int quantityReturned) {
     SalesOrderModel? foundOrder =
@@ -237,13 +238,49 @@ class NSOrderProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-  void addSalesReturnInProvider(int orderId, String itemName,){
-    SalesOrderModel? foundOrder =
-        _so.firstWhere((order) => order.orderID == orderId);
-    if (foundOrder.orderID != 0) {
-     
+
+  void addSalesReturnInProvider(
+    int orderId,
+    String itemName,
+    Item itemReturned,
+  ) {
+    try {
+      SalesOrderModel foundOrder =
+          _so.firstWhere((order) => order.orderID == orderId);
+      if (foundOrder.orderID != 0) {
+        final itemsReturned = foundOrder.itemsReturned ?? [];
+        itemsReturned.add(itemReturned);
+        foundOrder.itemsReturned = itemsReturned;
+        _lastUpdatedSalesOrder = foundOrder;
+        _sa.clear();
+      }
+      notifyListeners();
+    } catch (e) {
+      print('error addSalesReturnInProvider $e');
     }
-    notifyListeners();
+  }
+
+  void addSalesDeliveredInProvider(
+    int orderId,
+    String itemName,
+    Item itemDelivered,
+  ) {
+    try {
+      SalesOrderModel foundOrder =
+          _so.firstWhere((order) => order.orderID == orderId);
+      if (foundOrder.orderID != 0) {
+        final itemsDelivered = foundOrder.itemsDelivered ?? [];
+        itemsDelivered.add(itemDelivered);
+        foundOrder.itemsDelivered = itemsDelivered;
+        _lastUpdatedSalesOrder = foundOrder;
+        _sa.clear();
+      } else {
+        print('orderId me gadbad hai');
+      }
+      notifyListeners();
+    } catch (e) {
+      print('error in addSalesDeliveredInProvider $e');
+    }
   }
 
   // make a function to open close status of sales order

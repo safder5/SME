@@ -66,7 +66,6 @@ class _SalesOrderReturnTransactionsState
     _toInventory ? await updateInventory() : await addToWasteBucket();
     await updateItemDelivered(); //keep at last
     await addActivity();
-    prevData? updateInProvider(): createReturnForProvider();
   }
 
   void _handleSubmit() async {
@@ -78,6 +77,7 @@ class _SalesOrderReturnTransactionsState
     //  await  Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       await _executeFutures(track).then((_) {
+        prevData ? updateInProvider() : createReturnForProvider();
         setState(() {
           _isLoading = false; // Hide loading overlay
         });
@@ -105,9 +105,15 @@ class _SalesOrderReturnTransactionsState
     sorProvider.updateSalesItemsReturnedProviders(widget.orderId,
         _itemnameController.text, int.parse(_quantityCtrl.text));
   }
-  createReturnForProvider(){
-     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
-     
+
+  createReturnForProvider() {
+    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
+    sorProvider.addSalesReturnInProvider(
+        widget.orderId,
+        _itemnameController.text,
+        Item(
+            itemName: _itemnameController.text,
+            quantitySalesReturned: rit.quantitySalesReturned));
   }
 
   Future<void> addActivity() async {
@@ -129,7 +135,6 @@ class _SalesOrderReturnTransactionsState
   }
 
   Future<void> updateItemDelivered() async {
-    quantitysr = quantitysr! + quantityReturned;
     await FirebaseFirestore.instance
         .collection('UserData')
         .doc(auth!.email)
@@ -158,7 +163,7 @@ class _SalesOrderReturnTransactionsState
         DocumentSnapshot snapshot = await docRef.get();
         if (snapshot.exists && snapshot.data() != null) {
           itemQuantity = snapshot.get('itemQuantity');
-          quantitysr = snapshot.get('quantitySalesReturned');
+          // quantitysr = snapshot.get('quantitySalesReturned');
 
           await FirebaseFirestore.instance
               .collection('UserData')
@@ -167,7 +172,7 @@ class _SalesOrderReturnTransactionsState
               .doc(_itemnameController.text)
               .update({
             'itemQuantity': (itemQuantity! + quantityReturned),
-            'quantitySalesReturned': (quantitysr! + quantityReturned),
+            // 'quantitySalesReturned': (quantitysr! + quantityReturned),
           });
         }
         print('3');
@@ -303,6 +308,9 @@ class _SalesOrderReturnTransactionsState
         }
       }
     } catch (e) {
+      setState(() {
+        prevData = false;
+      });
       print("error checking data :$e");
     }
   }
@@ -533,12 +541,10 @@ class _SalesOrderReturnTransactionsState
                                 date: DateFormat('dd-MM-yyyy').format(now),
                                 quantitySalesReturned: quantityReturned);
 
-                                 final providerforReturns =
-                                  Provider.of<SalesReturnsProvider>(
-                                      context,
-                                      listen: false);
-                              providerforReturns.clearSalesReturns();
-
+                            final providerforReturns =
+                                Provider.of<SalesReturnsProvider>(context,
+                                    listen: false);
+                            providerforReturns.clearSalesReturns();
 
                             _isLoading ? null : _handleSubmit();
 

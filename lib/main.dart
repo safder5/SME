@@ -4,8 +4,9 @@ import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Providers/vendor_provider.dart';
-import 'package:ashwani/Services/authorizeUser/authorise.dart';
+import 'package:ashwani/Services/authorizeUser/loginauth.dart';
 import 'package:ashwani/Services/authorizeUser/more_user_details.dart';
+import 'package:ashwani/Services/authorizeUser/signupauth.dart';
 import 'package:ashwani/landingbypass.dart';
 import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
@@ -115,11 +116,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         color: const Color(colorPrimary),
         initialRoute: FirebaseAuth.instance.currentUser == null
-            ? '/authorizePage'
+            ? '/loginPage'
             : '/landingBypass',
         routes: {
-          '/authorizePage': (context) => const AuthorizePage(),
           '/landingBypass': (context) => const LandingBypass(),
+          '/loginPage':(context) => const LoginAuthPage(),
+          '/signupPage':(context) => const SignUpAuthPage(),
           '/moreDetails': (context) => const MoreUserDetails(),
         },
       ),

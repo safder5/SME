@@ -1,8 +1,8 @@
 import 'package:ashwani/Services/authorizeUser/loginauth.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -32,6 +32,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     ))
               ],
             ),
+            Column(
+              children: [],
+            ),
             const Spacer(),
             GestureDetector(
                 onTap: () {
@@ -40,8 +43,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   } catch (e) {
                     print('error');
                   }
-                  Navigator.of(context, rootNavigator: true).push(
+                  Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => const LoginAuthPage()));
+                      Navigator.of(context).pushNamedAndRemoveUntil('/loginPage', (route) => false);
                 },
                 child: Container(
                     decoration: BoxDecoration(

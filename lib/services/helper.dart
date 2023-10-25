@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../constants.dart';
 
@@ -63,6 +64,32 @@ InputDecoration getInputDecoration(
     ),
   );
 }
+InputDecoration logInputDecoration(
+    {required String hint, required Color errorColor}) {
+  return InputDecoration(
+    
+    constraints: const BoxConstraints(maxWidth: 600, minWidth: 200),
+    contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    hintText: hint,
+    hintStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: 12, color: b32),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+        borderSide: BorderSide(color: blue, width: 1.0)),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: errorColor),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: errorColor),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: b.withOpacity(0.07)),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+  );
+}
+
 
 // getDropDown({required String name,required List list}){
 //   ret

@@ -60,7 +60,6 @@ class _SalesOrderTransactionsShippedState
     // upload ttracks in inventory items
     await addActivity();
     // update sales activity
-    updateInProvider();
   }
 
   void _handleSubmit() async {
@@ -72,6 +71,7 @@ class _SalesOrderTransactionsShippedState
     //  await  Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       await _executeFutures(track).then((_) {
+        prevData ? updateInProvider() : createShippedForProvider();
         setState(() {
           _isLoading = false; // Hide loading overlay
         });
@@ -98,6 +98,16 @@ class _SalesOrderTransactionsShippedState
     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
     sorProvider.updateSalesItemsDeliveredProviders(widget.orderId,
         _itemnameController.text, int.parse(_quantityCtrl.text));
+  }
+
+  createShippedForProvider() {
+    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
+    sorProvider.addSalesDeliveredInProvider(
+        widget.orderId,
+        _itemnameController.text,
+        Item(
+            itemName: _itemnameController.text,
+            quantitySalesDelivered: int.parse(_quantityCtrl.text)));
   }
 
   Future<void> addActivity() async {
@@ -256,6 +266,9 @@ class _SalesOrderTransactionsShippedState
         }
       }
     } catch (e) {
+      setState(() {
+        prevData = false;
+      });
       print("error checking data :$e");
     }
   }
