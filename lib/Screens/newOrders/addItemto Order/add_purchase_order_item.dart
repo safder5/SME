@@ -20,6 +20,7 @@ class AddPurchaseOrderItem extends StatefulWidget {
 
 class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
   final TextEditingController _itemnameController = TextEditingController();
+  final TextEditingController _qtyCtrl = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final auth = FirebaseAuth.instance.currentUser;
   int itemQuantity = 0;
@@ -34,8 +35,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
           if (i.itemName! == item) {
             setState(() {
               selectedItem = i;
-              itemLimit =
-                  (i.itemQuantity! - i.quantitySales!).toString();
+              itemLimit = (i.itemQuantity! - i.quantitySales!).toString();
               print('item limit $itemLimit');
             });
             break;
@@ -121,34 +121,38 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
               height: 24,
             ),
             TextFormField(
+              controller: _qtyCtrl,
               keyboardType: TextInputType.number,
               cursorColor: blue,
               cursorWidth: 1,
               onSaved: (value) {
-                selectedItem.quantityPurchase =
-                    (int.tryParse(value ?? ''));
+                selectedItem.quantityPurchase = (int.tryParse(value ?? ''));
               },
               textInputAction: TextInputAction.next,
               decoration: getInputDecoration(hint: '12', errorColor: Colors.red)
                   .copyWith(
-                suffix: GestureDetector(
-                  onTap: () {
-                    // change type of unit
-                    // Navigator.of(context,
-                    //         rootNavigator: true)
-                    //     .push(MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             AddItems()));
-                  },
-                  child: Icon(
-                    LineIcons.box,
-                    size: 18,
-                    color: blue,
-                  ),
-                ),
+                // suffix: GestureDetector(
+                //   onTap: () {
+                //     // change type of unit
+                //     // Navigator.of(context,
+                //     //         rootNavigator: true)
+                //     //     .push(MaterialPageRoute(
+                //     //         builder: (context) =>
+                //     //             AddItems()));
+                //   },
+                //   child: Icon(
+                //     LineIcons.box,
+                //     size: 18,
+                //     color: blue,
+                //   ),
+                // ),
               ),
               onChanged: (value) {
-                itemQuantity = int.parse(value);
+                try {
+                  itemQuantity = int.parse(value);
+                } catch (e) {
+                  itemQuantity = int.parse('0');
+                }
                 // String limit = await checkQuantityLimit();
                 // print(limit);
               },
@@ -247,6 +251,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                   poItemsProvider.addpoitem(Item(
                     itemName: _itemnameController.text,
                     quantityPurchase: itemQuantity,
+                    originalQuantity: itemQuantity,
                   ));
                 } catch (e) {
                   //snackbar to show item not added

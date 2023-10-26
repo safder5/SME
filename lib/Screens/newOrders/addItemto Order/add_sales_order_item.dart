@@ -22,6 +22,7 @@ class AddSalesOrderItem extends StatefulWidget {
 class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _itemnameController = TextEditingController();
+  final TextEditingController _quantityCtrl = TextEditingController();
   final ScrollController scrollController = ScrollController();
 
   final auth = FirebaseAuth.instance.currentUser;
@@ -154,34 +155,20 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                 height: 24,
               ),
               TextFormField(
-                // validator: validateOrderNo,
+                controller: _quantityCtrl,
                 validator: validateSOIQ,
                 cursorColor: blue,
                 cursorWidth: 1,
                 textInputAction: TextInputAction.next,
                 decoration:
                     getInputDecoration(hint: '1.00', errorColor: Colors.red)
-                        .copyWith(
-                  suffix: GestureDetector(
-                    onTap: () {
-                      // change type of unit
-                      // Navigator.of(context,
-                      //         rootNavigator: true)
-                      //     .push(MaterialPageRoute(
-                      //         builder: (context) =>
-                      //             AddItems()));
-                    },
-                    child: Icon(
-                      LineIcons.box,
-                      size: 18,
-                      color: blue,
-                    ),
-                  ),
-                ),
+                        .copyWith(),
                 onChanged: (value) {
-                  quantitySales = int.parse(value);
-                  // String limit = await checkQuantityLimit();
-                  // print(limit);
+                  try {
+                    quantitySales = int.parse(value);
+                  } catch (e) {
+                    quantitySales = int.parse('0');
+                  }
                 },
               ),
               const SizedBox(
@@ -280,8 +267,9 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                     if (validateForm() == true) {
                       itemProvider.addsoItem(Item(
                           itemName: _itemnameController.text,
-                          quantitySales: quantitySales));
-                           Navigator.pop(context);
+                          quantitySales: quantitySales,
+                          originalQuantity: quantitySales));
+                      Navigator.pop(context);
                     } else {
                       print('error');
                     }
@@ -290,7 +278,6 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                     print(e);
                   }
                   // add items and pass the item and quantity to the list in sales order
-                 
                 },
                 child: Container(
                   decoration: BoxDecoration(

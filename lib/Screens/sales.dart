@@ -35,7 +35,7 @@ class _SalesPageState extends State<SalesPage> {
                         child: SizedBox(
                             child: Center(
                                 child: Text(
-                          "Sales Activity",
+                          "Sales Orders",
                           textScaleFactor: 0.8,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ))),
@@ -44,7 +44,7 @@ class _SalesPageState extends State<SalesPage> {
                         child: SizedBox(
                             child: Center(
                                 child: Text(
-                          "Sales Orders",
+                          "Sales Activity",
                           textScaleFactor: 0.8,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ))),
@@ -65,8 +65,8 @@ class _SalesPageState extends State<SalesPage> {
           ),
           body: const TabBarView(
             children: <Widget>[
+              SalesOrders(), 
               SalesActivity(),
-              SalesOrders(),
               SalesReturns(),
               // ItemsPage()
             ],

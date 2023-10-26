@@ -6,7 +6,6 @@ import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +105,7 @@ class _SalesOrderReturnTransactionsState
         _itemnameController.text, int.parse(_quantityCtrl.text));
   }
 
-  createReturnForProvider() {
+  void createReturnForProvider() {
     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
     sorProvider.addSalesReturnInProvider(
         widget.orderId,

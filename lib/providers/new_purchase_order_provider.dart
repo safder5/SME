@@ -1,5 +1,3 @@
-
-
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Providers/purchase_returns_provider.dart';
@@ -40,6 +38,12 @@ class NPOrderProvider with ChangeNotifier {
       .doc(uid)
       .collection('purchase_activities');
 
+  void clearAll() {
+    _po.clear();
+    _pa.clear();
+    notifyListeners();
+  }
+
   Future<void> addPurchaseOrder(PurchaseOrderModel puchaseOrder) async {
     try {
       await _purchaseOrderCollection
@@ -60,8 +64,11 @@ class NPOrderProvider with ChangeNotifier {
           .collection('items');
 
       for (final item in puchaseOrder.items!) {
-        await itemsCollection.doc(item.itemName).set(
-            {'itemName': item.itemName, 'itemQuantity': item.quantityPurchase});
+        await itemsCollection.doc(item.itemName).set({
+          'itemName': item.itemName,
+          'itemQuantity': item.quantityPurchase,
+          'originalQuantity': item.originalQuantity
+        });
       }
       notifyListeners();
     } catch (e) {
@@ -93,7 +100,8 @@ class NPOrderProvider with ChangeNotifier {
             final itemData = itemDoc.data();
             return Item(
                 itemName: itemData['itemName'],
-                itemQuantity: itemData['itemQuantity']);
+                itemQuantity: itemData['itemQuantity'],
+                originalQuantity: itemData['originalQuantity'] ?? 0);
           }).toList();
         }
 

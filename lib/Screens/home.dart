@@ -1,3 +1,4 @@
+import 'package:ashwani/Screens/home/activity_home.dart';
 import 'package:ashwani/Screens/more.dart';
 import 'package:ashwani/Screens/settings/setting_page.dart';
 import 'package:ashwani/Services/helper.dart';
@@ -6,6 +7,7 @@ import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/Utils/customers/add_customer.dart';
 import 'package:ashwani/Utils/items/addItems.dart';
 import 'package:ashwani/Providers/inventory_summary_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   bool isDisposed = false;
   bool hasData = false;
 
+  final _auth = FirebaseAuth.instance.currentUser;
   Future<void> getRequiredHomeData() async {
     final inventorySummaryProvider =
         Provider.of<InventorySummaryProvider>(context, listen: false);
@@ -88,17 +91,17 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         width: 15,
                       ),
-                      const Column(
+                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Company Name',
                             textScaleFactor: 1.2,
                           ),
                           Text(
-                            'Aryamann',
+                            _auth!.email ?? 'Name',
                             textScaleFactor: 0.8,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -162,11 +165,6 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 32.0,
                       ),
-                      ContainerHomeActivity(
-                        amt: '0',
-                        title: 'Quantity to be Packed',
-                        type: 0,
-                      ),
                       SizedBox(
                         height: 15,
                       ),
@@ -174,6 +172,7 @@ class _HomePageState extends State<HomePage> {
                         amt: '0',
                         title: 'Quantity to be Shipped',
                         type: 1,
+                        widget: AllHomeActivity(currentIndex: 1,),
                       ),
                       SizedBox(
                         height: 15,
@@ -182,6 +181,7 @@ class _HomePageState extends State<HomePage> {
                         amt: '0',
                         title: 'Quantity to be Delivered',
                         type: 2,
+                        widget: AllHomeActivity(currentIndex: 2,),
                       )
                     ],
                   ),

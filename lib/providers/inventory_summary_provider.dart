@@ -27,6 +27,14 @@ class InventorySummaryProvider with ChangeNotifier {
       .doc('purchases')
       .collection('purchase_orders');
 
+  void clearAll() {
+    _inHand = 0;
+    _toRecieve = 0;
+    _inventoryItems.clear();
+    _purchaseOrderItems.clear();
+    notifyListeners();
+  }
+
   Future<void> totalInHand() async {
     try {
       // sotre all items in inventory items

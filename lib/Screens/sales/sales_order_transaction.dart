@@ -100,7 +100,7 @@ class _SalesOrderTransactionsShippedState
         _itemnameController.text, int.parse(_quantityCtrl.text));
   }
 
-  createShippedForProvider() {
+  void createShippedForProvider() {
     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
     sorProvider.addSalesDeliveredInProvider(
         widget.orderId,

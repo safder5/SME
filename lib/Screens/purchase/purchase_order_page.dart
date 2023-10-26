@@ -1,3 +1,4 @@
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Screens/purchase/purchase_order_recieved_items.dart';
 import 'package:ashwani/Screens/purchase/purchase_order_return_items.dart';
@@ -253,7 +254,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
           ),
           if (isSelected[0])
             POPDetails(
-              items: widget.purchaseOrder.items,
+              items: widget.purchaseOrder.items ?? <Item>[],
             ),
           if (isSelected[1])
             POPRecieved(

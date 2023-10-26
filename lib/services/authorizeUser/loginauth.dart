@@ -2,6 +2,7 @@ import 'package:ashwani/Services/authorizeUser/signupauth.dart';
 import 'package:ashwani/Services/db_created.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
+import 'package:ashwani/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,8 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
       });
     }
   }
-  checkAuthentication(){
+
+  checkAuthentication() {
     // _auth.currentUser!.email? :
   }
 
@@ -126,7 +128,8 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
                     await _auth.signInWithEmailAndPassword(
                         email: _emailCtrl.text, password: _pwdCtrl.text);
                     if (!context.mounted) return;
-                    Navigator.pushNamed(context, '/landingBypass');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
                   } catch (e) {
                     print(e);
                   }

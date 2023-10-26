@@ -1,3 +1,4 @@
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Screens/sales/sales_order_return_transaction.dart';
 import 'package:ashwani/Screens/sales/sales_order_transaction.dart';
 import 'package:ashwani/Screens/sales/sales_page_sub_tabs.dart';
@@ -40,12 +41,12 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                   });
             }
             if (isSelected[2]) {
-              if (widget.salesorder.itemsDelivered?.length == 0) {
+              if (widget.salesorder.itemsDelivered!.isEmpty) {
                 showDialog(
                     context: context,
                     builder: (ctx) => const AlertDialog(
-                        title: Text("No Items Recieved"),
-                        // content: Text("This")
+                          title: Text("No Items Recieved"),
+                          // content: Text("This")
                         ));
               } else {
                 showModalBottomSheet<dynamic>(
@@ -277,7 +278,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
           ),
           if (isSelected[0])
             SOPDetails(
-              items: widget.salesorder.items,
+              items: widget.salesorder.items ?? <Item>[],
             ),
           if (isSelected[1])
             SOPShipped(

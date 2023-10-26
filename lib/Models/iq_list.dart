@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class Item {
   final String? itemName;
+  int? originalQuantity;
   int? itemQuantity;
   int? quantityPurchase;
   int? quantitySales;
@@ -13,6 +14,7 @@ class Item {
 
   Item({
     required this.itemName,
+    this.originalQuantity,
     this.itemQuantity,
     this.quantityPurchase,
     this.quantitySales,

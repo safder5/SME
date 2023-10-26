@@ -61,12 +61,64 @@ class _ContainerHomeInventoryState extends State<ContainerHomeInventory> {
   }
 }
 
+class ContainerSettings extends StatelessWidget {
+  const ContainerSettings(
+      {super.key, required this.title, required this.widget});
+  final String title;
+  final Widget widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => widget));
+      },
+      child: Container(
+        height: 53.0,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            color: const Color(0xFFF7F7F7),
+            borderRadius: BorderRadius.circular(10.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 12, color: b.withOpacity(0.6)),
+              ),
+              const Spacer(),
+              CircleAvatar(
+                maxRadius: 10,
+                backgroundColor: w,
+                child: Center(
+                  child: Icon(
+                    LineIcons.angleRight,
+                    color: b32,
+                    size: 14,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class ContainerHomeActivity extends StatefulWidget {
   const ContainerHomeActivity(
-      {super.key, required this.amt, required this.title, required this.type});
+      {super.key,
+      required this.amt,
+      required this.title,
+      required this.type,
+      required this.widget});
   final String amt;
   final String title;
   final int type;
+  final Widget widget;
   @override
   State<ContainerHomeActivity> createState() => _ContainerHomeActivityState();
 }
@@ -74,57 +126,63 @@ class ContainerHomeActivity extends StatefulWidget {
 class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 66.0,
-      width: double.maxFinite,
-      decoration: BoxDecoration(
-          color: const Color(0xFFF7F7F7),
-          borderRadius: BorderRadius.circular(10.0)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-                backgroundColor: w,
-                child: widget.type == 0
-                    ? Icon(
-                        LineIcons.box,
-                        color: blue,
-                      )
-                    : widget.type == 1
-                        ? Icon(LineIcons.truck, color: blue)
-                        : Icon(LineIcons.truckLoading, color: blue)),
-            const SizedBox(
-              width: 15,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.amt,
-                  style: const TextStyle(),
-                  textScaleFactor: 1.2,
-                ),
-                Text(
-                  widget.title,
-                  style: const TextStyle(fontWeight: FontWeight.w200),
-                  textScaleFactor: 0.8,
-                )
-              ],
-            ),
-            const Spacer(),
-            CircleAvatar(
-              maxRadius: 10,
-              backgroundColor: w,
-              child: Center(
-                child: Icon(
-                  LineIcons.angleRight,
-                  color: b32,
-                  size: 14,
-                ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => widget.widget));
+      },
+      child: Container(
+        height: 66.0,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            color: const Color(0xFFF7F7F7),
+            borderRadius: BorderRadius.circular(10.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                  backgroundColor: w,
+                  child: widget.type == 0
+                      ? Icon(
+                          LineIcons.box,
+                          color: blue,
+                        )
+                      : widget.type == 1
+                          ? Icon(LineIcons.truck, color: blue)
+                          : Icon(LineIcons.truckLoading, color: blue)),
+              const SizedBox(
+                width: 15,
               ),
-            )
-          ],
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.amt,
+                    style: const TextStyle(),
+                    textScaleFactor: 1.2,
+                  ),
+                  Text(
+                    widget.title,
+                    style: const TextStyle(fontWeight: FontWeight.w200),
+                    textScaleFactor: 0.8,
+                  )
+                ],
+              ),
+              const Spacer(),
+              CircleAvatar(
+                maxRadius: 10,
+                backgroundColor: w,
+                child: Center(
+                  child: Icon(
+                    LineIcons.angleRight,
+                    color: b32,
+                    size: 14,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -966,11 +1024,12 @@ class SOPDetailsItemTile extends StatelessWidget {
   final String name;
   final String quantity;
   final int index;
+  final int original;
   const SOPDetailsItemTile(
       {super.key,
       required this.name,
       required this.quantity,
-      required this.index});
+      required this.index, required this.original});
 
   @override
   Widget build(BuildContext context) {
@@ -1007,11 +1066,33 @@ class SOPDetailsItemTile extends StatelessWidget {
                     name,
                     style: const TextStyle(fontWeight: FontWeight.w400),
                   ),
-                  Text(
-                    'Units : ${quantity.toString()}',
-                    textScaleFactor: 0.8,
-                    style: TextStyle(
-                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                  Row(
+                    children: [
+                      Text(
+                        'Units : ${original.toString()}',
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                      ),
+                       const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 0.5, // Width of the vertical line
+                        height:
+                            12, // Height to fill the available vertical space
+                        color: b32, // Color of the line
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'To Ship : ${quantity.toString()}',
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -1028,8 +1109,8 @@ class SOPShippedItemsTile extends StatelessWidget {
   final String quantity;
   final String itemName;
   final int index;
-  int? quantityReturned;
-  SOPShippedItemsTile(
+  final int? quantityReturned;
+  const SOPShippedItemsTile(
       {super.key,
       required this.quantity,
       required this.itemName,

@@ -4,14 +4,37 @@ import 'package:ashwani/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 
 class SOPDetails extends StatefulWidget {
-  const SOPDetails({super.key, this.items});
-  final List<Item>? items;
+  const SOPDetails({super.key, required this.items});
+  final List<Item> items;
 
   @override
   State<SOPDetails> createState() => _SOPDetailsState();
 }
 
 class _SOPDetailsState extends State<SOPDetails> {
+  bool allDelivered = false;
+  int leftquantities = 0;
+  checkIfAllDelivered() {
+    if (widget.items.isNotEmpty) {
+      for (int i = 0; i < widget.items.length; i++) {
+        Item it = widget.items[i];
+        leftquantities += it.quantitySales!;
+      }
+      if(leftquantities == 0){
+        setState(() {
+          allDelivered = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkIfAllDelivered();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +56,7 @@ class _SOPDetailsState extends State<SOPDetails> {
                   ),
                   Spacer(),
                   Text(
-                    'Ready to pack',
+                    allDelivered? 'All Items Shipped':'Ready to pack',
                     textScaleFactor: 1.2,
                     style: TextStyle(color: dg),
                   ),
@@ -52,11 +75,11 @@ class _SOPDetailsState extends State<SOPDetails> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return SOPDetailsItemTile(
-                      name: widget.items![index].itemName!,
-                      quantity: widget.items![index].quantitySales.toString(),
-                      index: index);
+                      name: widget.items[index].itemName!,
+                      quantity: widget.items[index].quantitySales.toString(),
+                      index: index, original: widget.items[index].originalQuantity?? 0,);
                 },
-                itemCount: widget.items?.length ?? 0,
+                itemCount: widget.items.length,
               ),
             ),
           ],
@@ -102,7 +125,7 @@ class _SOPShippedState extends State<SOPShipped> {
                           reversedList[index].quantitySalesDelivered.toString(),
                       itemName: reversedList[index].itemName!,
                       quantityReturned:
-                          reversedList[index].quantitySalesReturned!,
+                          reversedList[index].quantitySalesReturned?? 0,
                       index: index);
                 },
                 itemCount: reversedList.length,

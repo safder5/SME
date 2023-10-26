@@ -34,18 +34,30 @@ class _PurchasePageState extends State<PurchasePage> {
                     tabs: const [
                       Tab(
                         child: SizedBox(
-
-                          child: Center(child: Text("Purchase Activity",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
+                            child: Center(
+                                child: Text(
+                          "Purchase Orders",
+                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ))),
                       ),
                       Tab(
                         child: SizedBox(
-
-                          child: Center(child: Text("Purchase Orders",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
+                            child: Center(
+                                child: Text(
+                          "Purchase Activity",
+                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ))),
                       ),
                       Tab(
                         child: SizedBox(
-
-                          child: Center(child: Text("Purchase Returns",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),))),
+                            child: Center(
+                                child: Text(
+                          "Purchase Returns",
+                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ))),
                       ),
                       // Tab(
                       //  child: Text("Items",textScaleFactor: 0.8,style: TextStyle(fontWeight: FontWeight.w400),),
@@ -54,8 +66,7 @@ class _PurchasePageState extends State<PurchasePage> {
           ),
           body: const TabBarView(
             children: <Widget>[
-              PurchaseActivity(),
-              PurchaseOrders(),
+              PurchaseOrders(), PurchaseActivity(),
               PurchaseReturns()
               // ItemsPage()
             ],

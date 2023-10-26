@@ -38,6 +38,12 @@ class NSOrderProvider with ChangeNotifier {
       .doc(uid)
       .collection('sales_activities');
 
+  void clearAll() {
+    _so.clear();
+    _sa.clear();
+    notifyListeners();
+  }
+
   Future<void> addSalesOrder(SalesOrderModel so) async {
     try {
       await _salesOrderCollection.doc(so.orderID.toString()).set({
@@ -57,6 +63,7 @@ class NSOrderProvider with ChangeNotifier {
         await itemsCollection.doc(item.itemName).set({
           'itemName': item.itemName,
           'quantitySales': item.quantitySales,
+          'originalQuantity': item.originalQuantity
         });
       }
       notifyListeners();
@@ -88,11 +95,11 @@ class NSOrderProvider with ChangeNotifier {
           salesOrder.items = itemDocs.docs.map((itemDoc) {
             final itemData = itemDoc.data();
             return Item(
-              itemName: itemData['itemName'],
-              itemQuantity: itemData['itemQuantity'],
-              quantityPurchase: itemData['quantityPurchase'],
-              quantitySales: itemData['quantitySales'],
-            );
+                itemName: itemData['itemName'],
+                itemQuantity: itemData['itemQuantity'],
+                quantityPurchase: itemData['quantityPurchase'],
+                quantitySales: itemData['quantitySales'],
+                originalQuantity: itemData['originalQuantity'] ?? 0);
           }).toList();
         }
         final tracksCollection = doc.reference.collection('tracks');
@@ -133,6 +140,7 @@ class NSOrderProvider with ChangeNotifier {
         }
         _so.add(salesOrder);
       }
+      print(_so.length);
       // _so.reversed;
       notifyListeners();
     } catch (e) {
@@ -245,8 +253,12 @@ class NSOrderProvider with ChangeNotifier {
     Item itemReturned,
   ) {
     try {
-      SalesOrderModel foundOrder =
-          _so.firstWhere((order) => order.orderID == orderId);
+      SalesOrderModel? foundOrder = _so.firstWhere(
+        (order) => order.orderID == orderId,
+      );
+      if (foundOrder == _lastUpdatedSalesOrder) {
+        print('its last updated order');
+      }
       if (foundOrder.orderID != 0) {
         final itemsReturned = foundOrder.itemsReturned ?? [];
         itemsReturned.add(itemReturned);
@@ -266,8 +278,14 @@ class NSOrderProvider with ChangeNotifier {
     Item itemDelivered,
   ) {
     try {
-      SalesOrderModel foundOrder =
-          _so.firstWhere((order) => order.orderID == orderId);
+      print(orderId);
+      SalesOrderModel? foundOrder = _so.firstWhere(
+        (order) => order.orderID == orderId,
+        orElse: () => _lastUpdatedSalesOrder,
+      );
+      if (foundOrder == _lastUpdatedSalesOrder) {
+        print('its last updated order');
+      }
       if (foundOrder.orderID != 0) {
         final itemsDelivered = foundOrder.itemsDelivered ?? [];
         itemsDelivered.add(itemDelivered);

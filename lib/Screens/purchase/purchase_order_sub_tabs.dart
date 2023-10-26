@@ -6,13 +6,36 @@ import '../../constants.dart';
 
 class POPDetails extends StatefulWidget {
   const POPDetails({super.key, required this.items});
-  final List<Item>? items;
+  final List<Item> items;
 
   @override
   State<POPDetails> createState() => _POPDetailsState();
 }
 
 class _POPDetailsState extends State<POPDetails> {
+  bool allRecieved = false;
+  int qrecieved = 0;
+
+  checkAllRecieved() {
+     if (widget.items.isNotEmpty) {
+      for (int i = 0; i < widget.items.length; i++) {
+        Item it = widget.items[i];
+        qrecieved += it.itemQuantity!;
+      }
+      if(qrecieved == 0){
+        setState(() {
+          allRecieved = true;
+        });
+      }
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkAllRecieved();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +57,7 @@ class _POPDetailsState extends State<POPDetails> {
                   ),
                   const Spacer(),
                   Text(
-                    'Order Placed',
+                    allRecieved? 'All Recieved':'Order Placed',
                     textScaleFactor: 1.2,
                     style: TextStyle(color: dg),
                   ),
@@ -55,7 +78,7 @@ class _POPDetailsState extends State<POPDetails> {
                   return SOPDetailsItemTile(
                       name: widget.items![index].itemName!,
                       quantity: widget.items![index].itemQuantity.toString(),
-                      index: index);
+                      index: index, original: widget.items![index].originalQuantity ?? 0,);
                 },
                 itemCount: widget.items?.length ?? 0,
               ),
@@ -128,7 +151,6 @@ class POPReturns extends StatefulWidget {
 }
 
 class _POPReturnsState extends State<POPReturns> {
-  
   @override
   void initState() {
     super.initState();
