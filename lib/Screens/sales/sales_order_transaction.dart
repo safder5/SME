@@ -4,7 +4,6 @@ import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +70,7 @@ class _SalesOrderTransactionsShippedState
     //  await  Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       await _executeFutures(track).then((_) {
+        print(widget.orderId);
         prevData ? updateInProvider() : createShippedForProvider();
         setState(() {
           _isLoading = false; // Hide loading overlay
@@ -101,7 +101,10 @@ class _SalesOrderTransactionsShippedState
   }
 
   void createShippedForProvider() {
+    print('create shipped activated');
+
     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
+    print(sorProvider.som.length);
     sorProvider.addSalesDeliveredInProvider(
         widget.orderId,
         _itemnameController.text,

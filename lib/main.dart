@@ -15,10 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -31,13 +35,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   // This widget is the root of your application.
   bool _initialise = false;
   bool _error = false;
+  // bool _dataLoaded = false;
 
-  void initialiseFlutterFire() async {
+  Future<void> initialiseFlutterFireandLoadData() async {
     try {
       await Firebase.initializeApp();
+      // _dataLoaded = await loadInitialData();
+
       setState(() {
         _initialise = true;
+        // _dataLoaded = _dataLoaded;
         print(FirebaseAuth.instance.currentUser);
+        // print('data loaded = $_dataLoaded');
       });
     } catch (e) {
       setState(() {
@@ -73,9 +82,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
     if (!_initialise) {
       return Container(
-        color: Colors.white,
-        child: const Center(child: CircularProgressIndicator.adaptive()),
-      );
+          color: Colors.white,
+          child: Lottie.asset('lib/animation/ani6.json',
+              width: 100, height: 100, fit: BoxFit.contain));
     }
     return MultiProvider(
       providers: [
@@ -87,7 +96,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(create: (context) => BSAddressProvider()),
         ChangeNotifierProvider(create: (context) => VendorProvider()),
         ChangeNotifierProvider(create: (context) => SalesReturnsProvider()),
-         ChangeNotifierProvider(create: (context) => PurchaseReturnsProvider()),
+        ChangeNotifierProvider(create: (context) => PurchaseReturnsProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -117,12 +126,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         color: const Color(colorPrimary),
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? '/loginPage'
-            : '/landingBypass',
+            : '/loadInventory',
         routes: {
+          '/myApp': (context) => const MyApp(),
           '/landingBypass': (context) => const LandingBypass(),
-          '/loginPage':(context) => const LoginAuthPage(),
-          '/signupPage':(context) => const SignUpAuthPage(),
+          '/loginPage': (context) => const LoginAuthPage(),
+          '/signupPage': (context) => const SignUpAuthPage(),
           '/moreDetails': (context) => const MoreUserDetails(),
+          '/loadInventory': (context) => const LoadInventory(),
         },
       ),
     );
@@ -132,6 +143,123 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initialiseFlutterFire();
+    initialiseFlutterFireandLoadData();
   }
 }
+
+class LoadInventory extends StatefulWidget {
+  const LoadInventory({super.key});
+
+  @override
+  State<LoadInventory> createState() => _LoadInventoryState();
+}
+
+class _LoadInventoryState extends State<LoadInventory> {
+  bool _loadData = false;
+  bool _err = false;
+  Future<void> loadData() async {
+    final customerP = Provider.of<CustomerProvider>(context, listen: false);
+    final vendorP = Provider.of<VendorProvider>(context, listen: false);
+    final itemsP = Provider.of<ItemsProvider>(context, listen: false);
+    final invSummP =
+        Provider.of<InventorySummaryProvider>(context, listen: false);
+    final salesOP = Provider.of<NSOrderProvider>(context, listen: false);
+    final salesRP = Provider.of<SalesReturnsProvider>(context, listen: false);
+    final purchaseOP = Provider.of<NPOrderProvider>(context, listen: false);
+    final purchaseRP =
+        Provider.of<PurchaseReturnsProvider>(context, listen: false);
+    try {
+      await customerP.fetchAllCustomers();
+      await vendorP.fetchAllVendors();
+      await itemsP.getItems();
+      await invSummP.totalInHand();
+      await invSummP.totalTobeRecieved();
+      await salesOP.fetchSalesOrders();
+      await salesOP.fetchActivity();
+      await salesRP.fetchSalesReturns();
+      await purchaseOP.fetchPurchaseOrders();
+      await purchaseOP.fetchPurchaseActivity();
+      await purchaseRP.fetchPurchaseReturns();
+      print(customerP.customers.length);
+      print(salesOP.som.length);
+      setState(() {
+        _loadData = true;
+      });
+    } catch (e) {
+      setState(() {
+        _err = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loadData) {
+      return Container(
+          color: w,
+          child: Lottie.asset('lib/animation/ani3.json',
+              width: 100, height: 100, fit: BoxFit.contain));
+    }
+    if (_err) {
+      return Scaffold(
+        body: Container(
+          color: Colors.white,
+          child: const Center(
+            child: Column(children: [
+              Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 25,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Failed To Load Database! Try REopening the App ',
+                style: TextStyle(color: Colors.red, fontSize: 25),
+              ),
+            ]),
+          ),
+        ),
+      );
+    }
+    return const LandingBypass();
+  }
+}
+
+// Future<bool> loadInitialData() async {
+//   // Load your data into providers
+//   // Example: orderProvider.loadDataFromFirebase()
+//   final customerP = CustomerProvider();
+//   final vendorP = VendorProvider();
+//   final itemsP = ItemsProvider();
+//   final invSummP = InventorySummaryProvider();
+//   final salesOP = NSOrderProvider();
+//   final salesRP = SalesReturnsProvider();
+//   final purchaseOP = NPOrderProvider();
+//   final purchaseRP = PurchaseReturnsProvider();
+
+//   try {
+//     await customerP.fetchAllCustomers();
+//     await vendorP.fetchAllVendors();
+//     await itemsP.getItems();
+//     await invSummP.totalInHand();
+//     await invSummP.totalTobeRecieved();
+//     await salesOP.fetchSalesOrders();
+//     await salesOP.fetchActivity();
+//     await salesRP.fetchSalesReturns();
+//     await purchaseOP.fetchPurchaseOrders();
+//     await purchaseOP.fetchPurchaseActivity();
+//     await purchaseRP.fetchPurchaseReturns();
+//     print(customerP.customers.length);
+//     print(salesOP.som.length);
+//     return true;
+//   } catch (e) {
+//     return false;
+//   }
+// }

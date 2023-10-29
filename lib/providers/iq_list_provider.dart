@@ -54,7 +54,8 @@ class ItemsProvider with ChangeNotifier {
     _poItems.clear();
     notifyListeners();
   }
-   void addsditem(Item newSDtem) {
+
+  void addsditem(Item newSDtem) {
     _salesDelivered.add(newSDtem);
     notifyListeners();
   }
@@ -72,6 +73,12 @@ class ItemsProvider with ChangeNotifier {
   void clearsdItems() {
     _salesDelivered.clear();
     notifyListeners();
+  }
+
+  void addInvItemtoProvider(Item item, ItemTrackingModel track) {
+    Item i = item;
+    i.itemTracks = [track];
+    _allItems.add(i);
   }
 
   Future<void> getItems() async {
@@ -220,7 +227,6 @@ class ItemsProvider with ChangeNotifier {
     return _allItems.map((item) => item.itemName).toList();
   }
 
-  Future<void> addSalesDeliveredItemsToFirebase(CollectionReference collRef)async{
-    
-  }
+  Future<void> addSalesDeliveredItemsToFirebase(
+      CollectionReference collRef) async {}
 }

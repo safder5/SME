@@ -121,7 +121,7 @@ class _AddItemsState extends State<AddItems> {
             ItemTrackingModel itm = ItemTrackingModel(
                 orderID: _auth?.email,
                 quantity: int.parse(itemQuantityCtrl.text),
-                reason: 'u');
+                reason: 'By User');
             Item item = Item(
                 imageURL: imgUrl,
                 itemName: itemName,
@@ -131,10 +131,9 @@ class _AddItemsState extends State<AddItems> {
                 itemTracks: [itm]);
 
             await itemProviderforAddingItem.addItemtoFB(item, collRef);
-            setState(() {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LandingBypass()));
-            });
+            itemProviderforAddingItem.addInvItemtoProvider(item, itm);
+            if (!context.mounted) return;
+            Navigator.pop(context);
           },
           child: Container(
             decoration: BoxDecoration(

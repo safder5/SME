@@ -19,12 +19,6 @@ class _ItemsPageState extends State<ItemsPage> {
   // final _auth = FirebaseAuth.instance.currentUser;
   List<Item> items = [];
 
-  @override
-  void initState() {
-    super.initState();
-    fetchItems(context);
-  }
-
   Future<void> fetchItems(BuildContext context) async {
     final itemProvider = Provider.of<ItemsProvider>(context, listen: false);
 
@@ -70,29 +64,34 @@ class _ItemsPageState extends State<ItemsPage> {
             const SizedBox(
               height: 32,
             ),
-            Expanded(
-              child: ((items.isEmpty)
-                  ? const Text('No Items, Add below')
-                  : ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ItemScreen(
-                                          item: item,
-                                        )));
-                          },
-                          child: ItemsPageContainer(
-                              itemName: items[index].itemName!,
-                              sku: items[index].itemQuantity.toString()),
-                        );
-                      })),
+            Consumer<ItemsProvider>(
+              builder: (_, ip, __) {
+                final items = ip.allItems.reversed.toList();
+                return Expanded(
+                  child: ((items.isEmpty)
+                      ? const Text('No Items, Add below')
+                      : ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ItemScreen(
+                                              item: item,
+                                            )));
+                              },
+                              child: ItemsPageContainer(
+                                  itemName: items[index].itemName!,
+                                  sku: items[index].itemQuantity.toString()),
+                            );
+                          })),
+                );
+              },
             )
           ],
         ),

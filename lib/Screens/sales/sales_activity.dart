@@ -15,51 +15,51 @@ class SalesActivity extends StatefulWidget {
 }
 
 class _SalesActivityState extends State<SalesActivity> {
-  List<ItemTrackingSalesOrder> saList = [];
-  bool isloading = true;
-  bool isDisposed = false;
-  bool hasData = false;
-  chackProviderforData() {
-    final soProvider = Provider.of<NSOrderProvider>(context, listen: false);
-    if (soProvider.sa.isNotEmpty) {
-      if (!isDisposed) {
-        setState(() {
-          isloading = false;
-          hasData = true;
-          saList = soProvider.sa.reversed.toList();
-        });
-      }
-    }
-  }
+  // List<ItemTrackingSalesOrder> saList = [];
+  // bool isloading = true;
+  // bool isDisposed = false;
+  // bool hasData = false;
+  // chackProviderforData() {
+  //   final soProvider = Provider.of<NSOrderProvider>(context, listen: false);
+  //   if (soProvider.sa.isNotEmpty) {
+  //     if (!isDisposed) {
+  //       setState(() {
+  //         isloading = false;
+  //         hasData = true;
+  //         saList = soProvider.sa.reversed.toList();
+  //       });
+  //     }
+  //   }
+  // }
 
-  Future<void> fetchPurchaseActivity(BuildContext context) async {
-    final soProvider = Provider.of<NSOrderProvider>(context, listen: false);
+  // Future<void> fetchPurchaseActivity(BuildContext context) async {
+  //   final soProvider = Provider.of<NSOrderProvider>(context, listen: false);
 
-    try {
-      await soProvider.fetchActivity();
-      if (!isDisposed && !hasData) {
-        setState(() {
-          saList = soProvider.sa.reversed.toList();
-          isloading = false;
-        });
-      }
-    } catch (e) {
-      // Handle the error
-      if (!isDisposed) {
-        setState(() {
-          isloading = false;
-        });
-      }
-      print('Error fetching sales orders: $e');
-    }
-  }
+  //   try {
+  //     await soProvider.fetchActivity();
+  //     if (!isDisposed && !hasData) {
+  //       setState(() {
+  //         saList = soProvider.sa.reversed.toList();
+  //         isloading = false;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     // Handle the error
+  //     if (!isDisposed) {
+  //       setState(() {
+  //         isloading = false;
+  //       });
+  //     }
+  //     print('Error fetching sales orders: $e');
+  //   }
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    chackProviderforData();
-    fetchPurchaseActivity(context);
+    // chackProviderforData();
+    // fetchPurchaseActivity(context);
   }
 
   @override
@@ -73,7 +73,9 @@ class _SalesActivityState extends State<SalesActivity> {
             child: Column(
               children: [
                 //future builder to build purchase orders
-                Expanded(
+                Consumer<NSOrderProvider>(builder: (_,sa,__){
+                  final saList = sa.sa.reversed.toList();
+                  return Expanded(
                   child: ListView.builder(
                       // physics: controllScroll,
                       shrinkWrap: true,
@@ -85,11 +87,13 @@ class _SalesActivityState extends State<SalesActivity> {
                           activity: salesOrder,
                         );
                       }),
-                ),
+                );
+                })
+                
               ],
             ),
           ),
-          if (isloading) LoadingOverlay()
+          // if (isloading) LoadingOverlay()
         ],
       ),
     );

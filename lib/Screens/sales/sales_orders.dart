@@ -36,6 +36,9 @@ class _SalesOrdersState extends State<SalesOrders> {
           soList = soProvider.som.reversed.toList();
         });
       }
+    } else {
+      print('fetching orders');
+      fetchSalesOrders(context);
     }
   }
 
@@ -44,6 +47,7 @@ class _SalesOrdersState extends State<SalesOrders> {
 
     try {
       await soProvider.fetchSalesOrders();
+      print(soProvider.som.length);
       if (!_isDisposed && !hasData) {
         setState(() {
           soList = soProvider.som.reversed.toList();
@@ -65,8 +69,11 @@ class _SalesOrdersState extends State<SalesOrders> {
   void initState() {
     super.initState();
     // Fetch sales orders and update the list
-    checkProviderForData();
-    fetchSalesOrders(context);
+
+    soList = [];
+    // checkProviderForData();
+
+    // fetchSalesOrders(context);
     // fetchCustomerNames(context);
   }
 
@@ -140,33 +147,61 @@ class _SalesOrdersState extends State<SalesOrders> {
                 const SizedBox(
                   height: 16,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                      // physics: controllScroll,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: soList.length,
-                      itemBuilder: (context, index) {
-                        final salesOrder = soList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                                MaterialPageRoute(
-                                    builder: (context) => SalesOrderPage(
-                                        salesorder: salesOrder)));
-                          },
-                          child: ContainerSalesOrder(
-                              orderID: salesOrder.orderID.toString(),
-                              name: salesOrder.customerName!,
-                              date: salesOrder.shipmentDate!,
-                              status: salesOrder.status!),
-                        );
-                      }),
-                ),
+                // Expanded(
+                //   child: ListView.builder(
+                //       // physics: controllScroll,
+                //       shrinkWrap: true,
+                //       scrollDirection: Axis.vertical,
+                //       itemCount: soList.length,
+                //       itemBuilder: (context, index) {
+                //         final salesOrder = soList[index];
+                //         return GestureDetector(
+                //           onTap: () {
+                //             Navigator.of(context, rootNavigator: true).push(
+                //                 MaterialPageRoute(
+                //                     builder: (context) => SalesOrderPage(
+                //                         salesorder: salesOrder)));
+                //           },
+                //           child: ContainerSalesOrder(
+                //               orderID: salesOrder.orderID.toString(),
+                //               name: salesOrder.customerName!,
+                //               date: salesOrder.shipmentDate!,
+                //               status: salesOrder.status!),
+                //         );
+                //       }),
+                // ),
+                Consumer<NSOrderProvider>(builder: (_, provider, __) {
+                  final salesOrders = provider.som.reversed.toList();
+                  print(salesOrders.length);
+                  if (salesOrders.isEmpty) {
+                    return const Center(
+                      child: Text('No Customers yet, Add Below '),
+                    );
+                  }
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: salesOrders.length,itemBuilder: (context, index) {
+                      final salesOrder = salesOrders[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SalesOrderPage(salesorder: salesOrder)));
+                        },
+                        child: ContainerSalesOrder(
+                            orderID: salesOrder.orderID.toString(),
+                            name: salesOrder.customerName!,
+                            date: salesOrder.shipmentDate!,
+                            status: salesOrder.status!),
+                      );
+                    }),
+                  );
+                })
               ],
             ),
           ),
-          if (isLoading) LoadingOverlay()
+          // if (isLoading) LoadingOverlay()
         ],
       ),
     );

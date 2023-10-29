@@ -1,10 +1,10 @@
+import 'package:ashwani/Providers/customer_provider.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Utils/customers/add_customer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 class CustomerPage extends StatefulWidget {
   const CustomerPage({super.key});
@@ -14,17 +14,21 @@ class CustomerPage extends StatefulWidget {
 }
 
 class _CustomerPageState extends State<CustomerPage> {
-  final _auth = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+    final customerP = Provider.of<CustomerProvider>(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const AddCustomer()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddCustomer()));
         },
         backgroundColor: blue,
-        child: const Center( child: Icon(LineIcons.plus,),),
+        child: const Center(
+          child: Icon(
+            LineIcons.plus,
+          ),
+        ),
       ),
       backgroundColor: w,
       body: SafeArea(
@@ -48,35 +52,25 @@ class _CustomerPageState extends State<CustomerPage> {
               const SizedBox(
                 height: 32,
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('UserData')
-                        .doc('${_auth!.email}')
-                        .collection('Customers')
-                        .snapshots(),
-                    builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      final userCustomerSnapshot = snapshot.data?.docs;
-                      if (userCustomerSnapshot!.isEmpty) {
-                        return const Center(
-                          child: Text('No Customers yet, Add Below '),
-                        );
-                      }
-                      return ListView.builder(
-                          itemCount: userCustomerSnapshot.length,
-                          itemBuilder: (context, index) {
-                            return CustomersPageContainer(
-                                fullname: userCustomerSnapshot[index]
-                                    ['name'],
-                                companyname: userCustomerSnapshot[index]
-                                    ['companyName']);
-                          });
-                    })),
-              ),
+              Consumer<CustomerProvider>(builder: (context, customerP, child) {
+                final customers = customerP.customers;
+                print(customers.length);
+                if (customers.isEmpty) {
+                  return const Center(
+                    child: Text('No Customers yet, Add Below '),
+                  );
+                }
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: ListView.builder(
+                      itemCount: customers.length,
+                      itemBuilder: (context, index) {
+                        return CustomersPageContainer(
+                            fullname: customers[index].name!,
+                            companyname: customers[index].companyName!);
+                      }),
+                );
+              })
             ],
           ),
         ),
@@ -84,3 +78,33 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 }
+
+
+// SizedBox(
+              //   height: MediaQuery.of(context).size.height,
+              //   child: StreamBuilder<QuerySnapshot>(
+              //       stream: FirebaseFirestore.instance
+              //           .collection('UserData')
+              //           .doc('${_auth!.email}')
+              //           .collection('Customers')
+              //           .snapshots(),
+              //       builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              //         if (snapshot.connectionState == ConnectionState.waiting) {
+              //           return const CircularProgressIndicator();
+              //         }
+              //         final userCustomerSnapshot = snapshot.data?.docs;
+              //         if (userCustomerSnapshot!.isEmpty) {
+              //           return const Center(
+              //             child: Text('No Customers yet, Add Below '),
+              //           );
+              //         }
+              //         return ListView.builder(
+              //             itemCount: userCustomerSnapshot.length,
+              //             itemBuilder: (context, index) {
+              //               return CustomersPageContainer(
+              //                   fullname: userCustomerSnapshot[index]['name'],
+              //                   companyname: userCustomerSnapshot[index]
+              //                       ['companyName']);
+              //             });
+              //       })),
+              // ),

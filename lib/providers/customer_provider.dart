@@ -8,13 +8,22 @@ import 'package:flutter/material.dart';
 class CustomerProvider with ChangeNotifier {
   List<CustomerModel> _customers = [];
   List<String> _customerNames = [];
-  List<CustomerModel> get customer => _customers;
+  List<CustomerModel> get customers => _customers;
   List<String> get customerNames => _customerNames;
 
   final CollectionReference cR = FirebaseFirestore.instance
       .collection('UserData')
       .doc(FirebaseAuth.instance.currentUser!.email)
       .collection('Customers');
+
+  void addCustomerinProvider(
+      CustomerModel customerData, AddressModel? bill, AddressModel? ship) {
+    final cd = customerData;
+    cd.bill = bill;
+    cd.ship = ship;
+    _customers.add(cd);
+    notifyListeners();
+  }
 
   Future<void> addCustomer(CustomerModel customerData, DocumentReference docRef,
       AddressModel? bill, AddressModel? ship) async {
@@ -65,19 +74,21 @@ class CustomerProvider with ChangeNotifier {
 
   Future<void> fetchAllCustomers() async {
     try {
+      _customers.clear();
       final customerSnapshot = await cR.get();
       _customers = customerSnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return CustomerModel(
-          name: data['name'],
-          displayname: data['displayname'],
-          companyName: data['companyName'],
-          email: data['email'],
-          phone: data['phone'],
-          remarks: data['remarks'],
-          business: data['business'],
+          name: data['name'] ?? '',
+          displayname: data['displayname'] ?? '',
+          companyName: data['companyName'] ?? '',
+          email: data['email'] ?? '',
+          phone: data['phone'] ?? '',
+          remarks: data['remarks'] ?? '',
+          business: data['business'] ?? '',
         );
       }).toList();
+      print('fetchedcustomers ');
       notifyListeners();
     } catch (e) {
       print('error getting fetch all customers $e');

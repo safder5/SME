@@ -68,7 +68,9 @@ class _AddVendorState extends State<AddVendor> {
               ship = addressPvr.shipping;
             }
             await vendor_provider.addVendor(vendorData, docRef, bill, ship);
+            vendor_provider.addVendorinProvider(vendorData, bill, ship);
             addressPvr.clearAddresses();
+            if (!context.mounted) return;
             Navigator.pop(context);
           },
           child: Container(

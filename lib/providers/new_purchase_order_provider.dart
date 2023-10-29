@@ -44,6 +44,11 @@ class NPOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addPurchaseOrdertoProvider(PurchaseOrderModel po) {
+    _po.add(po);
+    notifyListeners();
+  }
+
   Future<void> addPurchaseOrder(PurchaseOrderModel puchaseOrder) async {
     try {
       await _purchaseOrderCollection

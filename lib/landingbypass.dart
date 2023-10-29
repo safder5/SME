@@ -3,7 +3,6 @@ import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'Screens/bom.dart';
 import 'Screens/purchase.dart';
 import 'Screens/sales.dart';
 
@@ -20,8 +19,12 @@ class _LandingBypassState extends State<LandingBypass> {
     PersistentTabController controller;
     controller = PersistentTabController(initialIndex: 0);
     List<Widget> buildScreens() {
-      return [const HomePage(), const SalesPage(), const PurchasePage(),];
-    }// const BOM()
+      return [
+        const HomePage(),
+        const SalesPage(),
+        const PurchasePage(),
+      ];
+    } // const BOM()
 
     List<PersistentBottomNavBarItem> navBarItems() {
       return [
@@ -91,7 +94,7 @@ class _LandingBypassState extends State<LandingBypass> {
         animateTabTransition: true,
         duration: Duration(milliseconds: 400),
       ),
-      decoration: const NavBarDecoration( 
+      decoration: const NavBarDecoration(
           border: Border(top: BorderSide(color: Colors.grey, width: 0))),
       navBarStyle: NavBarStyle.style3,
     );

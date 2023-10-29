@@ -48,9 +48,10 @@ class _AddCustomerState extends State<AddCustomer> {
       setState(() => {_business = false, type = 'individual'});
     }
   }
-  void setAddresSaved(bool saved){
+
+  void setAddresSaved(bool saved) {
     setState(() {
-      isAddressSaved=saved;
+      isAddressSaved = saved;
     });
   }
 
@@ -88,7 +89,13 @@ class _AddCustomerState extends State<AddCustomer> {
               bill,
               ship,
             );
+            customerProvider.addCustomerinProvider(
+              customerdetails,
+              bill,
+              ship,
+            );
             addressPvdr.clearAddresses();
+            if (!context.mounted) return;
             Navigator.pop(context);
             // Navigator.push(
             //     context,
@@ -331,7 +338,9 @@ class _AddCustomerState extends State<AddCustomer> {
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return AddBillingShippingAddress(onAddressSaved: setAddresSaved,);
+                          return AddBillingShippingAddress(
+                            onAddressSaved: setAddresSaved,
+                          );
                         });
                   },
                   child: AbsorbPointer(
@@ -347,12 +356,16 @@ class _AddCustomerState extends State<AddCustomer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            isAddressSaved? LineIcons.checkCircleAlt:LineIcons.plusCircle,
+                            isAddressSaved
+                                ? LineIcons.checkCircleAlt
+                                : LineIcons.plusCircle,
                             color: blue,
                           ),
-                          const SizedBox(width: 16,),
+                          const SizedBox(
+                            width: 16,
+                          ),
                           Text(
-                           isAddressSaved
+                            isAddressSaved
                                 ? 'Adress Saved'
                                 : 'Add Billing & Shipping Address',
                             style: TextStyle(

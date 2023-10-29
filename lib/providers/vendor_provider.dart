@@ -1,6 +1,7 @@
 import 'package:ashwani/Models/address_model.dart';
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Models/vendor_model.dart';
+import 'package:ashwani/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ class VendorProvider with ChangeNotifier {
       .collection('UserData')
       .doc(FirebaseAuth.instance.currentUser!.email)
       .collection('Vendors');
-
 
   Future<void> addVendor(VendorModel vendorData, DocumentReference docRef,
       AddressModel? bill, AddressModel? ship) async {
@@ -36,10 +36,7 @@ class VendorProvider with ChangeNotifier {
           'zipcode': ship.zipCode ?? '',
           'phone': ship.phone ?? '',
         };
-        await docRef
-            .collection('addresses')
-            .doc('ship')
-            .set(vendorShipAddress);
+        await docRef.collection('addresses').doc('ship').set(vendorShipAddress);
       }
       if (bill != null) {
         Map<String, dynamic> vendorBillAddress = {
@@ -50,18 +47,22 @@ class VendorProvider with ChangeNotifier {
           'zipcode': bill.zipCode ?? '',
           'phone': bill.phone ?? '',
         };
-        await docRef
-            .collection('addresses')
-            .doc('bill')
-            .set(vendorBillAddress);
+        await docRef.collection('addresses').doc('bill').set(vendorBillAddress);
       }
       notifyListeners();
     } catch (e) {
       print(e);
     }
   }
-  Future<void> removeVendor() async {
-    try {} catch (e) {
+
+  Future<void> addVendorinProvider(
+      VendorModel vendorData, AddressModel? bill, AddressModel? ship) async {
+    try {
+      VendorModel vd = vendorData;
+      vd.billingAdd = bill;
+      vd.shippingAdd = ship;
+      _vendors.add(vd);
+    } catch (e) {
       print(e);
     }
   }
@@ -69,7 +70,7 @@ class VendorProvider with ChangeNotifier {
   Future<void> fetchAllVendors() async {
     try {
       final customerSnapshot = await cR.get();
-       _vendors= customerSnapshot.docs.map((doc) {
+      _vendors = customerSnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return VendorModel(
           name: data['name'],
@@ -85,12 +86,12 @@ class VendorProvider with ChangeNotifier {
     } catch (e) {
       print('error getting fetch all customers $e');
     }
+    notifyListeners();
   }
 
   List<String> getAllVendorNames() {
     return _vendors.map((vendor) => vendor.name!).toList();
   }
-
 
   Future<void> uploadOrderInVendorsProfile(
       PurchaseOrderModel po, String vendorName) async {
@@ -107,5 +108,4 @@ class VendorProvider with ChangeNotifier {
       print('error uploadOrderinCustomerProfile $e');
     }
   }
-
 }

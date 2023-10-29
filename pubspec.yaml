@@ -57,6 +57,7 @@ dependencies:
   textfield_search: ^0.10.0
   provider: ^6.0.5
   country_picker: ^2.0.21
+  lottie: ^2.7.0
 
 
 dev_dependencies:
@@ -86,6 +87,8 @@ flutter:
     - lib/images/itemimage.png
     - lib/images/gicon.png
     - lib/images/aicon.png
+    - lib/animation/
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -99,11 +99,11 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
             await poItemsProvider.updateItemsPOandTrack(orderId);
             await vendorProvider.uploadOrderInVendorsProfile(
                 newPurchaseOrder, _vendorName.text);
+            purchaseProvider.addPurchaseOrdertoProvider(newPurchaseOrder);
             poItemsProvider.clearpoItems();
             // submit final purchase order
             if (!context.mounted) return;
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const MyApp()));
+            Navigator.pop(context);
           },
           child: Container(
             decoration: BoxDecoration(

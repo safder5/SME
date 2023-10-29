@@ -1,4 +1,5 @@
 import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
@@ -17,48 +18,48 @@ class SalesReturns extends StatefulWidget {
 }
 
 class _SalesReturnsState extends State<SalesReturns> {
-  List<SalesReturnItemTracking> srList = [];
-  List<String> customerNames = [];
-  bool isLoading = true;
-  bool _isDisposed = false;
+  // List<SalesReturnItemTracking> srList = [];
+  // List<String> customerNames = [];
+  // bool isLoading = true;
+  // bool _isDisposed = false;
 
-  @override
-  void initState() {
-    super.initState();
-    // Fetch sales orders and update the list
-    fetchSalesReturns(context);
-    // fetchCustomerNames(context);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Fetch sales orders and update the list
+  //   fetchSalesReturns(context);
+  //   // fetchCustomerNames(context);
+  // }
 
-  Future<void> fetchSalesReturns(BuildContext context) async {
-    final srProvider =
-        Provider.of<SalesReturnsProvider>(context, listen: false);
-    try {
-      await srProvider.fetchSalesReturns();
-      if (!_isDisposed) {
-        setState(() {
-          srList = srProvider.sr;
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (!_isDisposed) {
-        setState(() {
-          isLoading = false; // Stop loading when an error occurs
-        });
-        print('Error fetching sales orders: $e');
-      }
-      // Handle the error
-      print('Error fetching sales returns: $e');
-    }
-  }
+  // Future<void> fetchSalesReturns(BuildContext context) async {
+  //   final srProvider =
+  //       Provider.of<SalesReturnsProvider>(context, listen: false);
+  //   try {
+  //     await srProvider.fetchSalesReturns();
+  //     if (!_isDisposed) {
+  //       setState(() {
+  //         srList = srProvider.sr;
+  //         isLoading = false;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     if (!_isDisposed) {
+  //       setState(() {
+  //         isLoading = false; // Stop loading when an error occurs
+  //       });
+  //       print('Error fetching sales orders: $e');
+  //     }
+  //     // Handle the error
+  //     print('Error fetching sales returns: $e');
+  //   }
+  // }
 
-  @override
-  void dispose() {
-    // Cancel or dispose of asynchronous operations here
-    _isDisposed = true;
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Cancel or dispose of asynchronous operations here
+  //   _isDisposed = true;
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -106,27 +107,30 @@ class _SalesReturnsState extends State<SalesReturns> {
                 const SizedBox(
                   height: 16,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                      // physics: controllScroll,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: srList.length,
-                      itemBuilder: (context, index) {
-                        final salesReturn = srProvider.sr[index];
-                        print(salesReturn.itemname);
-                        return ContainerSalesReturn(
-                          itemname: salesReturn.itemname,
-                          orderId: salesReturn.orderId,
-                          quantity: salesReturn.quantitySalesReturned!,
-                          toInventory: salesReturn.toInventory!,
-                        );
-                      }),
-                ),
+                Consumer<SalesReturnsProvider>(builder: ((context, sr, child) {
+                  final srList = sr.sr.reversed.toList();
+                 return Expanded(
+                    child: ListView.builder(
+                        // physics: controllScroll,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: srList.length,
+                        itemBuilder: (context, index) {
+                          final salesReturn = srProvider.sr[index];
+                          print(salesReturn.itemname);
+                          return ContainerSalesReturn(
+                            itemname: salesReturn.itemname,
+                            orderId: salesReturn.orderId,
+                            quantity: salesReturn.quantitySalesReturned!,
+                            toInventory: salesReturn.toInventory!,
+                          );
+                        }),
+                  );
+                }))
               ],
             ),
           ),
-          if (isLoading) LoadingOverlay()
+        
         ],
       ),
     );

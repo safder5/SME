@@ -94,30 +94,37 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
           onTap: () async {
-            final newSalesOrder = SalesOrderModel(
-                orderID: int.parse(orderId),
-                customerName: nameSearchController.text,
-                orderDate: dateController.text,
-                shipmentDate: dateShipmentController.text,
-                paymentMethods: dropdownValue,
-                notes: notesCtrl.text,
-                tandC: tandcCtrl.text,
-                status: status,
-                items: soItemsProvider.soItems);
-            await salesProvider.addSalesOrder(newSalesOrder);
-            await soItemsProvider.updateItemsSOandTrack(orderId);
-            await customerProvider.uploadOrderInCustomersProfile(
-                newSalesOrder, nameSearchController.text);
-                
-
+            try {
+              final newSalesOrder = SalesOrderModel(
+                  orderID: int.parse(orderId),
+                  customerName: nameSearchController.text,
+                  orderDate: dateController.text,
+                  shipmentDate: dateShipmentController.text,
+                  paymentMethods: dropdownValue,
+                  notes: notesCtrl.text,
+                  tandC: tandcCtrl.text,
+                  status: status,
+                  items: soItemsProvider.soItems);
+              print(newSalesOrder.items?.length);
+              await salesProvider.addSalesOrder(newSalesOrder);
+              await soItemsProvider.updateItemsSOandTrack(orderId);
+              await customerProvider.uploadOrderInCustomersProfile(
+                  newSalesOrder, nameSearchController.text);
+              salesProvider.addSalesOrderInProvider(newSalesOrder);
+              // salesProvider.addSalesOrderInProvider(
+              //     newSalesOrder, soItemsProvider.soItems);
+            } catch (e) {
+              print('add sales order mein error $e');
+            }
             // update it to firebase
             soItemsProvider.clearsoItems();
             // await Future.delayed(Duration(seconds: 1));
 
             //submit everything after validation is processed
             if (!context.mounted) return;
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const MyApp()));
+            Navigator.pop(context);
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) => const MyApp()));
           },
           child: Container(
             decoration: BoxDecoration(

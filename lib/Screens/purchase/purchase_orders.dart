@@ -21,54 +21,6 @@ class PurchaseOrders extends StatefulWidget {
 
 class _PurchaseOrdersState extends State<PurchaseOrders> {
   final ClampingScrollPhysics controllScroll = const ClampingScrollPhysics();
-  List<PurchaseOrderModel> poList = [];
-  bool isloading = true;
-  bool isDisposed = false;
-  bool hasData = false;
-  checkProviderforData() {
-    final poProvider = Provider.of<NPOrderProvider>(context, listen: false);
-    if (poProvider.po.isNotEmpty) {
-      if (!isDisposed) {
-        setState(() {
-          isloading = false;
-          hasData = true;
-          poList = poProvider.po.reversed.toList();
-        });
-      }
-    }
-  }
-
-  Future<void> fetchPurchaseOrders(BuildContext context) async {
-    final poProvider = Provider.of<NPOrderProvider>(context, listen: false);
-
-    try {
-      await poProvider.fetchPurchaseOrders();
-      if (!isDisposed && !hasData) {
-        setState(() {
-          poList = poProvider.po.reversed.toList();
-          isloading = false;
-        });
-      }
-    } catch (e) {
-      // Handle the error
-      if(mounted){
-        if (!isDisposed) {
-        setState(() {
-          isloading = false;
-        });
-      }
-      }
-      
-      print('Error fetching sales orders: $e');
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    checkProviderforData();
-    fetchPurchaseOrders(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,33 +85,35 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
                   height: 16,
                 ),
                 //future builder to build purchase orders
-                Expanded(
-                  child: ListView.builder(
-                      // physics: controllScroll,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: poList.length,
-                      itemBuilder: (context, index) {
-                        final purchaseOrder = poList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                                MaterialPageRoute(
-                                    builder: (context) => PurchaseOrderPage(
-                                        purchaseOrder: purchaseOrder)));
-                          },
-                          child: ContainerPurchaseOrder(
-                              orderID: purchaseOrder.orderID.toString(),
-                              name: purchaseOrder.vendorName!,
-                              date: purchaseOrder.deliveryDate!,
-                              status: purchaseOrder.status!),
-                        );
-                      }),
-                ),
+                Consumer<NPOrderProvider>(builder: (_, po, __) {
+                  final poList = po.po.reversed.toList();
+                  return Expanded(
+                    child: ListView.builder(
+                        // physics: controllScroll,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: poList.length,
+                        itemBuilder: (context, index) {
+                          final purchaseOrder = poList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => PurchaseOrderPage(
+                                          purchaseOrder: purchaseOrder)));
+                            },
+                            child: ContainerPurchaseOrder(
+                                orderID: purchaseOrder.orderID.toString(),
+                                name: purchaseOrder.vendorName!,
+                                date: purchaseOrder.deliveryDate!,
+                                status: purchaseOrder.status!),
+                          );
+                        }),
+                  );
+                }),
               ],
             ),
           ),
-          if (isloading) LoadingOverlay()
         ],
       ),
     );

@@ -44,6 +44,37 @@ class NSOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetProviderToInitialState() {
+    _so.clear(); // Clear the _so list
+    _lastUpdatedSalesOrder = SalesOrderModel(
+      orderID: 0,
+      customerName: 'customerName',
+      orderDate: 'orderDate',
+      shipmentDate: 'shipmentDate',
+      paymentMethods: 'paymentMethods',
+      notes: 'notes',
+      tandC: 'tandC',
+      status: 'status',
+    ); // Reset _lastUpdatedSalesOrder to initial state
+
+    // Optionally, you can also reset other variables if needed
+    _sa.clear();
+
+    notifyListeners();
+  }
+
+  void addSalesOrderInProvider(SalesOrderModel so,) {
+    try {
+      if (so.orderID != null && so.items != null) {
+        _so.add(so);
+        // _lastUpdatedSalesOrder = so;
+      }
+      notifyListeners();
+    } catch (e) {
+      print('error in adding sales order to provider');
+    }
+  }
+
   Future<void> addSalesOrder(SalesOrderModel so) async {
     try {
       await _salesOrderCollection.doc(so.orderID.toString()).set({
@@ -140,7 +171,9 @@ class NSOrderProvider with ChangeNotifier {
         }
         _so.add(salesOrder);
       }
-      print(_so.length);
+      // for (int i = 0; i < _so.length; i++) {
+      //   print(_so[i].orderID);
+      // }
       // _so.reversed;
       notifyListeners();
     } catch (e) {
@@ -278,22 +311,23 @@ class NSOrderProvider with ChangeNotifier {
     Item itemDelivered,
   ) {
     try {
-      print(orderId);
-      SalesOrderModel? foundOrder = _so.firstWhere(
+      int foundIndex = _so.indexWhere(
         (order) => order.orderID == orderId,
-        orElse: () => _lastUpdatedSalesOrder,
       );
-      if (foundOrder == _lastUpdatedSalesOrder) {
-        print('its last updated order');
+      if (_so[foundIndex].items == null) {
+        print('items are null');
+      } else {
+        print('items are present');
       }
-      if (foundOrder.orderID != 0) {
-        final itemsDelivered = foundOrder.itemsDelivered ?? [];
-        itemsDelivered.add(itemDelivered);
-        foundOrder.itemsDelivered = itemsDelivered;
-        _lastUpdatedSalesOrder = foundOrder;
+      if (foundIndex != -1) {
+        List<Item> delivered = _so[foundIndex].itemsDelivered ?? [];
+        delivered.add(itemDelivered);
+        _so[foundIndex].itemsDelivered = delivered;
+        print(_so[foundIndex].items?.length);
+        _lastUpdatedSalesOrder = _so[foundIndex];
         _sa.clear();
       } else {
-        print('orderId me gadbad hai');
+        print('not found order');
       }
       notifyListeners();
     } catch (e) {
