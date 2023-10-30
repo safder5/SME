@@ -100,7 +100,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
             await vendorProvider.uploadOrderInVendorsProfile(
                 newPurchaseOrder, _vendorName.text);
             purchaseProvider.addPurchaseOrdertoProvider(newPurchaseOrder);
-            poItemsProvider.clearpoItems();
+            
             // submit final purchase order
             if (!context.mounted) return;
             Navigator.pop(context);

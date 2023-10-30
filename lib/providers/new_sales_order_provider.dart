@@ -44,6 +44,11 @@ class NSOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateSalesActivityinProvider(ItemTrackingSalesOrder activity) {
+    _sa.add(activity);
+    notifyListeners();
+  }
+
   void resetProviderToInitialState() {
     _so.clear(); // Clear the _so list
     _lastUpdatedSalesOrder = SalesOrderModel(
@@ -63,10 +68,13 @@ class NSOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addSalesOrderInProvider(SalesOrderModel so,) {
+  void addSalesOrderInProvider(
+    SalesOrderModel so,
+  ) {
     try {
       if (so.orderID != null && so.items != null) {
         _so.add(so);
+        print('added items');
         // _lastUpdatedSalesOrder = so;
       }
       notifyListeners();
@@ -97,6 +105,7 @@ class NSOrderProvider with ChangeNotifier {
           'originalQuantity': item.originalQuantity
         });
       }
+
       notifyListeners();
     } catch (e) {
       print("Error uploading to fb");
@@ -236,104 +245,145 @@ class NSOrderProvider with ChangeNotifier {
   }
 
   void updateSalesItemsDeliveredProviders(
-      int orderId, String itemName, int quantitydelivered) {
-    SalesOrderModel? foundOrder =
-        _so.firstWhere((order) => order.orderID == orderId);
+      int orderId, String itemName, int quantitydelivered, Item itemDelivered) {
+    int index = _so.indexWhere((element) => element.orderID == orderId);
+    SalesOrderModel foundOrder = _so[index];
+
     if (foundOrder.orderID != 0) {
       final itemsList = foundOrder.items;
-      Item? item =
-          itemsList!.firstWhere((element) => element.itemName == itemName);
+      int itemindex =
+          itemsList!.indexWhere((element) => element.itemName == itemName);
+      Item item = itemsList[itemindex];
       item.quantitySales = item.quantitySales! - quantitydelivered;
+      itemsList[itemindex] = item;
+      foundOrder.items = itemsList;
 
-      final itemDeliveredList = foundOrder.itemsDelivered;
-      Item? itemDelivered = itemDeliveredList!
-          .firstWhere((element) => element.itemName == itemName);
-      itemDelivered.quantitySalesDelivered =
-          itemDelivered.quantitySalesDelivered! + quantitydelivered;
-      _lastUpdatedSalesOrder = foundOrder;
-      _sa.clear();
+      if (foundOrder.itemsDelivered == null) {
+        List<Item> itemDeliveredList = [itemDelivered];
+        foundOrder.itemsDelivered = itemDeliveredList;
+      } else {
+        List<Item> itemDeliveredList = foundOrder.itemsDelivered!;
+        int itemIndex = itemDeliveredList
+            .indexWhere((element) => element.itemName == itemName);
+        Item? itemDelivered = itemDeliveredList[itemIndex];
+        itemDelivered.quantitySalesDelivered =
+            itemDelivered.quantitySalesDelivered! + quantitydelivered;
+        itemDeliveredList[itemIndex] = itemDelivered;
+        foundOrder.itemsDelivered = itemDeliveredList;
+      }
     }
+    _so[index] = foundOrder;
     notifyListeners();
   }
 
   void updateSalesItemsReturnedProviders(
-      int orderId, String itemName, int quantityReturned) {
-    SalesOrderModel? foundOrder =
-        _so.firstWhere((order) => order.orderID == orderId);
-    if (foundOrder.orderID != 0) {
-      final itemReturnedList = foundOrder.itemsReturned;
-      Item? itemReturned = itemReturnedList!
-          .firstWhere((element) => element.itemName == itemName);
-      itemReturned.quantitySalesReturned =
-          itemReturned.quantitySalesReturned! + quantityReturned;
-
-      final itemDeliveredList = foundOrder.itemsDelivered;
-      Item? itemDelivered = itemDeliveredList!
-          .firstWhere((element) => element.itemName == itemName);
-      itemDelivered.quantitySalesDelivered =
-          itemDelivered.quantitySalesDelivered! - quantityReturned;
-      itemDelivered.quantitySalesReturned =
-          itemDelivered.quantitySalesReturned! - quantityReturned;
-      _lastUpdatedSalesOrder = foundOrder;
-      _sa.clear();
-    }
-    notifyListeners();
-  }
-
-  void addSalesReturnInProvider(
     int orderId,
     String itemName,
+    int quantityReturned,
     Item itemReturned,
   ) {
-    try {
-      SalesOrderModel? foundOrder = _so.firstWhere(
-        (order) => order.orderID == orderId,
-      );
-      if (foundOrder == _lastUpdatedSalesOrder) {
-        print('its last updated order');
-      }
-      if (foundOrder.orderID != 0) {
-        final itemsReturned = foundOrder.itemsReturned ?? [];
-        itemsReturned.add(itemReturned);
-        foundOrder.itemsReturned = itemsReturned;
-        _lastUpdatedSalesOrder = foundOrder;
-        _sa.clear();
-      }
-      notifyListeners();
-    } catch (e) {
-      print('error addSalesReturnInProvider $e');
-    }
-  }
+    int index = _so.indexWhere((element) => element.orderID == orderId);
+    SalesOrderModel foundOrder = _so[index];
 
-  void addSalesDeliveredInProvider(
-    int orderId,
-    String itemName,
-    Item itemDelivered,
-  ) {
-    try {
-      int foundIndex = _so.indexWhere(
-        (order) => order.orderID == orderId,
-      );
-      if (_so[foundIndex].items == null) {
-        print('items are null');
+    if (foundOrder.orderID != 0) {
+      final itemDeliveredList = foundOrder.itemsDelivered;
+      int itemIndex = itemDeliveredList!
+          .indexWhere((element) => element.itemName == itemName);
+      Item item = itemDeliveredList[itemIndex];
+      item.quantitySalesDelivered =
+          item.quantitySalesDelivered! - quantityReturned;
+      item.quantitySalesReturned =
+          item.quantitySalesReturned! + quantityReturned;
+      itemDeliveredList[itemIndex] = item;
+      foundOrder.itemsDelivered = itemDeliveredList;
+
+      if (foundOrder.itemsReturned == null) {
+        List<Item> itemsReturnedList = [itemReturned];
+        foundOrder.itemsReturned = itemsReturnedList;
       } else {
-        print('items are present');
+        List<Item> itemsReturnedList = foundOrder.itemsReturned!;
+        int itemIndex = itemsReturnedList
+            .indexWhere((element) => element.itemName == itemName);
+        Item? itemReturned = itemsReturnedList[itemIndex];
+        itemReturned.quantitySalesReturned =
+            itemReturned.quantitySalesReturned! + quantityReturned;
+        itemsReturnedList[itemIndex] = itemReturned;
+        foundOrder.itemsReturned = itemsReturnedList;
       }
-      if (foundIndex != -1) {
-        List<Item> delivered = _so[foundIndex].itemsDelivered ?? [];
-        delivered.add(itemDelivered);
-        _so[foundIndex].itemsDelivered = delivered;
-        print(_so[foundIndex].items?.length);
-        _lastUpdatedSalesOrder = _so[foundIndex];
-        _sa.clear();
-      } else {
-        print('not found order');
-      }
-      notifyListeners();
-    } catch (e) {
-      print('error in addSalesDeliveredInProvider $e');
+
     }
+    _so[index] = foundOrder;
+    notifyListeners();
   }
+}
+
+      // Item? itemDelivered = itemDeliveredList!
+      //     .firstWhere((element) => element.itemName == itemName);
+      // itemDelivered.quantitySalesDelivered =
+      //     itemDelivered.quantitySalesDelivered! - quantityReturned;
+      // itemDelivered.quantitySalesReturned =
+      //     itemDelivered.quantitySalesReturned! - quantityReturned;
+
+      // final itemReturnedList = foundOrder.itemsReturned;
+      // Item? itemReturned = itemReturnedList!
+      //     .firstWhere((element) => element.itemName == itemName);
+      // itemReturned.quantitySalesReturned =
+      //     itemReturned.quantitySalesReturned! + quantityReturned;
+      
+  // void addSalesReturnInProvider(
+  //   int orderId,
+  //   String itemName,
+  //   Item itemReturned,
+  // ) {
+  //   try {
+  //     SalesOrderModel? foundOrder = _so.firstWhere(
+  //       (order) => order.orderID == orderId,
+  //     );
+  //     if (foundOrder == _lastUpdatedSalesOrder) {
+  //       print('its last updated order');
+  //     }
+  //     if (foundOrder.orderID != 0) {
+  //       final itemsReturned = foundOrder.itemsReturned ?? [];
+  //       itemsReturned.add(itemReturned);
+  //       foundOrder.itemsReturned = itemsReturned;
+  //       _lastUpdatedSalesOrder = foundOrder;
+  //       _sa.clear();
+  //     }
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print('error addSalesReturnInProvider $e');
+  //   }
+  // }
+
+  // void addSalesDeliveredInProvider(
+  //   int orderId,
+  //   String itemName,
+  //   Item itemDelivered,
+  // ) {
+  //   try {
+  //     int foundIndex = _so.indexWhere(
+  //       (order) => order.orderID == orderId,
+  //     );
+  //     if (_so[foundIndex].items == null) {
+  //       print('items are null');
+  //     } else {
+  //       print('items are present');
+  //     }
+  //     if (foundIndex != -1) {
+  //       List<Item> delivered = _so[foundIndex].itemsDelivered ?? [];
+  //       delivered.add(itemDelivered);
+  //       _so[foundIndex].itemsDelivered = delivered;
+  //       print(_so[foundIndex].items?.length);
+  //       _lastUpdatedSalesOrder = _so[foundIndex];
+  //       _sa.clear();
+  //     } else {
+  //       print('not found order');
+  //     }
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print('error in addSalesDeliveredInProvider $e');
+  //   }
+  
 
   // make a function to open close status of sales order
-}
+

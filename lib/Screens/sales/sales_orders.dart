@@ -11,6 +11,8 @@ import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
+import '../../Providers/iq_list_provider.dart';
+
 class SalesOrders extends StatefulWidget {
   const SalesOrders({super.key});
 
@@ -101,6 +103,7 @@ class _SalesOrdersState extends State<SalesOrders> {
             ),
           ),
           onPressed: () {
+            Provider.of<ItemsProvider>(context, listen: false).clearsoItems();
             Navigator.of(context, rootNavigator: true)
                 .push(MaterialPageRoute(builder: (context) => NewSalesOrder()));
             // Navigator.push(context,
@@ -187,7 +190,7 @@ class _SalesOrdersState extends State<SalesOrders> {
                           Navigator.of(context, rootNavigator: true).push(
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      SalesOrderPage(salesorder: salesOrder)));
+                                      SalesOrderPage(orderId: salesOrder.orderID??0,)));
                         },
                         child: ContainerSalesOrder(
                             orderID: salesOrder.orderID.toString(),

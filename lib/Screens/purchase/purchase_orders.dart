@@ -10,6 +10,7 @@ import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
+import '../../Providers/iq_list_provider.dart';
 import 'purchase_order_page.dart';
 
 class PurchaseOrders extends StatefulWidget {
@@ -38,6 +39,7 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
             ),
           ),
           onPressed: () {
+            Provider.of<ItemsProvider>(context, listen: false).clearpoItems();
             Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(builder: (context) => NewPurchaseOrder()));
             // Navigator.push(context,
@@ -97,10 +99,11 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
                           final purchaseOrder = poList[index];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                  MaterialPageRoute(
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(MaterialPageRoute(
                                       builder: (context) => PurchaseOrderPage(
-                                          purchaseOrder: purchaseOrder)));
+                                            orderId: purchaseOrder.orderID,
+                                          )));
                             },
                             child: ContainerPurchaseOrder(
                                 orderID: purchaseOrder.orderID.toString(),

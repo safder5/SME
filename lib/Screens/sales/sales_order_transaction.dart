@@ -1,5 +1,6 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
 import 'package:ashwani/Services/helper.dart';
@@ -59,6 +60,7 @@ class _SalesOrderTransactionsShippedState
     // upload ttracks in inventory items
     await addActivity();
     // update sales activity
+    updateAllProviders();
   }
 
   void _handleSubmit() async {
@@ -70,8 +72,6 @@ class _SalesOrderTransactionsShippedState
     //  await  Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       await _executeFutures(track).then((_) {
-        print(widget.orderId);
-        prevData ? updateInProvider() : createShippedForProvider();
         setState(() {
           _isLoading = false; // Hide loading overlay
         });
@@ -82,22 +82,60 @@ class _SalesOrderTransactionsShippedState
       try {
         Navigator.pop(context);
         Navigator.pop(context);
-        final order = Provider.of<NSOrderProvider>(context, listen: false)
-            .lastUpdatedSalesOrder;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SalesOrderPage(salesorder: order)));
+                builder: (context) => SalesOrderPage(
+                      orderId: widget.orderId,
+                    )));
       } catch (e) {
         print('error loading to new purchase order page $e');
       }
     }
   }
 
+  void updateAllProviders() {
+    // ItemTrackingSalesOrder activity = ItemTrackingSalesOrder(
+    //     itemName: track.itemName,
+    //     quantityShipped: track.quantityShipped,
+    //     date: track.date,
+    //     customer: track.customer);
+    try {
+      Provider.of<NSOrderProvider>(context, listen: false)
+          .updateSalesActivityinProvider(track);
+
+      Provider.of<ItemsProvider>(context, listen: false)
+          .updateItemsonSalesTransactioninProvider(
+              _itemnameController.text, int.parse(_quantityCtrl.text));
+
+      ItemTrackingModel itemTracking = ItemTrackingModel(
+          orderID: widget.orderId.toString(),
+          quantity: int.parse(_quantityCtrl.text),
+          reason: 'Sales Delivered');
+      Provider.of<ItemsProvider>(context, listen: false)
+          .addItemtrackinProvider(itemTracking, _itemnameController.text);
+      Provider.of<NSOrderProvider>(context, listen: false)
+          .updateSalesItemsDeliveredProviders(
+              widget.orderId,
+              _itemnameController.text,
+              int.parse(_quantityCtrl.text),
+              Item(
+                  itemName: _itemnameController.text,
+                  quantitySalesDelivered: int.parse(_quantityCtrl.text)));
+    } catch (e) {
+      print("Error in updating all providers $e");
+    }
+  }
+
   void updateInProvider() {
     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
-    sorProvider.updateSalesItemsDeliveredProviders(widget.orderId,
-        _itemnameController.text, int.parse(_quantityCtrl.text));
+    sorProvider.updateSalesItemsDeliveredProviders(
+        widget.orderId,
+        _itemnameController.text,
+        int.parse(_quantityCtrl.text),
+        Item(
+            itemName: _itemnameController.text,
+            quantitySalesDelivered: int.parse(_quantityCtrl.text)));
   }
 
   void createShippedForProvider() {
@@ -105,12 +143,12 @@ class _SalesOrderTransactionsShippedState
 
     final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
     print(sorProvider.som.length);
-    sorProvider.addSalesDeliveredInProvider(
-        widget.orderId,
-        _itemnameController.text,
-        Item(
-            itemName: _itemnameController.text,
-            quantitySalesDelivered: int.parse(_quantityCtrl.text)));
+    // sorProvider.addSalesDeliveredInProvider(
+    //     widget.orderId,
+    //     _itemnameController.text,
+    //     Item(
+    //         itemName: _itemnameController.text,
+    //         quantitySalesDelivered: int.parse(_quantityCtrl.text)));
   }
 
   Future<void> addActivity() async {

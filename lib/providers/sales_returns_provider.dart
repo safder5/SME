@@ -37,8 +37,13 @@ class SalesReturnsProvider with ChangeNotifier {
     }
   }
 
-  void clearSalesReturns() {
-    _sr.clear();
+  // void clearSalesReturns() {
+  //   _sr.clear();
+  //   notifyListeners();
+  // }
+
+  void addSalesReturninProvider(SalesReturnItemTracking ret) {
+    _sr.add(ret);
     notifyListeners();
   }
 }

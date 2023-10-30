@@ -72,7 +72,7 @@ class _PurchaseOrderRecievedItemsState
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PurchaseOrderPage(purchaseOrder: order)));
+                builder: (context) => PurchaseOrderPage(orderId: widget.orderId,)));
       } catch (e) {
         print('error loading to new purchase order page $e');
       }

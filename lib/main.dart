@@ -83,8 +83,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (!_initialise) {
       return Container(
           color: Colors.white,
-          child: Lottie.asset('lib/animation/ani6.json',
-              width: 100, height: 100, fit: BoxFit.contain));
+          child: Lottie.asset('lib/animation/ani6.json',fit: BoxFit.contain));
     }
     return MultiProvider(
       providers: [
@@ -204,8 +203,7 @@ class _LoadInventoryState extends State<LoadInventory> {
     if (!_loadData) {
       return Container(
           color: w,
-          child: Lottie.asset('lib/animation/ani3.json',
-              width: 100, height: 100, fit: BoxFit.contain));
+          child: Lottie.asset('lib/animation/ani6.json',fit: BoxFit.contain));
     }
     if (_err) {
       return Scaffold(

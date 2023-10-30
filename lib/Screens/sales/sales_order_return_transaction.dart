@@ -1,6 +1,7 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
 import 'package:ashwani/Models/waste_bucket_model.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
@@ -58,14 +59,45 @@ class _SalesOrderReturnTransactionsState
 
   Future<void> _executeFutures(ItemTrackingSalesOrder track) async {
     await uploadTrack(track);
-    await uploadItemInventorytracks();
+    await uploadItemInventorytracks(); //done
     await checkPrevItemReturnedData(); // we have this data already in sales order so no need to make this check REMOVE IT WITH REPLACEMENT
-    await addItemtoSalesReturned();
+    await addItemtoSalesReturned(); // done
     await createSalesReturn();
     _toInventory ? await updateInventory() : await addToWasteBucket();
     await updateItemDelivered(); //keep at last
-    await addActivity();
+    await addActivity(); //done
+    updateAllProviders();
   }
+
+  void updateAllProviders() {
+   try{ Provider.of<NSOrderProvider>(context, listen: false)
+        .updateSalesActivityinProvider(track);
+
+    Provider.of<SalesReturnsProvider>(context, listen: false)
+        .addSalesReturninProvider(rit);
+
+    Provider.of<ItemsProvider>(context, listen: false)
+        .updateItemsonSalesReturninProvider(_itemnameController.text,int.parse(_quantityCtrl.text),_toInventory);
+
+    ItemTrackingModel itemTracking = ItemTrackingModel(
+        orderID: widget.orderId.toString(),
+        quantity: quantityReturned,
+        reason: 'Sales Return');
+
+    Provider.of<ItemsProvider>(context, listen: false)
+        .addItemtrackinProvider(itemTracking, _itemnameController.text);
+
+    Provider.of<NSOrderProvider>(context, listen: false)
+        .updateSalesItemsReturnedProviders(
+            widget.orderId,
+            _itemnameController.text,
+            int.parse(_quantityCtrl.text),
+            Item(
+                itemName: _itemnameController.text,
+                quantitySalesReturned: int.parse(_quantityCtrl.text)));}catch(e)
+{
+  print('error $e');
+}  }
 
   void _handleSubmit() async {
     if (mounted) {
@@ -76,7 +108,7 @@ class _SalesOrderReturnTransactionsState
     //  await  Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       await _executeFutures(track).then((_) {
-        prevData ? updateInProvider() : createReturnForProvider();
+        // prevData ? updateInProvider() : createReturnForProvider();
         setState(() {
           _isLoading = false; // Hide loading overlay
         });
@@ -87,33 +119,31 @@ class _SalesOrderReturnTransactionsState
       try {
         Navigator.pop(context);
         Navigator.pop(context);
-        final order = Provider.of<NSOrderProvider>(context, listen: false)
-            .lastUpdatedSalesOrder;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SalesOrderPage(salesorder: order)));
+                builder: (context) => SalesOrderPage(orderId: widget.orderId)));
       } catch (e) {
         print('error loading to new purchase order page $e');
       }
     }
   }
 
-  void updateInProvider() {
-    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
-    sorProvider.updateSalesItemsReturnedProviders(widget.orderId,
-        _itemnameController.text, int.parse(_quantityCtrl.text));
-  }
+  // void updateInProvider() {
+  //   final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
+  //   sorProvider.updateSalesItemsReturnedProviders(widget.orderId,
+  //       _itemnameController.text, int.parse(_quantityCtrl.text));
+  // }
 
-  void createReturnForProvider() {
-    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
-    sorProvider.addSalesReturnInProvider(
-        widget.orderId,
-        _itemnameController.text,
-        Item(
-            itemName: _itemnameController.text,
-            quantitySalesReturned: rit.quantitySalesReturned));
-  }
+  // void createReturnForProvider() {
+  //   final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
+  //   sorProvider.addSalesReturnInProvider(
+  //       widget.orderId,
+  //       _itemnameController.text,
+  //       Item(
+  //           itemName: _itemnameController.text,
+  //           quantitySalesReturned: rit.quantitySalesReturned));
+  // }
 
   Future<void> addActivity() async {
     try {
@@ -539,11 +569,6 @@ class _SalesOrderReturnTransactionsState
                                 toInventory: _toInventory,
                                 date: DateFormat('dd-MM-yyyy').format(now),
                                 quantitySalesReturned: quantityReturned);
-
-                            final providerforReturns =
-                                Provider.of<SalesReturnsProvider>(context,
-                                    listen: false);
-                            providerforReturns.clearSalesReturns();
 
                             _isLoading ? null : _handleSubmit();
 

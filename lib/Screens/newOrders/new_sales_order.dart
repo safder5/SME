@@ -106,18 +106,19 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                   status: status,
                   items: soItemsProvider.soItems);
               print(newSalesOrder.items?.length);
+              salesProvider.addSalesOrderInProvider(newSalesOrder);
               await salesProvider.addSalesOrder(newSalesOrder);
               await soItemsProvider.updateItemsSOandTrack(orderId);
               await customerProvider.uploadOrderInCustomersProfile(
                   newSalesOrder, nameSearchController.text);
-              salesProvider.addSalesOrderInProvider(newSalesOrder);
+
               // salesProvider.addSalesOrderInProvider(
               //     newSalesOrder, soItemsProvider.soItems);
             } catch (e) {
               print('add sales order mein error $e');
             }
             // update it to firebase
-            soItemsProvider.clearsoItems();
+            // soItemsProvider.clearsoItems();
             // await Future.delayed(Duration(seconds: 1));
 
             //submit everything after validation is processed

@@ -64,12 +64,12 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
       try {
         Navigator.pop(context);
         Navigator.pop(context);
-        final order = Provider.of<NPOrderProvider>(context, listen: false)
-            .lastUpdatedPurchaseOrder;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PurchaseOrderPage(purchaseOrder: order)));
+                builder: (context) => PurchaseOrderPage(
+                      orderId: widget.orderId,
+                    )));
       } catch (e) {
         print('error loading to new purchase order page $e');
       }
@@ -469,11 +469,9 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
                                   quantity: quantityReturned);
 
                               final providerforReturns =
-                                  Provider.of<PurchaseReturnsProvider>(
-                                      context,
+                                  Provider.of<PurchaseReturnsProvider>(context,
                                       listen: false);
                               providerforReturns.clearPurchaseReturns();
-
 
                               isLoading ? null : _handleSubmit();
 

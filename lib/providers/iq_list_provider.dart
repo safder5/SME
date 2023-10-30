@@ -15,70 +15,47 @@ class ItemsProvider with ChangeNotifier {
   List<Item> get poItems => _poItems;
   List<Item> get salesDelivered => _salesDelivered;
 
-  void addsoItem(Item newItem) {
-    _soItems.add(newItem);
-    notifyListeners();
-  }
-
-  void updatesoItem(int index, Item updatedItem) {
-    _soItems[index] = updatedItem;
-    notifyListeners();
-  }
-
-  void removesoItem(int index) {
-    _soItems.removeAt(index);
-    notifyListeners();
-  }
-
-  void clearsoItems() {
-    _soItems.clear();
-    notifyListeners();
-  }
-
-  void addpoitem(Item newPItem) {
-    _poItems.add(newPItem);
-    notifyListeners();
-  }
-
-  void updatepoItem(int index, Item updatedItem) {
-    _poItems[index] = updatedItem;
-    notifyListeners();
-  }
-
-  void removepoItem(int index) {
-    _poItems.removeAt(index);
-    notifyListeners();
-  }
-
-  void clearpoItems() {
-    _poItems.clear();
-    notifyListeners();
-  }
-
-  void addsditem(Item newSDtem) {
-    _salesDelivered.add(newSDtem);
-    notifyListeners();
-  }
-
-  void updatesdItem(int index, Item updatedItem) {
-    _salesDelivered[index] = updatedItem;
-    notifyListeners();
-  }
-
-  void removesdItem(int index) {
-    _salesDelivered.removeAt(index);
-    notifyListeners();
-  }
-
-  void clearsdItems() {
-    _salesDelivered.clear();
-    notifyListeners();
-  }
-
   void addInvItemtoProvider(Item item, ItemTrackingModel track) {
     Item i = item;
     i.itemTracks = [track];
     _allItems.add(i);
+  }
+
+  void updateItemsonSalesTransactioninProvider(
+      String itemName, int quantityShipped) {
+    final index =
+        _allItems.indexWhere((element) => element.itemName == itemName);
+    final item = _allItems[index];
+    final quantity = item.itemQuantity! - quantityShipped;
+    item.itemQuantity = quantity;
+    final sales = item.quantitySales! - quantityShipped;
+    item.quantitySales = sales;
+    _allItems[index] = item;
+    notifyListeners();
+  }
+
+  void updateItemsonSalesReturninProvider(
+      String itemName, int quantityReturned, bool inventory) {
+    final index =
+        _allItems.indexWhere((element) => element.itemName == itemName);
+    final item = _allItems[index];
+    if (inventory) {
+      final quantity = item.itemQuantity! + quantityReturned;
+      item.itemQuantity = quantity;
+    }
+    _allItems[index] = item;
+    notifyListeners();
+  }
+
+  void addItemtrackinProvider(ItemTrackingModel track, String itemName) {
+    final index =
+        _allItems.indexWhere((element) => element.itemName == itemName);
+    final item = _allItems[index];
+    final tracks = item.itemTracks ?? [];
+    tracks.add(track);
+    item.itemTracks = tracks;
+    _allItems[index] = item;
+    notifyListeners();
   }
 
   Future<void> getItems() async {
@@ -229,4 +206,64 @@ class ItemsProvider with ChangeNotifier {
 
   Future<void> addSalesDeliveredItemsToFirebase(
       CollectionReference collRef) async {}
+
+  void addsoItem(Item newItem) {
+    _soItems.add(newItem);
+    notifyListeners();
+  }
+
+  void updatesoItem(int index, Item updatedItem) {
+    _soItems[index] = updatedItem;
+    notifyListeners();
+  }
+
+  void removesoItem(int index) {
+    _soItems.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearsoItems() {
+    _soItems.clear();
+    notifyListeners();
+  }
+
+  void addpoitem(Item newPItem) {
+    _poItems.add(newPItem);
+    notifyListeners();
+  }
+
+  void updatepoItem(int index, Item updatedItem) {
+    _poItems[index] = updatedItem;
+    notifyListeners();
+  }
+
+  void removepoItem(int index) {
+    _poItems.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearpoItems() {
+    _poItems.clear();
+    notifyListeners();
+  }
+
+  void addsditem(Item newSDtem) {
+    _salesDelivered.add(newSDtem);
+    notifyListeners();
+  }
+
+  void updatesdItem(int index, Item updatedItem) {
+    _salesDelivered[index] = updatedItem;
+    notifyListeners();
+  }
+
+  void removesdItem(int index) {
+    _salesDelivered.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearsdItems() {
+    _salesDelivered.clear();
+    notifyListeners();
+  }
 }
