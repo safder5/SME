@@ -1,12 +1,10 @@
 import 'package:ashwani/Services/authorizeUser/signupauth.dart';
-import 'package:ashwani/Services/db_created.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 
 class LoginAuthPage extends StatefulWidget {
   const LoginAuthPage({super.key});
@@ -129,7 +127,7 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
                         email: _emailCtrl.text, password: _pwdCtrl.text);
                     if (!context.mounted) return;
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
+                        MaterialPageRoute(builder: (context) =>const MyApp()));
                   } catch (e) {
                     print(e);
                   }
@@ -160,7 +158,7 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SignUpAuthPage()));
+                          builder: (context) =>const SignUpAuthPage()));
                 },
                 child: Text(
                   'Sign Up',

@@ -97,7 +97,7 @@ class NPOrderProvider with ChangeNotifier {
             final itemData = itemDoc.data();
             return Item(
                 itemName: itemData['itemName'],
-                itemQuantity: itemData['itemQuantity'],
+                quantityPurchase: itemData['quantityPurchase'],
                 originalQuantity: itemData['originalQuantity'] ?? 0);
           }).toList();
         }

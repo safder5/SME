@@ -1,4 +1,5 @@
 import 'package:ashwani/landingbypass.dart';
+import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -245,7 +246,7 @@ class _DBCreatingPageState extends State<DBCreatingPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LandingBypass()));
+                              builder: (context) =>const  LoadInventory()));
                     } catch (e) {
                       print(e);
                     }

@@ -16,28 +16,31 @@ class SOPDetails extends StatefulWidget {
 }
 
 class _SOPDetailsState extends State<SOPDetails> {
-  // bool allDelivered = false;
-  // int leftquantities = 0;
-  // checkIfAllDelivered() {
-  //   if (widget.items.isNotEmpty) {
-  //     for (int i = 0; i < widget.items.length; i++) {
-  //       Item it = widget.items[i];
-  //       leftquantities += it.quantitySales!;
-  //     }
-  //     if (leftquantities == 0) {
-  //       setState(() {
-  //         allDelivered = true;
-  //       });
-  //     }
-  //   }
-  // }
+  bool allDelivered = false;
+  int leftquantities = 0;
+  checkIfAllDelivered() {
+    final prov = Provider.of<NSOrderProvider>(context, listen: false);
+    SalesOrderModel som =
+        prov.som.firstWhere((element) => element.orderID == widget.orderId);
+    List<Item> items = som.items!;
+    if (items.isNotEmpty) {
+      for (int i = 0; i < items.length; i++) {
+        Item it = items[i];
+        leftquantities += it.quantitySales!;
+      }
+      if (leftquantities == 0) {
+        setState(() {
+          allDelivered = true;
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
-    // checkIfAllDelivered();
+    checkIfAllDelivered();
   }
 
   @override
@@ -46,8 +49,6 @@ class _SOPDetailsState extends State<SOPDetails> {
       SalesOrderModel som =
           ip.som.firstWhere((element) => element.orderID == widget.orderId);
       List<Item> items = som.items!;
-      print(widget.orderId);
-      print(items.length);
       if (items.isEmpty) {
         print('items are null');
         return const Text('empty');
@@ -60,22 +61,42 @@ class _SOPDetailsState extends State<SOPDetails> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Status',
-                      textScaleFactor: 1.2,
+                      'Status:',
+                      textScaleFactor: 1,
                       style: TextStyle(color: b.withOpacity(0.6)),
                     ),
-                    Spacer(),
-                    // Text(
-                    //   allDelivered ? 'All Items Shipped' : 'Ready to pack',
-                    //   textScaleFactor: 1.2,
-                    //   style: TextStyle(color: dg),
-                    // ),
-                    Spacer(),
+                    const Spacer(),
+                    Text(
+                      allDelivered ? 'All Items Shipped' : 'To be shipped',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: dg),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Left Quantity:',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: b.withOpacity(0.6)),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$leftquantities box',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: dg),
+                    ),
+                    const Spacer(),
                   ],
                 ),
               ),
@@ -116,10 +137,37 @@ class SOPShipped extends StatefulWidget {
 }
 
 class _SOPShippedState extends State<SOPShipped> {
+  bool allDelivered = false;
+  int leftquantities = 0;
+  int totalquantities = 0;
+  checkIfAllDelivered() {
+    final prov = Provider.of<NSOrderProvider>(context, listen: false);
+    SalesOrderModel som =
+        prov.som.firstWhere((element) => element.orderID == widget.orderId);
+    List<Item> items = som.items!;
+    if (items.isNotEmpty) {
+      for (int i = 0; i < items.length; i++) {
+        Item it = items[i];
+        totalquantities += it.originalQuantity!;
+        leftquantities += it.quantitySales!;
+      }
+      if (leftquantities == 0) {
+        setState(() {
+          allDelivered = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkIfAllDelivered();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final itemsDelivered = widget.itemsDelivered ?? [];
-    // final reversedList = itemsDelivered.reversed.toList();
     return Consumer<NSOrderProvider>(builder: (_, ipd, __) {
       SalesOrderModel som =
           ipd.som.firstWhere((element) => element.orderID == widget.orderId);
@@ -131,6 +179,37 @@ class _SOPShippedState extends State<SOPShipped> {
           padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total Quantity:',
+                      textScaleFactor: 1,
+                      style: TextStyle(
+                          color: b.withOpacity(0.5),
+                          fontWeight: FontWeight.w300),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '$totalquantities box',
+                      textScaleFactor: 1,
+                      style: TextStyle(
+                          color: b.withOpacity(0.5),
+                          fontWeight: FontWeight.w300),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$leftquantities box left',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: b, fontWeight: FontWeight.w300),
+                    ),
+                  ],
+                ),
+              ),
               Divider(
                 height: 0,
                 color: b32,

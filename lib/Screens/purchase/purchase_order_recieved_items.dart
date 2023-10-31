@@ -204,10 +204,10 @@ class _PurchaseOrderRecievedItemsState
           .doc(orderId)
           .collection('items');
       DocumentSnapshot docSnap = await cRref.doc(item).get();
-      int prevItemQuantity = docSnap.get('itemQuantity');
+      int prevItemQuantity = docSnap.get('quantityPurchase');
       await cRref
           .doc(item)
-          .update({'itemQuantity': prevItemQuantity - quantityRecieved});
+          .update({'quantityPurchase': prevItemQuantity - quantityRecieved});
     } catch (e) {
       print('error while updating purchase order details');
     }

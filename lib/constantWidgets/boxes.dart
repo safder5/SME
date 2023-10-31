@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+
+
 class ContainerHomeInventory extends StatefulWidget {
   const ContainerHomeInventory(
       {super.key, required this.title, required this.amount});
@@ -1029,7 +1031,8 @@ class SOPDetailsItemTile extends StatelessWidget {
       {super.key,
       required this.name,
       required this.quantity,
-      required this.index, required this.original});
+      required this.index,
+      required this.original});
 
   @override
   Widget build(BuildContext context) {
@@ -1072,9 +1075,10 @@ class SOPDetailsItemTile extends StatelessWidget {
                         'Units : ${original.toString()}',
                         textScaleFactor: 0.8,
                         style: TextStyle(
-                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
                       ),
-                       const SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Container(
@@ -1090,7 +1094,8 @@ class SOPDetailsItemTile extends StatelessWidget {
                         'To Ship : ${quantity.toString()}',
                         textScaleFactor: 0.8,
                         style: TextStyle(
-                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -1104,7 +1109,6 @@ class SOPDetailsItemTile extends StatelessWidget {
     );
   }
 }
-
 
 class SOPShippedItemsTile extends StatelessWidget {
   final String quantity;
@@ -1126,7 +1130,7 @@ class SOPShippedItemsTile extends StatelessWidget {
         height: 66,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: f7.withOpacity(0.7),
+          color: t, //f7.withOpacity(0.7)
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -1135,6 +1139,20 @@ class SOPShippedItemsTile extends StatelessWidget {
           ),
           child: Row(
             children: [
+              Container(
+                width: 15,
+                height: 15,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
+                child: Center(
+                  child: CustomPaint(
+                    size: const Size(5, 5),
+                    painter: TickPainter(),
+                  ),
+                ),
+              ),
               const SizedBox(
                 width: 10,
               ),
@@ -1195,6 +1213,30 @@ class SOPShippedItemsTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class TickPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 0.5
+      ..style = PaintingStyle.stroke;
+
+    final double halfSize = size.width / 2;
+
+    final Path path = Path()
+      ..moveTo(halfSize - 5, halfSize)
+      ..lineTo(halfSize, halfSize + 5)
+      ..lineTo(halfSize + 7, halfSize - 7);
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
 
@@ -1263,9 +1305,15 @@ class SOReturnsItemTile extends StatelessWidget {
     );
   }
 }
+
 class PoDetailsItemTile extends StatelessWidget {
-  const PoDetailsItemTile({super.key, required this.name, required this.quantity, required this.index, required this.original});
-   final String name;
+  const PoDetailsItemTile(
+      {super.key,
+      required this.name,
+      required this.quantity,
+      required this.index,
+      required this.original});
+  final String name;
   final String quantity;
   final int index;
   final int original;
@@ -1311,9 +1359,10 @@ class PoDetailsItemTile extends StatelessWidget {
                         'Units : ${original.toString()}',
                         textScaleFactor: 0.8,
                         style: TextStyle(
-                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
                       ),
-                       const SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Container(
@@ -1329,7 +1378,8 @@ class PoDetailsItemTile extends StatelessWidget {
                         'To Recieve : ${quantity.toString()}',
                         textScaleFactor: 0.8,
                         style: TextStyle(
-                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                            color: b.withOpacity(0.5),
+                            fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),
@@ -1343,6 +1393,7 @@ class PoDetailsItemTile extends StatelessWidget {
     );
   }
 }
+
 class PORecievedItemTile extends StatelessWidget {
   final String quantity;
   final String itemName;

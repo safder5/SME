@@ -30,11 +30,11 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
   bool _obscureText = false;
   bool _sendCode = false;
   String _country = '';
-  TextEditingController _emailCtrl = TextEditingController();
-  TextEditingController _pwdCtrl = TextEditingController();
-  TextEditingController _nameCtrl = TextEditingController();
-  TextEditingController _codeCtrl = TextEditingController();
-  TextEditingController _countryCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
+  final TextEditingController _pwdCtrl = TextEditingController();
+  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _codeCtrl = TextEditingController();
+  final TextEditingController _countryCtrl = TextEditingController();
   // TextEditingController _stateCtrl = TextEditingController();
   Color bgEmail = b.withOpacity(0.02);
   Color bgpwd = b.withOpacity(0.02);

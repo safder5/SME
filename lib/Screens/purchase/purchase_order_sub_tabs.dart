@@ -16,26 +16,32 @@ class POPDetails extends StatefulWidget {
 }
 
 class _POPDetailsState extends State<POPDetails> {
-  // bool allRecieved = false;
-  // int qrecieved = 0;
+  bool allRecieved = false;
+  int qrecieved = 0;
 
-  // checkAllRecieved() {
-  //    if (widget.items.isNotEmpty) {
-  //     for (int i = 0; i < widget.items.length; i++) {
-  //       Item it = widget.items[i];
-  //       qrecieved += it.itemQuantity!;
-  //     }
-  //     if(qrecieved == 0){
-  //       setState(() {
-  //         allRecieved = true;
-  //       });
-  //     }
-  //   }
-  // }
+  checkAllRecieved() {
+    final prov = Provider.of<NPOrderProvider>(context, listen: false);
+    PurchaseOrderModel po =
+        prov.po.firstWhere((element) => element.orderID == widget.orderId);
+    List<Item> items = po.items!;
+    if (items.isNotEmpty) {
+      for (int i = 0; i < items.length; i++) {
+        Item it = items[i];
+        qrecieved += it.quantityPurchase!;
+      }
+      if (qrecieved == 0) {
+        setState(() {
+          allRecieved = true;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    checkAllRecieved();
   }
 
   @override
@@ -64,15 +70,15 @@ class _POPDetailsState extends State<POPDetails> {
                   children: [
                     Text(
                       'Status',
-                      textScaleFactor: 1.2,
+                      textScaleFactor: 1,
                       style: TextStyle(color: b.withOpacity(0.6)),
                     ),
                     const Spacer(),
-                    // Text(
-                    //   allRecieved? 'All Recieved':'Order Placed',
-                    //   textScaleFactor: 1.2,
-                    //   style: TextStyle(color: dg),
-                    // ),
+                    Text(
+                      allRecieved ? 'All Recieved' : 'Order Placed',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: dg),
+                    ),
                     const Spacer(),
                   ],
                 ),
@@ -114,9 +120,32 @@ class POPRecieved extends StatefulWidget {
 }
 
 class _POPRecievedState extends State<POPRecieved> {
+  bool allRecieved = false;
+  int qrecieved = 0;
+
+  checkAllRecieved() {
+    final prov = Provider.of<NPOrderProvider>(context, listen: false);
+    PurchaseOrderModel po =
+        prov.po.firstWhere((element) => element.orderID == widget.orderId);
+    List<ItemTrackingPurchaseOrder> items = po.itemsRecieved??[];
+    if (items.isNotEmpty) {
+      for (int i = 0; i < items.length; i++) {
+        ItemTrackingPurchaseOrder it = items[i];
+        qrecieved += it.quantityRecieved;
+      }
+      if (qrecieved == 0) {
+        setState(() {
+          allRecieved = true;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
+    checkAllRecieved();
   }
 
   @override
@@ -127,8 +156,7 @@ class _POPRecievedState extends State<POPRecieved> {
     return Consumer<NPOrderProvider>(builder: (_, opr, __) {
       PurchaseOrderModel po =
           opr.po.firstWhere((element) => element.orderID == widget.orderId);
-      List<ItemTrackingPurchaseOrder> items =
-          po.itemsRecieved?? [];
+      List<ItemTrackingPurchaseOrder> items = po.itemsRecieved ?? [];
       print(widget.orderId);
       print(items.length);
       if (items.isEmpty) {
@@ -142,6 +170,37 @@ class _POPRecievedState extends State<POPRecieved> {
           padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total recieved:',
+                      textScaleFactor: 1,
+                      style: TextStyle(
+                          color: b.withOpacity(0.5),
+                          fontWeight: FontWeight.w300),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                   Text(
+                      '$qrecieved box ',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                    ),
+                    const Spacer(),
+                    //  Text(
+                    //   '$totalquantities box',
+                    //   textScaleFactor: 1,
+                    //   style: TextStyle(
+                    //       color: b.withOpacity(0.5),
+                    //       fontWeight: FontWeight.w300),
+                    // ),
+                  ],
+                ),
+              ),
               Divider(
                 height: 0,
                 color: b32,
@@ -186,48 +245,45 @@ class _POPReturnsState extends State<POPReturns> {
   Widget build(BuildContext context) {
     // final itemsReturned = widget.itemsReturned ?? [];
     // final itemsReversed = itemsReturned.reversed.toList();
-    return Consumer<NPOrderProvider>(
-      builder: (_,pr,__) {
-        PurchaseOrderModel po =
+    return Consumer<NPOrderProvider>(builder: (_, pr, __) {
+      PurchaseOrderModel po =
           pr.po.firstWhere((element) => element.orderID == widget.orderId);
-      List<ItemTrackingPurchaseOrder> items =
-          po.itemsRecieved?? [];
+      List<ItemTrackingPurchaseOrder> items = po.itemsRecieved ?? [];
       print(widget.orderId);
       print(items.length);
       if (items.isEmpty) {
         print('items are null');
         return const Text('empty');
       }
-        return Container(
-          height: (MediaQuery.of(context).size.height * 0.66) - 110,
-          color: w,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
-            child: Column(
-              children: [
-                Divider(
-                  height: 0,
-                  color: b32,
-                  thickness: 0.2,
+      return Container(
+        height: (MediaQuery.of(context).size.height * 0.66) - 110,
+        color: w,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
+          child: Column(
+            children: [
+              Divider(
+                height: 0,
+                color: b32,
+                thickness: 0.2,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return POReturnsTile(
+                        itemName: items[index].itemName,
+                        quantityReturned: items[index].quantityReturned,
+                        index: index);
+                  },
+                  itemCount: items.length,
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return POReturnsTile(
-                          itemName: items[index].itemName,
-                          quantityReturned: items[index].quantityReturned,
-                          index: index);
-                    },
-                    itemCount: items.length,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }
