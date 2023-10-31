@@ -20,7 +20,7 @@ class SalesOrderReturnTransactions extends StatefulWidget {
       required this.itemsDelivered,
       required this.orderId,
       required this.customer});
-  final List<Item>? itemsDelivered;
+  final List<Item> itemsDelivered;
   final int orderId;
   final String customer;
 
@@ -58,6 +58,7 @@ class _SalesOrderReturnTransactionsState
   bool _toInventory = true;
 
   Future<void> _executeFutures(ItemTrackingSalesOrder track) async {
+    updateAllProviders();
     await uploadTrack(track);
     await uploadItemInventorytracks(); //done
     await checkPrevItemReturnedData(); // we have this data already in sales order so no need to make this check REMOVE IT WITH REPLACEMENT
@@ -66,38 +67,40 @@ class _SalesOrderReturnTransactionsState
     _toInventory ? await updateInventory() : await addToWasteBucket();
     await updateItemDelivered(); //keep at last
     await addActivity(); //done
-    updateAllProviders();
   }
 
   void updateAllProviders() {
-   try{ Provider.of<NSOrderProvider>(context, listen: false)
-        .updateSalesActivityinProvider(track);
+    try {
+      Provider.of<NSOrderProvider>(context, listen: false)
+          .updateSalesActivityinProvider(track);
 
-    Provider.of<SalesReturnsProvider>(context, listen: false)
-        .addSalesReturninProvider(rit);
+      Provider.of<SalesReturnsProvider>(context, listen: false)
+          .addSalesReturninProvider(rit);
 
-    Provider.of<ItemsProvider>(context, listen: false)
-        .updateItemsonSalesReturninProvider(_itemnameController.text,int.parse(_quantityCtrl.text),_toInventory);
+      Provider.of<ItemsProvider>(context, listen: false)
+          .updateItemsonSalesReturninProvider(_itemnameController.text,
+              int.parse(_quantityCtrl.text), _toInventory);
 
-    ItemTrackingModel itemTracking = ItemTrackingModel(
-        orderID: widget.orderId.toString(),
-        quantity: quantityReturned,
-        reason: 'Sales Return');
+      ItemTrackingModel itemTracking = ItemTrackingModel(
+          orderID: widget.orderId.toString(),
+          quantity: quantityReturned,
+          reason: 'Sales Return');
 
-    Provider.of<ItemsProvider>(context, listen: false)
-        .addItemtrackinProvider(itemTracking, _itemnameController.text);
+      Provider.of<ItemsProvider>(context, listen: false)
+          .addItemtrackinProvider(itemTracking, _itemnameController.text);
 
-    Provider.of<NSOrderProvider>(context, listen: false)
-        .updateSalesItemsReturnedProviders(
-            widget.orderId,
-            _itemnameController.text,
-            int.parse(_quantityCtrl.text),
-            Item(
-                itemName: _itemnameController.text,
-                quantitySalesReturned: int.parse(_quantityCtrl.text)));}catch(e)
-{
-  print('error $e');
-}  }
+      Provider.of<NSOrderProvider>(context, listen: false)
+          .updateSalesItemsReturnedProviders(
+              widget.orderId,
+              _itemnameController.text,
+              int.parse(_quantityCtrl.text),
+              Item(
+                  itemName: _itemnameController.text,
+                  quantitySalesReturned: int.parse(_quantityCtrl.text)));
+    } catch (e) {
+      print('error $e');
+    }
+  }
 
   void _handleSubmit() async {
     if (mounted) {
@@ -368,28 +371,36 @@ class _SalesOrderReturnTransactionsState
     }
   }
 
-  getData() async {
+  void getData() async {
     String itemname = _itemnameController.text;
-    if (itemname.isNotEmpty && widget.itemsDelivered != null) {
+    if (itemname.isNotEmpty && widget.itemsDelivered.isNotEmpty) {
       try {
-        for (var i in widget.itemsDelivered!) {
+        for (var i in widget.itemsDelivered) {
           if (i.itemName == itemname) {
             setState(() {
               selectedItem = i;
-              itemLimit = (i.quantitySalesDelivered! - i.quantitySalesReturned!)
-                  .toString();
+              if (i.quantitySalesReturned != null) {
+                if (i.quantitySalesDelivered! > i.quantitySalesReturned!) {
+                  itemLimit =
+                      (i.quantitySalesDelivered! - i.quantitySalesReturned!)
+                          .toString();
+                }
+              } else {
+                i.quantitySalesReturned = 0;
+                itemLimit = (i.quantitySalesDelivered).toString();
+              }
             });
             break;
           }
         }
       } catch (e) {
-        print(e);
+        print('mil gya $e');
       }
     }
   }
 
   List<String?> getItemNames() {
-    return widget.itemsDelivered!.map((item) => item.itemName).toList();
+    return widget.itemsDelivered.map((item) => item.itemName).toList();
   }
 
   String? validateSOIQ(String? value) {
@@ -418,7 +429,6 @@ class _SalesOrderReturnTransactionsState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _itemnameController.addListener(getData);
   }
@@ -555,26 +565,36 @@ class _SalesOrderReturnTransactionsState
                     GestureDetector(
                       onTap: () async {
                         try {
-                          if (validateForm() == true) {
-                            track = ItemTrackingSalesOrder(
-                                itemName: _itemnameController.text,
-                                date: DateFormat('dd-MM-yyyy').format(now),
-                                quantityReturned: quantityReturned,
-                                customer: widget.customer);
+                          String quantityText = _quantityCtrl.text;
 
-                            rit = SalesReturnItemTracking(
-                                orderId: widget.orderId,
-                                itemname: _itemnameController.text,
-                                referenceNo: _referencenoCtrl.text,
-                                toInventory: _toInventory,
-                                date: DateFormat('dd-MM-yyyy').format(now),
-                                quantitySalesReturned: quantityReturned);
+                          if (quantityText.isNotEmpty &&
+                              quantityText
+                                  .trim()
+                                  .replaceAll('-', '')
+                                  .isNotEmpty) {
+                            print('text is $quantityText');
+                            int quantityReturnedValue = int.parse(quantityText);
 
-                            _isLoading ? null : _handleSubmit();
+                            if (validateForm() == true) {
+                              track = ItemTrackingSalesOrder(
+                                  itemName: _itemnameController.text,
+                                  date: DateFormat('dd-MM-yyyy').format(now),
+                                  quantityReturned: quantityReturnedValue,
+                                  customer: widget.customer);
 
+                              rit = SalesReturnItemTracking(
+                                  orderId: widget.orderId,
+                                  itemname: _itemnameController.text,
+                                  referenceNo: _referencenoCtrl.text,
+                                  toInventory: _toInventory,
+                                  date: DateFormat('dd-MM-yyyy').format(now),
+                                  quantitySalesReturned: quantityReturnedValue);
+
+                              _isLoading ? null : _handleSubmit();
+                            } else {
+                              print('error validating form');
+                            }
                             // if (!context.mounted) return;
-                          } else {
-                            print('error validating form');
                           }
                         } catch (e) {
                           //snackbar to show item not added

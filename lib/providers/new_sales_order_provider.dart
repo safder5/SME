@@ -15,17 +15,6 @@ class NSOrderProvider with ChangeNotifier {
   List<SalesOrderModel> get som => _so;
   List<ItemTrackingSalesOrder> get sa => _sa;
 
-  SalesOrderModel _lastUpdatedSalesOrder = SalesOrderModel(
-      orderID: 0,
-      customerName: 'customerName',
-      orderDate: 'orderDate',
-      shipmentDate: 'shipmentDate',
-      paymentMethods: 'paymentMethods',
-      notes: 'notes',
-      tandC: 'tandC',
-      status: 'status');
-
-  SalesOrderModel get lastUpdatedSalesOrder => _lastUpdatedSalesOrder;
   final CollectionReference _salesOrderCollection = FirebaseFirestore.instance
       .collection('UserData')
       .doc(uid)
@@ -51,16 +40,6 @@ class NSOrderProvider with ChangeNotifier {
 
   void resetProviderToInitialState() {
     _so.clear(); // Clear the _so list
-    _lastUpdatedSalesOrder = SalesOrderModel(
-      orderID: 0,
-      customerName: 'customerName',
-      orderDate: 'orderDate',
-      shipmentDate: 'shipmentDate',
-      paymentMethods: 'paymentMethods',
-      notes: 'notes',
-      tandC: 'tandC',
-      status: 'status',
-    ); // Reset _lastUpdatedSalesOrder to initial state
 
     // Optionally, you can also reset other variables if needed
     _sa.clear();
@@ -263,13 +242,18 @@ class NSOrderProvider with ChangeNotifier {
         foundOrder.itemsDelivered = itemDeliveredList;
       } else {
         List<Item> itemDeliveredList = foundOrder.itemsDelivered!;
-        int itemIndex = itemDeliveredList
-            .indexWhere((element) => element.itemName == itemName);
-        Item? itemDelivered = itemDeliveredList[itemIndex];
-        itemDelivered.quantitySalesDelivered =
-            itemDelivered.quantitySalesDelivered! + quantitydelivered;
-        itemDeliveredList[itemIndex] = itemDelivered;
-        foundOrder.itemsDelivered = itemDeliveredList;
+        try {
+          int itemIndex = itemDeliveredList
+              .indexWhere((element) => element.itemName == itemName);
+          Item? itemDelivered = itemDeliveredList[itemIndex];
+          itemDelivered.quantitySalesDelivered =
+              itemDelivered.quantitySalesDelivered! + quantitydelivered;
+          itemDeliveredList[itemIndex] = itemDelivered;
+          foundOrder.itemsDelivered = itemDeliveredList;
+        } catch (e) {
+          itemDeliveredList.add(itemDelivered);
+          foundOrder.itemsDelivered = itemDeliveredList;
+        }
       }
     }
     _so[index] = foundOrder;
@@ -302,15 +286,19 @@ class NSOrderProvider with ChangeNotifier {
         foundOrder.itemsReturned = itemsReturnedList;
       } else {
         List<Item> itemsReturnedList = foundOrder.itemsReturned!;
-        int itemIndex = itemsReturnedList
-            .indexWhere((element) => element.itemName == itemName);
-        Item? itemReturned = itemsReturnedList[itemIndex];
-        itemReturned.quantitySalesReturned =
-            itemReturned.quantitySalesReturned! + quantityReturned;
-        itemsReturnedList[itemIndex] = itemReturned;
-        foundOrder.itemsReturned = itemsReturnedList;
+        try {
+          int itemIndex = itemsReturnedList
+              .indexWhere((element) => element.itemName == itemName);
+          Item? itemReturned = itemsReturnedList[itemIndex];
+          itemReturned.quantitySalesReturned =
+              itemReturned.quantitySalesReturned! + quantityReturned;
+          itemsReturnedList[itemIndex] = itemReturned;
+          foundOrder.itemsReturned = itemsReturnedList;
+        } catch (e) {
+          itemsReturnedList.add(itemReturned);
+          foundOrder.itemsReturned = itemsReturnedList;
+        }
       }
-
     }
     _so[index] = foundOrder;
     notifyListeners();

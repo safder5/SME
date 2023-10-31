@@ -61,7 +61,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return SalesOrderReturnTransactions(
-                          itemsDelivered: salesorder.itemsDelivered,
+                          itemsDelivered: salesorder.itemsDelivered ?? [],
                           orderId: salesorder.orderID!,
                           customer: salesorder.customerName!,
                         );

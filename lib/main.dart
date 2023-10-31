@@ -261,3 +261,11 @@ class _LoadInventoryState extends State<LoadInventory> {
 //     return false;
 //   }
 // }
+
+
+
+
+// animations links 
+// https://lottiefiles.com/animations/loading-iew43eMiJN.   
+// https://lottiefiles.com/animations/factory-industry-house-home-building-maison-mocca-animation-97rg4awLxc. 
+// https://lottiefiles.com/animations/simple-loading-rXNTJsH6UW

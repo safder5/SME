@@ -1105,6 +1105,7 @@ class SOPDetailsItemTile extends StatelessWidget {
   }
 }
 
+
 class SOPShippedItemsTile extends StatelessWidget {
   final String quantity;
   final String itemName;
@@ -1262,7 +1263,86 @@ class SOReturnsItemTile extends StatelessWidget {
     );
   }
 }
+class PoDetailsItemTile extends StatelessWidget {
+  const PoDetailsItemTile({super.key, required this.name, required this.quantity, required this.index, required this.original});
+   final String name;
+  final String quantity;
+  final int index;
+  final int original;
 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5), color: w),
+                child: null,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Units : ${original.toString()}',
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                      ),
+                       const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 0.5, // Width of the vertical line
+                        height:
+                            12, // Height to fill the available vertical space
+                        color: b32, // Color of the line
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'To Recieve : ${quantity.toString()}',
+                        textScaleFactor: 0.8,
+                        style: TextStyle(
+                            color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 class PORecievedItemTile extends StatelessWidget {
   final String quantity;
   final String itemName;

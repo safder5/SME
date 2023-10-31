@@ -11,8 +11,8 @@ import '../../../Models/iq_list.dart';
 import '../../../constants.dart';
 
 class AddPurchaseOrderItem extends StatefulWidget {
-  const AddPurchaseOrderItem({super.key, this.items});
-  final List<Item>? items;
+  const AddPurchaseOrderItem({super.key,required this.items});
+  final List<Item> items;
 
   @override
   State<AddPurchaseOrderItem> createState() => _AddPurchaseOrderItemState();
@@ -31,7 +31,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
     String item = _itemnameController.text;
     if (item != '') {
       try {
-        for (var i in widget.items!) {
+        for (var i in widget.items) {
           if (i.itemName! == item) {
             setState(() {
               selectedItem = i;

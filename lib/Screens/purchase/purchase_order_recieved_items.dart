@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 import '../../Models/item_tracking_model.dart';
+import '../../Providers/iq_list_provider.dart';
 import '../../constants.dart';
 
 class PurchaseOrderRecievedItems extends StatefulWidget {
@@ -67,12 +68,12 @@ class _PurchaseOrderRecievedItemsState
       try {
         Navigator.pop(context);
         Navigator.pop(context);
-        final order = Provider.of<NPOrderProvider>(context, listen: false)
-            .lastUpdatedPurchaseOrder;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PurchaseOrderPage(orderId: widget.orderId,)));
+                builder: (context) => PurchaseOrderPage(
+                      orderId: widget.orderId,
+                    )));
       } catch (e) {
         print('error loading to new purchase order page $e');
       }
@@ -81,6 +82,8 @@ class _PurchaseOrderRecievedItemsState
 
   Future<void> _executeFutures(ItemTrackingPurchaseOrder track) async {
     try {
+       updateRespectiveProviders();
+
       await prevItemsRecievedData();
       // checks what quantity has been recieved earlier and marks #prevdata = true (if it has data). done
 
@@ -101,16 +104,36 @@ class _PurchaseOrderRecievedItemsState
 
       await updateItemTrack();
       // updates item track/activity in main inventory. done
-      updateRespectiveProviders();
+     
     } catch (e) {
       print('Error executing futures $e');
     }
   }
 
-  updateRespectiveProviders() {
-    final porProvider = Provider.of<NPOrderProvider>(context, listen: false);
-    porProvider.purchaseRecievedProviderUpdate(widget.orderId,
-        _itemnameController.text, int.parse(_quantityCtrl.text));
+  void updateRespectiveProviders() {
+    try {
+      final porProvider = Provider.of<NPOrderProvider>(context, listen: false);
+      porProvider.purchaseRecievedProviderUpdate(widget.orderId,
+          _itemnameController.text, int.parse(_quantityCtrl.text), track);
+      print('D');
+
+      porProvider.updatePurchaseActivityinProvider(track);
+       print('D');
+
+      Provider.of<ItemsProvider>(context, listen: false)
+          .updateItemsonPurchaseTransactioninProvider(
+              _itemnameController.text, int.parse(_quantityCtrl.text));
+               print('D');
+      ItemTrackingModel itemTracking = ItemTrackingModel(
+          orderID: widget.orderId.toString(),
+          quantity: quantityRecieved,
+          reason: 'Purchase Recieved');
+      Provider.of<ItemsProvider>(context, listen: false)
+          .addItemtrackinProvider(itemTracking, _itemnameController.text);
+           print('D');
+    } catch (e) {
+      print("Error in updating all providers $e");
+    }
   }
 
   Future<void> prevItemsRecievedData() async {
@@ -291,7 +314,7 @@ class _PurchaseOrderRecievedItemsState
           if (i.itemName == itemName) {
             setState(() {
               selectedItem = i;
-              itemLimit = i.itemQuantity!;
+              itemLimit = i.quantityPurchase!;
             });
             break;
           }

@@ -29,15 +29,16 @@ class PurchaseReturnsProvider with ChangeNotifier {
           quantity: data['quantityPurchaseReturned'],
         );
         _pr.add(purchaseReturn);
-        notifyListeners();
       }
+      _pr.reversed.toList();
+      notifyListeners();
     } catch (e) {
       print('error fetching purchase returns');
     }
   }
 
-  void clearPurchaseReturns() {
-    _pr.clear();
+  void addPurchaseReturninProvider(PurchaseReturnItemTracking prit) {
+    _pr.add(prit);
     notifyListeners();
   }
 }

@@ -34,6 +34,19 @@ class ItemsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateItemsonPurchaseTransactioninProvider(
+      String itemName, int quantityRecieved) {
+    final index =
+        _allItems.indexWhere((element) => element.itemName == itemName);
+    final item = _allItems[index];
+    final quantity = item.itemQuantity! + quantityRecieved;
+    item.itemQuantity = quantity;
+    final purchase = item.quantityPurchase! - quantityRecieved;
+    item.quantityPurchase = purchase;
+    _allItems[index] = item;
+    notifyListeners();
+  }
+
   void updateItemsonSalesReturninProvider(
       String itemName, int quantityReturned, bool inventory) {
     final index =
@@ -43,6 +56,19 @@ class ItemsProvider with ChangeNotifier {
       final quantity = item.itemQuantity! + quantityReturned;
       item.itemQuantity = quantity;
     }
+    _allItems[index] = item;
+    notifyListeners();
+  }
+
+  void updateItemsonPurchaseReturninProvider(
+    String itemName,
+    int quantityReturned,
+  ) {
+    final index =
+        _allItems.indexWhere((element) => element.itemName == itemName);
+    final item = _allItems[index];
+    final quantity = item.itemQuantity! - quantityReturned;
+    item.itemQuantity = quantity;
     _allItems[index] = item;
     notifyListeners();
   }

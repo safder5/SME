@@ -12,6 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
+import '../../Providers/iq_list_provider.dart';
+
 class PurchaseOrderReturnItems extends StatefulWidget {
   const PurchaseOrderReturnItems(
       {super.key,
@@ -103,9 +105,29 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
   }
 
   void updateRespectiveProviders() {
-    final porProvider = Provider.of<NPOrderProvider>(context, listen: false);
-    porProvider.purchaseReturnProviderUpdate(widget.orderId,
-        _itemnameController.text, int.parse(_quantityCtrl.text));
+    try {
+      final porProvider = Provider.of<NPOrderProvider>(context, listen: false);
+      porProvider.purchaseReturnProviderUpdate(widget.orderId,
+          _itemnameController.text, int.parse(_quantityCtrl.text), track);
+
+      porProvider.updatePurchaseActivityinProvider(track);
+
+      Provider.of<PurchaseReturnsProvider>(context, listen: false)
+          .addPurchaseReturninProvider(prit);
+
+      Provider.of<ItemsProvider>(context, listen: false)
+          .updateItemsonPurchaseReturninProvider(
+              _itemnameController.text, int.parse(_quantityCtrl.text));
+
+      ItemTrackingModel itemTracking = ItemTrackingModel(
+          orderID: widget.orderId.toString(),
+          quantity: quantityReturned,
+          reason: 'Purchase Returned');
+      Provider.of<ItemsProvider>(context, listen: false)
+          .addItemtrackinProvider(itemTracking, _itemnameController.text);
+    } catch (e) {
+      print("Error updating provider $e");
+    }
   }
 
   Future<void> updateItemRecievedforReturns() async {
@@ -468,10 +490,6 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
                                   date: DateFormat('dd-MM-yyyy').format(now),
                                   quantity: quantityReturned);
 
-                              final providerforReturns =
-                                  Provider.of<PurchaseReturnsProvider>(context,
-                                      listen: false);
-                              providerforReturns.clearPurchaseReturns();
 
                               isLoading ? null : _handleSubmit();
 

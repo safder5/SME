@@ -1,3 +1,4 @@
+import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
-
 
 class PurchaseReturns extends StatefulWidget {
   const PurchaseReturns({super.key});
@@ -62,7 +62,7 @@ class _PurchaseReturnsState extends State<PurchaseReturns> {
                 //   height: 16,
                 // ),
                 Consumer<PurchaseReturnsProvider>(builder: (_, pr, __) {
-                  final prList = pr.pr.reversed.toList();
+                  List<PurchaseReturnItemTracking> prList = pr.pr;
                   return Expanded(
                     child: ListView.builder(
                         // physics: controllScroll,

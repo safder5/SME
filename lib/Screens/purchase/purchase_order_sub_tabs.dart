@@ -87,9 +87,9 @@ class _POPDetailsState extends State<POPDetails> {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return SOPDetailsItemTile(
+                    return PoDetailsItemTile(
                       name: items[index].itemName!,
-                      quantity: items[index].itemQuantity.toString(),
+                      quantity: items[index].quantityPurchase.toString(),
                       index: index,
                       original: items[index].originalQuantity ?? 0,
                     );

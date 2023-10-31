@@ -1,10 +1,8 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/purchase_order.dart';
-import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 final _auth = FirebaseAuth.instance.currentUser;
 String? uid = _auth!.email;
@@ -14,17 +12,6 @@ class NPOrderProvider with ChangeNotifier {
   List<PurchaseOrderModel> get po => _po;
   final List<ItemTrackingPurchaseOrder> _pa = [];
   List<ItemTrackingPurchaseOrder> get pa => _pa;
-  PurchaseOrderModel _lastUpdatedPurchaseOrder = PurchaseOrderModel(
-      orderID: 000000,
-      vendorName: 'vendorName',
-      purchaseDate: 'purchaseDate',
-      deliveryDate: 'deliveryDate',
-      paymentTerms: 'paymentTerms',
-      deliveryMethod: 'deliveryMethod',
-      notes: 'notes',
-      tandc: 'tandc',
-      status: 'status');
-  PurchaseOrderModel get lastUpdatedPurchaseOrder => _lastUpdatedPurchaseOrder;
 
   final CollectionReference _purchaseOrderCollection = FirebaseFirestore
       .instance
@@ -46,6 +33,11 @@ class NPOrderProvider with ChangeNotifier {
 
   void addPurchaseOrdertoProvider(PurchaseOrderModel po) {
     _po.add(po);
+    notifyListeners();
+  }
+
+  void updatePurchaseActivityinProvider(ItemTrackingPurchaseOrder activity) {
+    _pa.add(activity);
     notifyListeners();
   }
 
@@ -71,7 +63,7 @@ class NPOrderProvider with ChangeNotifier {
       for (final item in puchaseOrder.items!) {
         await itemsCollection.doc(item.itemName).set({
           'itemName': item.itemName,
-          'itemQuantity': item.quantityPurchase,
+          'quantityPurchase': item.quantityPurchase,
           'originalQuantity': item.originalQuantity
         });
       }
@@ -174,48 +166,122 @@ class NPOrderProvider with ChangeNotifier {
     }
   }
 
-  void purchaseReturnProviderUpdate(
-      int orderId, String itemName, int quantityReturned) {
-    PurchaseOrderModel? foundOrder =
-        _po.firstWhere((order) => order.orderID == orderId);
+  void purchaseReturnProviderUpdate(int orderId, String itemName,
+      int quantityReturned, ItemTrackingPurchaseOrder itemReturned) {
+    int index = _po.indexWhere((element) => element.orderID == orderId);
+    PurchaseOrderModel? foundOrder = _po[index];
+
     if (foundOrder.orderID != 0) {
-      final itemReturnedList = foundOrder.itemsReturned;
+      final itemsRecievedList = foundOrder.itemsRecieved;
 
-      ItemTrackingPurchaseOrder? itemReturned = itemReturnedList!
-          .firstWhere((element) => element.itemName == itemName);
-      // int prevReturnQuantity = itemReturned.quantityReturned;
-      itemReturned.quantityReturned += quantityReturned;
+      int itemIndex = itemsRecievedList!
+          .indexWhere((element) => element.itemName == itemName);
 
-      final itemRecievedList = foundOrder.itemsRecieved;
+      ItemTrackingPurchaseOrder itemRecieved = itemsRecievedList[itemIndex];
 
-      ItemTrackingPurchaseOrder? itemRecieved = itemRecievedList!
-          .firstWhere((element) => element.itemName == itemName);
       itemRecieved.quantityRecieved -= quantityReturned;
       itemRecieved.quantityReturned += quantityReturned;
+      itemsRecievedList[itemIndex] = itemRecieved;
 
-      _lastUpdatedPurchaseOrder = foundOrder;
-      _pa.clear();
+      foundOrder.itemsRecieved = itemsRecievedList;
+
+      if (foundOrder.itemsReturned == null) {
+        List<ItemTrackingPurchaseOrder> itemsReturnedList = [itemReturned];
+        foundOrder.itemsReturned = itemsReturnedList;
+      } else {
+        List<ItemTrackingPurchaseOrder> itemsReturnedList =
+            foundOrder.itemsReturned!;
+
+        try {
+          int itemIndex = itemsReturnedList
+              .indexWhere((element) => element.itemName == itemName);
+
+          ItemTrackingPurchaseOrder? itemReturned =
+              itemsReturnedList[itemIndex];
+
+          itemReturned.quantityReturned += quantityReturned;
+          itemsReturnedList[itemIndex] = itemReturned;
+
+          foundOrder.itemsReturned = itemsReturnedList;
+        } catch (e) {
+          print('error in return $e');
+          itemsReturnedList.add(itemReturned);
+          foundOrder.itemsReturned = itemsReturnedList;
+        }
+      }
     }
+    _po[index] = foundOrder;
     notifyListeners();
   }
 
-  void purchaseRecievedProviderUpdate(
-      int orderId, String itemName, int quantityRecieved) {
-    PurchaseOrderModel? foundOrder =
-        _po.firstWhere((order) => order.orderID == orderId);
-    if (foundOrder.orderID != 0) {
-      final itemRecievedList = foundOrder.itemsRecieved;
-      ItemTrackingPurchaseOrder? itemRecieved = itemRecievedList!
-          .firstWhere((element) => element.itemName == itemName);
-      itemRecieved.quantityRecieved += quantityRecieved;
+  void purchaseRecievedProviderUpdate(int orderId, String itemName,
+      int quantityRecieved, ItemTrackingPurchaseOrder itemRecieved) {
+    try {
+      int index = _po.indexWhere((element) => element.orderID == orderId);
+      PurchaseOrderModel foundOrder = _po[index];
 
-      final itemsList = foundOrder.items;
-      Item? item =
-          itemsList!.firstWhere((element) => element.itemName == itemName);
-      item.itemQuantity = item.itemQuantity! - quantityRecieved;
-      _lastUpdatedPurchaseOrder = foundOrder;
-      _pa.clear();
+      if (foundOrder.orderID != 0) {
+        final itemsList = foundOrder.items;
+        int itemindex =
+            itemsList!.indexWhere((element) => element.itemName == itemName);
+        Item item = itemsList[itemindex];
+        item.quantityPurchase = item.quantityPurchase! - quantityRecieved;
+        itemsList[itemindex] = item;
+        foundOrder.items = itemsList;
+
+        if (foundOrder.itemsRecieved == null) {
+          List<ItemTrackingPurchaseOrder> itemsRecieved = [itemRecieved];
+          foundOrder.itemsRecieved = itemsRecieved;
+        } else {
+          List<ItemTrackingPurchaseOrder> itemsRecievedList =
+              foundOrder.itemsRecieved!;
+          try {
+            int itemIndex = itemsRecievedList
+                .indexWhere((element) => element.itemName == itemName);
+            ItemTrackingPurchaseOrder? itemRecieved =
+                itemsRecievedList[itemIndex];
+            itemRecieved.quantityRecieved += quantityRecieved;
+            itemsRecievedList[itemIndex] = itemRecieved;
+            foundOrder.itemsRecieved = itemsRecievedList;
+          } catch (e) {
+            print('error in recieved $e');
+            itemsRecievedList.add(itemRecieved);
+            foundOrder.itemsRecieved = itemsRecievedList;
+          }
+        }
+      }
+      _po[index] = foundOrder;
+      notifyListeners();
+    } catch (e) {
+      print('error in main provider update $e');
     }
-    notifyListeners();
   }
 }
+
+
+// final itemRecievedList = foundOrder.itemsRecieved;
+    // ItemTrackingPurchaseOrder? itemRecieved = itemRecievedList!
+    //     .firstWhere((element) => element.itemName == itemName);
+    // itemRecieved.quantityRecieved += quantityRecieved;
+
+    // final itemsList = foundOrder.items;
+    // Item? item =
+    //     itemsList!.firstWhere((element) => element.itemName == itemName);
+    // item.itemQuantity = item.itemQuantity! - quantityRecieved;
+    // _lastUpdatedPurchaseOrder = foundOrder;
+    // _pa.clear();
+
+       // ItemTrackingPurchaseOrder? itemReturned = itemReturnedList!
+      //     .firstWhere((element) => element.itemName == itemName);
+      // int prevReturnQuantity = itemReturned.quantityReturned;
+      // itemReturned.quantityReturned += quantityReturned;
+
+      // final itemRecievedList = foundOrder.itemsRecieved;
+
+      // ItemTrackingPurchaseOrder? itemRecieved = itemRecievedList!
+      //     .firstWhere((element) => element.itemName == itemName);
+
+      // itemRecieved.quantityReturned += quantityReturned;
+
+      // _lastUpdatedPurchaseOrder = foundOrder;
+      // _pa.clear();

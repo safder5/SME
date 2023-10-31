@@ -69,13 +69,18 @@ class InventorySummaryProvider with ChangeNotifier {
         final itemDocs = await itemsCollection.get();
         for (final itemDoc in itemDocs.docs) {
           final itemData = itemDoc.data();
-          final itemQuantity = itemData['itemQuantity'] as int;
-          _toRecieve += itemQuantity;
+          if (itemData['quantityPurchase'] != null && itemData['quantityPurchase'] is int) {
+          final quantityPurchase = itemData['quantityPurchase'] as int;
+          _toRecieve += quantityPurchase;
+        } else {
+          // Handle the case when 'itemQuantity' is null or not an integer
+          print('Invalid or null itemQuantity for document: ${itemDoc.id}');
+        }
         }
       }
       notifyListeners();
     } catch (e) {
-      print('Error fetching items: $e');
+      print('Error fetching : $e');
     }
   }
 }

@@ -314,7 +314,7 @@ class _SalesOrderTransactionsShippedState
     }
   }
 
-  getData() async {
+  void getData() async {
     String itemname = _itemnameController.text;
     if (itemname.isNotEmpty && widget.items != null) {
       try {
