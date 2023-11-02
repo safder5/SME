@@ -10,9 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../../Providers/customer_provider.dart';
 import '../../Services/helper.dart';
-import '../../main.dart';
 
 class NewPurchaseOrder extends StatefulWidget {
   const NewPurchaseOrder({super.key});
@@ -66,7 +64,6 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // for vendor names ??
     fetchVendorNames(context);
@@ -198,7 +195,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10))),
                             height: 120,
-                            child: Expanded(
+                            child: SizedBox(
                               child: ListView.builder(
                                 itemCount: suggestions.length,
                                 itemBuilder: (context, index) {

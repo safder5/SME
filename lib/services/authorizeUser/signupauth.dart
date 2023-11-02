@@ -1,12 +1,8 @@
 import 'package:ashwani/Services/db_created.dart';
-import 'package:ashwani/country_state/country_select.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../constants.dart';
 import '../helper.dart';
@@ -28,8 +24,8 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
   String email = '';
   String password = '';
   bool _obscureText = false;
-  bool _sendCode = false;
-  String _country = '';
+  final bool _sendCode = false;
+  // String _country = '';
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _pwdCtrl = TextEditingController();
   final TextEditingController _nameCtrl = TextEditingController();

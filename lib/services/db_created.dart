@@ -1,4 +1,3 @@
-import 'package:ashwani/landingbypass.dart';
 import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../Models/user.dart';
 import '../constants.dart';
 import 'helper.dart';
 
@@ -21,11 +19,11 @@ class DBCreatingPage extends StatefulWidget {
 
 class _DBCreatingPageState extends State<DBCreatingPage> {
   DateTime cdate = DateTime.now();
-  TextEditingController _cName = TextEditingController();
-  TextEditingController _bLocation = TextEditingController();
+  final TextEditingController _cName = TextEditingController();
+  final TextEditingController _bLocation = TextEditingController();
   // TextEditingController fiscal = TextEditingController();
-  TextEditingController _language = TextEditingController();
-  TextEditingController _inventoryDate = TextEditingController();
+  final TextEditingController _language = TextEditingController();
+  final TextEditingController _inventoryDate = TextEditingController();
   final _fs = FirebaseFirestore.instance;
   Color bgName = b.withOpacity(0.02);
   Color bgLocation = b.withOpacity(0.02);

@@ -38,7 +38,6 @@ class _SOPDetailsState extends State<SOPDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkIfAllDelivered();
   }
@@ -161,7 +160,6 @@ class _SOPShippedState extends State<SOPShipped> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkIfAllDelivered();
   }

@@ -7,7 +7,6 @@ import 'package:ashwani/Models/sales_order.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Services/helper.dart';
-import 'package:ashwani/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
@@ -224,7 +223,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10))),
                             height: 120,
-                            child: Expanded(
+                            child: SizedBox(
                               child: ListView.builder(
                                 itemCount: suggestions.length,
                                 itemBuilder: (context, index) {
@@ -267,10 +266,10 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           child: GestureDetector(
                             onTap: () async {
                               await soItemsProvider.getItems();
-                              List<String> item_names = [];
+                              List<String> itemNames = [];
                               try {
                                 for (Item element in soItemsProvider.allItems) {
-                                  item_names.add(element.itemName!);
+                                  itemNames.add(element.itemName!);
                                 }
                               } catch (e) {
                                 print(e);

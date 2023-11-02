@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../constants.dart';
 
@@ -106,6 +105,8 @@ String generateSalesOrderID() {
 }
 
 class LoadingOverlay extends StatelessWidget {
+  const LoadingOverlay({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

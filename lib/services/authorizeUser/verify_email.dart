@@ -13,7 +13,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: w,
-      body: SafeArea(child: Column(
+      body: const SafeArea(child: Column(
         children: [
           Row(
             children: [

@@ -10,6 +10,6 @@ class AllActivityHome extends StatefulWidget {
 class _AllActivityHomeState extends State<AllActivityHome> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }

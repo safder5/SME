@@ -1,7 +1,6 @@
 import 'package:ashwani/Models/sales_order.dart';
 import 'package:ashwani/Screens/newOrders/new_sales_order.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
-import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
@@ -105,7 +104,7 @@ class _SalesOrdersState extends State<SalesOrders> {
           onPressed: () {
             Provider.of<ItemsProvider>(context, listen: false).clearsoItems();
             Navigator.of(context, rootNavigator: true)
-                .push(MaterialPageRoute(builder: (context) => NewSalesOrder()));
+                .push(MaterialPageRoute(builder: (context) => const NewSalesOrder()));
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => NewSalesOrder()));
           }),

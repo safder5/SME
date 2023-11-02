@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class CustomerProvider with ChangeNotifier {
   List<CustomerModel> _customers = [];
-  List<String> _customerNames = [];
+  final List<String> _customerNames = [];
   List<CustomerModel> get customers => _customers;
   List<String> get customerNames => _customerNames;
 
@@ -28,7 +28,7 @@ class CustomerProvider with ChangeNotifier {
   Future<void> addCustomer(CustomerModel customerData, DocumentReference docRef,
       AddressModel? bill, AddressModel? ship) async {
     try {
-      Map<String, dynamic> customer_data = {
+      Map<String, dynamic> customerDATA = {
         'name': customerData.name,
         'companyName': customerData.companyName ?? '',
         'displayname': customerData.displayname,
@@ -37,7 +37,7 @@ class CustomerProvider with ChangeNotifier {
         'remarks': customerData.remarks ?? '',
         'business': customerData.business,
       };
-      docRef.set(customer_data);
+      docRef.set(customerDATA);
       if (ship != null) {
         Map<String, dynamic> customerShipAddress = {
           'street': ship.street ?? '',

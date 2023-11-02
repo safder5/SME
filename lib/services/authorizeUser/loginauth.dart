@@ -18,8 +18,8 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
   String email = '';
   String password = '';
   bool _obscureText = false;
-  TextEditingController _emailCtrl = TextEditingController();
-  TextEditingController _pwdCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
+  final TextEditingController _pwdCtrl = TextEditingController();
   Color bgEmail = b.withOpacity(0.02);
   Color bgpwd = b.withOpacity(0.02);
   void colorOfTextField() {
@@ -41,7 +41,6 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkAuthentication();
   }
@@ -212,7 +211,7 @@ class _LoginAuthPageState extends State<LoginAuthPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Container(

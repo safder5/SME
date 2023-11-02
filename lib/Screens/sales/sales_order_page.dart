@@ -158,7 +158,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                                 ),
                               ],
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Icon(
                               Icons.attach_file_outlined,
                               size: 36,

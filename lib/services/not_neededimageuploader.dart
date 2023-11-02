@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 
-UploadImage(String itemname) async {
+  uploadImage(String itemname) async {
   final fauth = FirebaseAuth.instance.currentUser;
   String? uid = fauth!.email;
   final firebaseStorage = FirebaseStorage.instance;
@@ -23,7 +23,7 @@ UploadImage(String itemname) async {
     XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
     var file = File(image!.path);
 
-    if (image != null) {
+    if (image.path.isNotEmpty) {
       //Upload to Firebase
       var snapshot = await firebaseStorage
           .ref()

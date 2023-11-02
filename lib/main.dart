@@ -140,7 +140,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initialiseFlutterFireandLoadData();
   }
@@ -193,7 +192,6 @@ class _LoadInventoryState extends State<LoadInventory> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadData();
   }

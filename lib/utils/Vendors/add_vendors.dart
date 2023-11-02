@@ -40,7 +40,7 @@ class _AddVendorState extends State<AddVendor> {
   @override
   Widget build(BuildContext context) {
     final addressPvr = Provider.of<BSAddressProvider>(context);
-    final vendor_provider = Provider.of<VendorProvider>(context);
+    final vendorProvider = Provider.of<VendorProvider>(context);
     final auth = FirebaseAuth.instance.currentUser;
     return Scaffold(
       // bottomNavigationBar: ,
@@ -67,8 +67,8 @@ class _AddVendorState extends State<AddVendor> {
               bill = addressPvr.billing;
               ship = addressPvr.shipping;
             }
-            await vendor_provider.addVendor(vendorData, docRef, bill, ship);
-            vendor_provider.addVendorinProvider(vendorData, bill, ship);
+            await vendorProvider.addVendor(vendorData, docRef, bill, ship);
+            vendorProvider.addVendorinProvider(vendorData, bill, ship);
             addressPvr.clearAddresses();
             if (!context.mounted) return;
             Navigator.pop(context);

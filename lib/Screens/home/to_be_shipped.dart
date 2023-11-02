@@ -10,6 +10,6 @@ class ToBeShipped extends StatefulWidget {
 class _ToBeShippedState extends State<ToBeShipped> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }

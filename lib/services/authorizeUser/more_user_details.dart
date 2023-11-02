@@ -10,7 +10,7 @@ class MoreUserDetails extends StatefulWidget {
 class _MoreUserDetailsState extends State<MoreUserDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(child: Column(
         children: [
           

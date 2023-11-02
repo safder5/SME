@@ -3,7 +3,6 @@ import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/constants.dart';
-import 'package:ashwani/landingbypass.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/Utils/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,7 +57,7 @@ class _AddItemsState extends State<AddItems> {
     String url = (imageFile!.path);
 
     try {
-      final Reference ref = _storage.ref().child('images/${url}.png');
+      final Reference ref = _storage.ref().child('images/$url.png');
 
       final UploadTask uploadTask = ref.putFile(imageFile!);
       final TaskSnapshot snapshot = await uploadTask.whenComplete(() => {});
@@ -89,7 +88,6 @@ class _AddItemsState extends State<AddItems> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // requestPhotosPermission();
   }
@@ -187,41 +185,29 @@ class _AddItemsState extends State<AddItems> {
                         // });
                         //upload image
                       },
-                      child: imageFile != null
-                          ? Flexible(
-                              child: CircleAvatar(
-                                maxRadius: 40,
-                                backgroundColor: t,
-                                child: Expanded(
-                                    child: Image(
-                                        fit: BoxFit.contain,
-                                        image: FileImage(imageFile!))),
-                              ),
+                      child:  Container(
+                      height: 90,
+                      width: 90,
+                      decoration: BoxDecoration(
+                          color: t,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: blue)),
+                      child: const Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              LineIcons.plus,
+                              size: 12,
+                            ),
+                            Text(
+                              'Upload Image',
+                              style: TextStyle(fontSize: 8),
                             )
-                          : Flexible(
-                              child: Container(
-                              height: 90,
-                              width: 90,
-                              decoration: BoxDecoration(
-                                  color: t,
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: blue)),
-                              child: const Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      LineIcons.plus,
-                                      size: 12,
-                                    ),
-                                    Text(
-                                      'Upload Image',
-                                      style: TextStyle(fontSize: 8),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ))),
+                          ],
+                        ),
+                      ),
+                            )),
                 ],
               ),
               const SizedBox(

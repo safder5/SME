@@ -1,7 +1,4 @@
 import 'package:ashwani/Providers/inventory_summary_provider.dart';
-import 'package:ashwani/Providers/new_sales_order_provider.dart';
-import 'package:ashwani/Providers/purchase_returns_provider.dart';
-import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Screens/settings/customer_support.dart';
 import 'package:ashwani/Screens/settings/rate_app.dart';
 import 'package:ashwani/Screens/settings/setting_screens/about.dart';
@@ -16,7 +13,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Providers/new_purchase_order_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -154,7 +150,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             horizontal: 16.0, vertical: 8.0),
                         child: Center(child: Text('Logout')),
                       ))),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               )
             ],

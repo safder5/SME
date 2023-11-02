@@ -23,8 +23,8 @@ class DottedBorderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0; // Adjust the border width as needed
 
-    final double dashWidth = 0.5; // Width of each dot
-    final double dashSpace = 10.0; // Space between each dot
+    const double dashWidth = 0.5; // Width of each dot
+    const double dashSpace = 10.0; // Space between each dot
 
     double startX = 0.0;
     while (startX < size.width) {
@@ -56,7 +56,7 @@ class DottedBorderPainter extends CustomPainter {
 class DottedBorderContainer extends StatelessWidget {
   final Widget child; // The content of the container
 
-  DottedBorderContainer({required this.child});
+  const DottedBorderContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

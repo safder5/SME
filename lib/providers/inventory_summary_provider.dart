@@ -7,7 +7,7 @@ class InventorySummaryProvider with ChangeNotifier {
   int _inHand = 0;
   int _toRecieve = 0;
   List<Item> _inventoryItems = [];
-  List<Item> _purchaseOrderItems = [];
+  final List<Item> _purchaseOrderItems = [];
 
   int get inHand => _inHand;
   int get toRecieve => _toRecieve;

@@ -1,8 +1,6 @@
 import 'package:ashwani/Providers/vendor_provider.dart';
 import 'package:ashwani/Utils/Vendors/add_vendors.dart';
 import 'package:ashwani/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,7 @@ class VendorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance.currentUser;
+    // final _auth = FirebaseAuth.instance.currentUser;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: blue,
@@ -22,7 +20,7 @@ class VendorPage extends StatelessWidget {
         tooltip: 'Add Vendor',
         onPressed: (() {
           Navigator.push(
-              context, MaterialPageRoute(builder: ((context) => AddVendor())));
+              context, MaterialPageRoute(builder: ((context) => const AddVendor())));
         }),
         child: Icon(
           LineIcons.plus,

@@ -1,7 +1,5 @@
-import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Screens/newOrders/new_purchase_order.dart';
-import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +39,7 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
           onPressed: () {
             Provider.of<ItemsProvider>(context, listen: false).clearpoItems();
             Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(builder: (context) => NewPurchaseOrder()));
+                MaterialPageRoute(builder: (context) => const NewPurchaseOrder()));
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => NewSalesOrder()));
           }),

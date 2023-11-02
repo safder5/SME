@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ItemsProvider with ChangeNotifier {
-  List<Item> _soItems = [];
-  List<Item> _allItems = [];
-  List<Item> _poItems = [];
-  List<Item> _salesDelivered = [];
+  final List<Item> _soItems = [];
+  final List<Item> _allItems = [];
+  final List<Item> _poItems = [];
+  final List<Item> _salesDelivered = [];
 
   List<Item> get soItems => _soItems;
   List<Item> get allItems => _allItems;

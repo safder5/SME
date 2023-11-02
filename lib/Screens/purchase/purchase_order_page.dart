@@ -1,4 +1,3 @@
-import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Screens/purchase/purchase_order_recieved_items.dart';

@@ -1,7 +1,6 @@
 import 'package:ashwani/Models/address_model.dart';
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Models/vendor_model.dart';
-import 'package:ashwani/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ class VendorProvider with ChangeNotifier {
   Future<void> addVendor(VendorModel vendorData, DocumentReference docRef,
       AddressModel? bill, AddressModel? ship) async {
     try {
-      Map<String, dynamic> vendor_data = {
+      Map<String, dynamic> vendorDATA = {
         'name': vendorData.name,
         'companyName': vendorData.companyName ?? '',
         'displayname': vendorData.displayName,
@@ -26,7 +25,7 @@ class VendorProvider with ChangeNotifier {
         'phone': vendorData.phone ?? '',
         'remarks': vendorData.remarks ?? '',
       };
-      docRef.set(vendor_data);
+      docRef.set(vendorDATA);
       if (ship != null) {
         Map<String, dynamic> vendorShipAddress = {
           'street': ship.street ?? '',

@@ -1398,8 +1398,8 @@ class PORecievedItemTile extends StatelessWidget {
   final String quantity;
   final String itemName;
   final int index;
-  int? quantityReturned;
-  PORecievedItemTile(
+  final int? quantityReturned;
+  const PORecievedItemTile(
       {super.key,
       required this.quantity,
       required this.itemName,
@@ -1489,8 +1489,8 @@ class PORecievedItemTile extends StatelessWidget {
 class POReturnsTile extends StatelessWidget {
   final String itemName;
   final int index;
-  int? quantityReturned;
-  POReturnsTile(
+  final int? quantityReturned;
+  const POReturnsTile(
       {super.key,
       required this.itemName,
       required this.index,

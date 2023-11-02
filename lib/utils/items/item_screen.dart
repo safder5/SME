@@ -131,7 +131,7 @@ class _ItemScreenState extends State<ItemScreen> {
                     c = b;
                   } else if (itemTrack.reason == 'Sales Return') {
                     text = 'Sales Return';
-                    c = Color(colorPrimary);
+                    c = const Color(colorPrimary);
                   } else {
                     text = 'Waste';
                     c = r;
@@ -163,7 +163,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                 ),
                               ],
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Text(
                               itemTrack.quantity.toString(),
                               textScaleFactor: 1.2,

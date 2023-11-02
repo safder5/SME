@@ -316,6 +316,7 @@ class _AddBillingShippingAddressState extends State<AddBillingShippingAddress> {
                   )),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height*0.4,)
             ],
           ),
         ),
