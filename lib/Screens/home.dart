@@ -9,6 +9,7 @@ import 'package:ashwani/Utils/items/add_items.dart';
 import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<InventorySummaryProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Stack(
           children: [
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         width: 15,
                       ),
-                       Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
@@ -115,10 +116,7 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context) =>
                                         const SettingsPage()));
                           },
-                          icon: const Icon(
-                            Icons.settings,
-                            size: 30,
-                          )),
+                          icon: SvgPicture.asset('lib/icons/settings.svg')),
                     ],
                   ),
                   const SizedBox(
@@ -171,8 +169,10 @@ class _HomePageState extends State<HomePage> {
                       ContainerHomeActivity(
                         amt: '0',
                         title: 'Quantity to be Shipped',
-                        type: 1,
-                        widget: AllHomeActivity(currentIndex: 1,),
+                       
+                        widget: AllHomeActivity(
+                          currentIndex: 1,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -180,8 +180,10 @@ class _HomePageState extends State<HomePage> {
                       ContainerHomeActivity(
                         amt: '0',
                         title: 'Quantity to be Delivered',
-                        type: 2,
-                        widget: AllHomeActivity(currentIndex: 2,),
+                       
+                        widget: AllHomeActivity(
+                          currentIndex: 2,
+                        ),
                       )
                     ],
                   ),
@@ -226,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ContainerHomeMore(
                         title: 'More',
-                        type: 1,
+                        type: 2,
                         action: MoreFromHomePage(),
                       ),
                       SizedBox(

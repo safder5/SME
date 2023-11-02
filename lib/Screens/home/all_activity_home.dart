@@ -10,6 +10,8 @@ class AllActivityHome extends StatefulWidget {
 class _AllActivityHomeState extends State<AllActivityHome> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    );
   }
 }

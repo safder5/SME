@@ -5,6 +5,7 @@ import 'package:ashwani/Screens/sales/sales_page_sub_tabs.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Models/sales_order.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -159,11 +160,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                               ],
                             ),
                             const Spacer(),
-                            Icon(
-                              Icons.attach_file_outlined,
-                              size: 36,
-                              color: w,
-                            )
+                            SvgPicture.asset('lib/icons/attatchment.svg')
                           ],
                         ),
                         const SizedBox(

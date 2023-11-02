@@ -1,8 +1,9 @@
 import 'package:ashwani/Screens/home.dart';
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'Screens/bom.dart';
 import 'Screens/purchase.dart';
 import 'Screens/sales.dart';
 
@@ -23,59 +24,40 @@ class _LandingBypassState extends State<LandingBypass> {
         const HomePage(),
         const SalesPage(),
         const PurchasePage(),
+        const BOM(),
       ];
     } // const BOM()
 
     List<PersistentBottomNavBarItem> navBarItems() {
       return [
         PersistentBottomNavBarItem(
-            inactiveIcon: Icon(
-              LineIcons.home,
-              color: b32,
-            ),
-            icon: Icon(
-              LineIcons.home,
-              color: blue,
-            ),
+            inactiveIcon:SvgPicture.asset('lib/icons/home.svg'),
+            icon:SvgPicture.asset('lib/icons/home_active.svg'),
             title: 'Home',
+            textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
         PersistentBottomNavBarItem(
-            inactiveIcon: Icon(
-              LineIcons.sellcast,
-              color: b32,
-            ),
-            icon: Icon(
-              LineIcons.sellcast,
-              color: blue,
-            ),
+            inactiveIcon:SvgPicture.asset('lib/icons/sales.svg'),
+            icon: SvgPicture.asset('lib/icons/sales_active.svg'),
             title: 'Sales',
+             textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
         PersistentBottomNavBarItem(
-            inactiveIcon: Icon(
-              LineIcons.shoppingBag,
-              color: b32,
-            ),
-            icon: Icon(
-              LineIcons.shoppingBag,
-              color: blue,
-            ),
+            inactiveIcon: SvgPicture.asset('lib/icons/purchase.svg'),
+            icon:SvgPicture.asset('lib/icons/purchase_active.svg'),
             title: 'Purchase',
+             textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
-        // PersistentBottomNavBarItem(
-        //     inactiveIcon: Icon(
-        //       LineIcons.pieChart,
-        //       color: b32,
-        //     ),
-        //     icon: Icon(
-        //       LineIcons.pieChart,
-        //       color: blue,
-        //     ),
-        //     title: 'BOM',
-        //     activeColorPrimary: blue,
-        //     activeColorSecondary: blue)
+        PersistentBottomNavBarItem(
+            inactiveIcon: SvgPicture.asset('lib/icons/bom.svg'),
+            icon: SvgPicture.asset('lib/icons/bom_active.svg'),
+            title: 'BOM',
+             textStyle: const TextStyle(fontWeight: FontWeight.w300),
+            activeColorPrimary: blue,
+            activeColorSecondary: blue)
       ];
     }
 

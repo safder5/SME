@@ -111,16 +111,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               secondary: const Color(colorPrimary),
               brightness: Brightness.light),
         ),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Colors.grey.shade800,
-            appBarTheme: const AppBarTheme(
-                systemOverlayStyle: SystemUiOverlayStyle.light),
-            snackBarTheme: const SnackBarThemeData(
-                contentTextStyle: TextStyle(color: Colors.white)),
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: const Color(colorPrimary),
-                brightness: Brightness.dark)),
+        themeMode: ThemeMode.light,
+        // darkTheme: ThemeData(
+        //     brightness: Brightness.dark,
+        //     scaffoldBackgroundColor: Colors.black,
+        //     appBarTheme: const AppBarTheme(
+        //         systemOverlayStyle: SystemUiOverlayStyle.light),
+        //     snackBarTheme: const SnackBarThemeData(
+        //         contentTextStyle: TextStyle(color: Colors.black)),
+        //     colorScheme: ColorScheme.fromSwatch().copyWith(
+        //         secondary: const Color(colorPrimary),
+        //         brightness: Brightness.dark)),
         debugShowCheckedModeBanner: false,
         color: const Color(colorPrimary),
         initialRoute: FirebaseAuth.instance.currentUser == null
@@ -178,8 +179,6 @@ class _LoadInventoryState extends State<LoadInventory> {
       await purchaseOP.fetchPurchaseOrders();
       await purchaseOP.fetchPurchaseActivity();
       await purchaseRP.fetchPurchaseReturns();
-      print(customerP.customers.length);
-      print(salesOP.som.length);
       setState(() {
         _loadData = true;
       });

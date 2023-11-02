@@ -24,7 +24,7 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
           heroTag: '/newPurchaseOrder',
           // elevation: 0,

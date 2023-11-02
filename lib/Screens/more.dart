@@ -14,48 +14,50 @@ class MoreFromHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: w,
-      body: SafeArea(child: Padding(
+      body: SafeArea(
+          child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-             Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(LineIcons.angleLeft)),
-                  const SizedBox(width: 10),
-                  const Text('More'),
-                  const Spacer(),
-                ],
-              ),
-              const SizedBox(height: 32,),
-              const ContainerHomeMore(
-                    title: 'Items',
-                    type: 0,
-                    action: ItemsPage(),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const ContainerHomeMore(
-                    title: 'Customers',
-                    type: 1,
-                    action: CustomerPage(),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const ContainerHomeMore(
-                    title: 'Vendors',
-                    type: 1,
-                    action: VendorPage(),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-              
+            Row(
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(LineIcons.angleLeft)),
+                const SizedBox(width: 10),
+                const Text('More'),
+                const Spacer(),
+              ],
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            const ContainerHomeMore(
+              title: 'Items',
+              type: 3,
+              action: ItemsPage(),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const ContainerHomeMore(
+              title: 'Customers',
+              type: 2,
+              action: CustomerPage(),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            const ContainerHomeMore(
+              title: 'Vendors',
+              type: 4,
+              action: VendorPage(),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
           ],
         ),
       )),

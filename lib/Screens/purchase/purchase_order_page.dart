@@ -29,7 +29,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
       PurchaseOrderModel purchaseOrder =
           pop.po.firstWhere((element) => element.orderID == widget.orderId);
       return Scaffold(
-        backgroundColor: w,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButton: Visibility(
             visible: isSelected[0] ? false : true,
             child: FloatingActionButton(

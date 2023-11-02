@@ -20,6 +20,7 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
       length: 3,
       initialIndex: widget.currentIndex,
       child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             // title: Text('Activity'),
             // leading: IconButton(

@@ -2,10 +2,9 @@ import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-
-
 
 class ContainerHomeInventory extends StatefulWidget {
   const ContainerHomeInventory(
@@ -115,11 +114,9 @@ class ContainerHomeActivity extends StatefulWidget {
       {super.key,
       required this.amt,
       required this.title,
-      required this.type,
       required this.widget});
   final String amt;
   final String title;
-  final int type;
   final Widget widget;
   @override
   State<ContainerHomeActivity> createState() => _ContainerHomeActivityState();
@@ -145,14 +142,7 @@ class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
             children: [
               CircleAvatar(
                   backgroundColor: w,
-                  child: widget.type == 0
-                      ? Icon(
-                          LineIcons.box,
-                          color: blue,
-                        )
-                      : widget.type == 1
-                          ? Icon(LineIcons.truck, color: blue)
-                          : Icon(LineIcons.truckLoading, color: blue)),
+                  child: SvgPicture.asset('lib/icons/truck.svg')),
               const SizedBox(
                 width: 15,
               ),
@@ -200,6 +190,33 @@ class ContainerHomeMore extends StatelessWidget {
   final String title;
   final int type;
   final Widget action;
+  Widget iconselect(int t) {
+    String name;
+    switch (t) {
+      case 0:
+        name = 'add_items';
+        break;
+      case 1:
+        name = 'add_customer';
+        break;
+      case 2:
+        name = 'more';
+        break;
+      case 3:
+        name = 'items';
+        break;
+        case 4:
+        name = 'vendors';
+        break;
+        // case 5:
+        // name = 'settings';
+        // break;
+      default:
+        name = 'more';
+    }
+    return SvgPicture.asset('lib/icons/$name.svg');
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -217,14 +234,7 @@ class ContainerHomeMore extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              CircleAvatar(
-                  backgroundColor: w,
-                  child: type == 0
-                      ? Icon(
-                          LineIcons.addToShoppingCart,
-                          color: blue,
-                        )
-                      : Icon(LineIcons.peopleCarry, color: blue)),
+              CircleAvatar(backgroundColor: w, child: iconselect(type)),
               const SizedBox(
                 width: 15,
               ),

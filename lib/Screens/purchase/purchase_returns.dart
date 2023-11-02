@@ -1,7 +1,6 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
-import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +16,7 @@ class _PurchaseReturnsState extends State<PurchaseReturns> {
   Widget build(BuildContext context) {
     final prProvider = Provider.of<PurchaseReturnsProvider>(context);
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           Padding(

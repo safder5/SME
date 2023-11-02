@@ -91,7 +91,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
-          color: w,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),
       child: Padding(

@@ -58,7 +58,7 @@ class _POPDetailsState extends State<POPDetails> {
       }
       return Container(
         height: (MediaQuery.of(context).size.height * 0.65) - 70,
-        color: w,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

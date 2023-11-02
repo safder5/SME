@@ -58,6 +58,7 @@ dependencies:
   provider: ^6.0.5
   country_picker: ^2.0.21
   lottie: ^2.7.0
+  flutter_svg: ^2.0.9
   
 
 
@@ -89,6 +90,7 @@ flutter:
     - lib/images/gicon.png
     - lib/images/aicon.png
     - lib/animation/
+    - lib/icons/
 
   #   - images/a_dot_ham.jpeg
 

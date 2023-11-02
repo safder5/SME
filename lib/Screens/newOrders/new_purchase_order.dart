@@ -76,7 +76,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
     final purchaseProvider = Provider.of<NPOrderProvider>(context);
     final vendorProvider = Provider.of<VendorProvider>(context);
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(

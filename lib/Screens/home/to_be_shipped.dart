@@ -10,6 +10,8 @@ class ToBeShipped extends StatefulWidget {
 class _ToBeShippedState extends State<ToBeShipped> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    );
   }
 }

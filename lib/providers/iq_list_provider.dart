@@ -48,14 +48,12 @@ class ItemsProvider with ChangeNotifier {
   }
 
   void updateItemsonSalesReturninProvider(
-      String itemName, int quantityReturned, bool inventory) {
+      String itemName, int quantityReturned) {
     final index =
         _allItems.indexWhere((element) => element.itemName == itemName);
     final item = _allItems[index];
-    if (inventory) {
-      final quantity = item.itemQuantity! + quantityReturned;
-      item.itemQuantity = quantity;
-    }
+    final quantity = item.itemQuantity! + quantityReturned;
+    item.itemQuantity = quantity;
     _allItems[index] = item;
     notifyListeners();
   }

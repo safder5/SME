@@ -55,7 +55,6 @@ class _SalesOrderReturnTransactionsState
   bool _isLoading = false;
   ItemTrackingSalesOrder track = ItemTrackingSalesOrder(itemName: 'itemName');
   bool prevData = false;
-  bool _toInventory = true;
 
   Future<void> _executeFutures(ItemTrackingSalesOrder track) async {
     updateAllProviders();
@@ -64,7 +63,7 @@ class _SalesOrderReturnTransactionsState
     await checkPrevItemReturnedData(); // we have this data already in sales order so no need to make this check REMOVE IT WITH REPLACEMENT
     await addItemtoSalesReturned(); // done
     await createSalesReturn();
-    _toInventory ? await updateInventory() : await addToWasteBucket();
+    await updateInventory(); //: await addToWasteBucket();
     await updateItemDelivered(); //keep at last
     await addActivity(); //done
   }
@@ -79,7 +78,7 @@ class _SalesOrderReturnTransactionsState
 
       Provider.of<ItemsProvider>(context, listen: false)
           .updateItemsonSalesReturninProvider(_itemnameController.text,
-              int.parse(_quantityCtrl.text), _toInventory);
+              int.parse(_quantityCtrl.text));
 
       ItemTrackingModel itemTracking = ItemTrackingModel(
           orderID: widget.orderId.toString(),
@@ -535,31 +534,31 @@ class _SalesOrderReturnTransactionsState
                     const SizedBox(
                       height: 24,
                     ),
-                    Row(
-                      children: [
-                        const Text(
-                          'Add this item back to Inventory',
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                          textScaleFactor: 1,
-                        ),
-                        const Spacer(),
-                        Switch(
-                          value: _toInventory,
-                          onChanged: (value) {
-                            // When the user toggles the switch, update the state
-                            setState(() {
-                              _toInventory = !_toInventory;
-                            });
-                          },
-                          activeColor: blue, // Color when switch is ON
-                          activeTrackColor: Colors
-                              .lightBlueAccent, // Track color when switch is ON
-                          inactiveThumbColor: b, // Color when switch is OFF
-                          inactiveTrackColor:
-                              b25, // Track color when switch is OFF
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     const Text(
+                    //       'Add this item back to Inventory',
+                    //       style: TextStyle(fontWeight: FontWeight.w300),
+                    //       textScaleFactor: 1,
+                    //     ),
+                    //     const Spacer(),
+                    //     Switch(
+                    //       value: _toInventory,
+                    //       onChanged: (value) {
+                    //         // When the user toggles the switch, update the state
+                    //         setState(() {
+                    //           _toInventory = !_toInventory;
+                    //         });
+                    //       },
+                    //       activeColor: blue, // Color when switch is ON
+                    //       activeTrackColor: Colors
+                    //           .lightBlueAccent, // Track color when switch is ON
+                    //       inactiveThumbColor: b, // Color when switch is OFF
+                    //       inactiveTrackColor:
+                    //           b25, // Track color when switch is OFF
+                    //     ),
+                    //   ],
+                    // ),
                     const Spacer(),
                     // const SizedBox(height: 24,),
                     GestureDetector(
@@ -586,7 +585,6 @@ class _SalesOrderReturnTransactionsState
                                   orderId: widget.orderId,
                                   itemname: _itemnameController.text,
                                   referenceNo: _referencenoCtrl.text,
-                                  toInventory: _toInventory,
                                   date: DateFormat('dd-MM-yyyy').format(now),
                                   quantitySalesReturned: quantityReturnedValue);
 

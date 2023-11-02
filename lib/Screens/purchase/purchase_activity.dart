@@ -1,6 +1,5 @@
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
-import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,7 @@ class _PurchaseActivityState extends State<PurchaseActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           Padding(

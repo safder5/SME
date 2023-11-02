@@ -144,7 +144,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
           ),
         ),
       ),
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
