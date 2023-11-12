@@ -1,3 +1,4 @@
+import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/Providers/bs_address_provider.dart';
 import 'package:ashwani/Providers/customer_provider.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
@@ -83,7 +84,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (!_initialise) {
       return Container(
           color: Colors.white,
-          child: Lottie.asset('lib/animation/ani6.json',fit: BoxFit.contain));
+          child: Lottie.asset('lib/animation/ani6.json', fit: BoxFit.contain));
     }
     return MultiProvider(
       providers: [
@@ -96,12 +97,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(create: (context) => VendorProvider()),
         ChangeNotifierProvider(create: (context) => SalesReturnsProvider()),
         ChangeNotifierProvider(create: (context) => PurchaseReturnsProvider()),
+        ChangeNotifierProvider(create: (context) => BOMProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+          useMaterial3: true,
           brightness: Brightness.light,
-          scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          scaffoldBackgroundColor: const Color(0xFFF1F3F5),
           appBarTheme:
               const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
           snackBarTheme: const SnackBarThemeData(
@@ -167,6 +170,7 @@ class _LoadInventoryState extends State<LoadInventory> {
     final purchaseOP = Provider.of<NPOrderProvider>(context, listen: false);
     final purchaseRP =
         Provider.of<PurchaseReturnsProvider>(context, listen: false);
+    final bomP = Provider.of<BOMProvider>(context, listen: false);
     try {
       await customerP.fetchAllCustomers();
       await vendorP.fetchAllVendors();
@@ -179,6 +183,8 @@ class _LoadInventoryState extends State<LoadInventory> {
       await purchaseOP.fetchPurchaseOrders();
       await purchaseOP.fetchPurchaseActivity();
       await purchaseRP.fetchPurchaseReturns();
+      await bomP.fetchBOMS();
+
       setState(() {
         _loadData = true;
       });
@@ -200,7 +206,7 @@ class _LoadInventoryState extends State<LoadInventory> {
     if (!_loadData) {
       return Container(
           color: w,
-          child: Lottie.asset('lib/animation/ani6.json',fit: BoxFit.contain));
+          child: Lottie.asset('lib/animation/ani6.json', fit: BoxFit.contain));
     }
     if (_err) {
       return Scaffold(

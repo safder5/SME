@@ -62,7 +62,7 @@ class _SalesReturnsState extends State<SalesReturns> {
   Widget build(BuildContext context) {
     final srProvider = Provider.of<SalesReturnsProvider>(context);
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           Padding(
@@ -114,7 +114,7 @@ class _SalesReturnsState extends State<SalesReturns> {
                         itemCount: srList.length,
                         itemBuilder: (context, index) {
                           final salesReturn = srProvider.sr[index];
-                          print(salesReturn.itemname);
+                          // print(salesReturn.itemname);
                           return ContainerSalesReturn(
                             itemname: salesReturn.itemname,
                             orderId: salesReturn.orderId,

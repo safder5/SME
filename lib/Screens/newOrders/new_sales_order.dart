@@ -254,7 +254,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                 final item = soItemsProvider.soItems[index];
                                 return NewSalesOrderItemsTile(
                                   index: index,
-                                  name: item.itemName ?? '',
+                                  name: item.itemName,
                                   quantity: item.quantitySales.toString(),
                                 );
                               }),
@@ -265,11 +265,11 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           },
                           child: GestureDetector(
                             onTap: () async {
-                              await soItemsProvider.getItems();
+                              // await soItemsProvider.getItems();
                               List<String> itemNames = [];
                               try {
                                 for (Item element in soItemsProvider.allItems) {
-                                  itemNames.add(element.itemName!);
+                                  itemNames.add(element.itemName);
                                 }
                               } catch (e) {
                                 print(e);

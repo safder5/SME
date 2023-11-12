@@ -29,7 +29,7 @@ class _CustomerPageState extends State<CustomerPage> {
           ),
         ),
       ),
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
           child: SingleChildScrollView(
         child: Padding(

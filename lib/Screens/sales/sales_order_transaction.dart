@@ -338,7 +338,7 @@ class _SalesOrderTransactionsShippedState
   }
 
   String? validateSOIQ(String? value) {
-    if (selectedItem.itemName!.isEmpty) {
+    if (selectedItem.itemName.isEmpty) {
       return null;
     }
     if (value == null || value.isEmpty) {
@@ -493,7 +493,7 @@ class _SalesOrderTransactionsShippedState
           ),
         ),
       ),
-      if (_isLoading) LoadingOverlay()
+      if (_isLoading) const LoadingOverlay()
     ]);
   }
 }

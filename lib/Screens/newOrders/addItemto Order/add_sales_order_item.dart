@@ -40,7 +40,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
     if (item != '') {
       try {
         for (var i in widget.items!) {
-          if (i.itemName! == item) {
+          if (i.itemName == item) {
             setState(() {
               selectedItem = i;
               itemLimit = (i.itemQuantity! - i.quantitySales!).toString();
@@ -56,7 +56,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
   }
 
   String? validateSOIQ(String? value) {
-    if (selectedItem.itemName!.isEmpty) {
+    if (selectedItem.itemName.isEmpty) {
       return null;
     }
     if (value == null || value.isEmpty) {

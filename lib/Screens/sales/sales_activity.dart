@@ -1,4 +1,3 @@
-import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +53,6 @@ class _SalesActivityState extends State<SalesActivity> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // chackProviderforData();
     // fetchPurchaseActivity(context);
@@ -63,7 +61,7 @@ class _SalesActivityState extends State<SalesActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           Padding(

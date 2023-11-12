@@ -70,7 +70,7 @@ class _AddItemsState extends State<AddItems> {
   }
 
   String itemName = '';
-  String sIh = '';
+  String sIh = '0';
   String imgUrl = '';
   bool ra = false;
   List<String>? measuringUnit = [
@@ -118,14 +118,14 @@ class _AddItemsState extends State<AddItems> {
             // imgUrl = await uploadImageAndUrl();
             ItemTrackingModel itm = ItemTrackingModel(
                 orderID: _auth?.email,
-                quantity: int.parse(itemQuantityCtrl.text),
+                quantity: int.parse(sIh),
                 reason: 'By User');
             Item item = Item(
                 imageURL: imgUrl,
                 itemName: itemName,
                 quantityPurchase: qfp,
                 quantitySales: qfs,
-                itemQuantity: int.parse(itemQuantityCtrl.text),
+                itemQuantity: int.parse(sIh),
                 itemTracks: [itm]);
 
             await itemProviderforAddingItem.addItemtoFB(item, collRef);
@@ -185,29 +185,29 @@ class _AddItemsState extends State<AddItems> {
                         // });
                         //upload image
                       },
-                      child:  Container(
-                      height: 90,
-                      width: 90,
-                      decoration: BoxDecoration(
-                          color: t,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: blue)),
-                      child: const Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              LineIcons.plus,
-                              size: 12,
-                            ),
-                            Text(
-                              'Upload Image',
-                              style: TextStyle(fontSize: 8),
-                            )
-                          ],
+                      child: Container(
+                        height: 90,
+                        width: 90,
+                        decoration: BoxDecoration(
+                            color: t,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: blue)),
+                        child: const Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                LineIcons.plus,
+                                size: 12,
+                              ),
+                              Text(
+                                'Upload Image',
+                                style: TextStyle(fontSize: 8),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                            )),
+                      )),
                 ],
               ),
               const SizedBox(

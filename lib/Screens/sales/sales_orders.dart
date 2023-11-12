@@ -89,7 +89,7 @@ class _SalesOrdersState extends State<SalesOrders> {
   Widget build(BuildContext context) {
     // final soProvider = Provider.of<NSOrderProvider>(context);
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
           heroTag: null,
           // elevation: 0,
@@ -174,7 +174,7 @@ class _SalesOrdersState extends State<SalesOrders> {
                 // ),
                 Consumer<NSOrderProvider>(builder: (_, provider, __) {
                   final salesOrders = provider.som.reversed.toList();
-                  print(salesOrders.length);
+                  // print(salesOrders.length);
                   if (salesOrders.isEmpty) {
                     return const Center(
                       child: Text('No Customers yet, Add Below '),

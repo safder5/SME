@@ -403,7 +403,7 @@ class _SalesOrderReturnTransactionsState
   }
 
   String? validateSOIQ(String? value) {
-    if (selectedItem.itemName!.isEmpty) {
+    if (selectedItem.itemName.isEmpty) {
       return null;
     }
     if (value == null || value.isEmpty) {
@@ -623,7 +623,7 @@ class _SalesOrderReturnTransactionsState
             ),
           ),
         ),
-        if (_isLoading) LoadingOverlay()
+        if (_isLoading) const LoadingOverlay()
       ],
     );
   }

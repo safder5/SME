@@ -35,7 +35,7 @@ class _ItemsPageState extends State<ItemsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
         backgroundColor: blue,
         onPressed: () {
@@ -86,7 +86,7 @@ class _ItemsPageState extends State<ItemsPage> {
                                             )));
                               },
                               child: ItemsPageContainer(
-                                  itemName: items[index].itemName!,
+                                  itemName: items[index].itemName,
                                   sku: items[index].itemQuantity.toString()),
                             );
                           })),

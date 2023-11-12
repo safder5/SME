@@ -325,7 +325,7 @@ class _PurchaseOrderRecievedItemsState
   }
 
   String? validatePOIQ(String? value) {
-    if (selectedItem.itemName!.isEmpty) {
+    if (selectedItem.itemName.isEmpty) {
       return null;
     }
     if (value == null || value.isEmpty) {
@@ -494,7 +494,7 @@ class _PurchaseOrderRecievedItemsState
                 ),
               ),
             )),
-        if (_isLoading) LoadingOverlay()
+        if (_isLoading)const  LoadingOverlay()
       ],
     );
   }

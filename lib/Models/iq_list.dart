@@ -1,7 +1,7 @@
 import 'package:ashwani/Models/item_tracking_model.dart';
 
 class Item {
-  final String? itemName;
+  final String itemName;
   int? originalQuantity;
   int? itemQuantity;
   int? quantityPurchase;
@@ -10,6 +10,7 @@ class Item {
   int? quantitySalesReturned;
   List<ItemTrackingModel>? itemTracks;
   String? imageURL;
+  bool? bom;
 
   Item({
     required this.itemName,
@@ -21,6 +22,7 @@ class Item {
     this.imageURL,
     this.quantitySalesDelivered,
     this.quantitySalesReturned,
+    this.bom
   });
 }
 

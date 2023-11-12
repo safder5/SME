@@ -101,6 +101,7 @@ class ItemsProvider with ChangeNotifier {
           quantitySales: data['quantitySales'],
           itemTracks: [],
           imageURL: data['imageURL'],
+          bom: data['bom'],
         );
 
         final trackSnapshot = await doc.reference.collection('tracks').get();
@@ -127,6 +128,32 @@ class ItemsProvider with ChangeNotifier {
         'itemQuantity': item.itemQuantity,
         'quantityPurchase': item.quantityPurchase,
         'quantitySales': item.quantitySales,
+        'bom': false,
+      });
+
+      CollectionReference cr =
+          collRef.doc(item.itemName.toString()).collection('tracks');
+
+      final id = item.itemTracks?[0].orderID;
+      await cr.doc(id).set({
+        "orderID": item.itemTracks![0].orderID,
+        'quantity': item.itemTracks![0].quantity,
+        'reason': item.itemTracks![0].reason,
+      });
+      notifyListeners();
+    } catch (e) {
+      print('error uploading item to fb $e');
+    }
+  }
+
+  Future<void> addBOMProducttoFBasItem(Item item, CollectionReference collRef) async {
+    try {
+      await collRef.doc(item.itemName.toString()).set({
+        'itemName': item.itemName,
+        'itemQuantity': item.itemQuantity,
+        'quantityPurchase': item.quantityPurchase,
+        'quantitySales': item.quantitySales,
+        'bom': item.bom,
       });
 
       CollectionReference cr =

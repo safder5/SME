@@ -32,7 +32,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
     if (item != '') {
       try {
         for (var i in widget.items) {
-          if (i.itemName! == item) {
+          if (i.itemName == item) {
             setState(() {
               selectedItem = i;
               itemLimit = (i.itemQuantity! - i.quantitySales!).toString();

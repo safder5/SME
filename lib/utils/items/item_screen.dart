@@ -62,7 +62,7 @@ class _ItemScreenState extends State<ItemScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.item.itemName!,
+                                widget.item.itemName,
                                 style: TextStyle(
                                     color: w, fontWeight: FontWeight.w600),
                                 textScaleFactor: 1.6,

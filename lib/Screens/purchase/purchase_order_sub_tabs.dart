@@ -94,7 +94,7 @@ class _POPDetailsState extends State<POPDetails> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return PoDetailsItemTile(
-                      name: items[index].itemName!,
+                      name: items[index].itemName,
                       quantity: items[index].quantityPurchase.toString(),
                       index: index,
                       original: items[index].originalQuantity ?? 0,

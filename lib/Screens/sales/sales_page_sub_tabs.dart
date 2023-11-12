@@ -110,7 +110,7 @@ class _SOPDetailsState extends State<SOPDetails> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return SOPDetailsItemTile(
-                      name: items[index].itemName!,
+                      name: items[index].itemName,
                       quantity: items[index].quantitySales.toString(),
                       index: index,
                       original: items[index].originalQuantity ?? 0,
@@ -222,7 +222,7 @@ class _SOPShippedState extends State<SOPShipped> {
                         quantity: itemsDelivered[index]
                             .quantitySalesDelivered
                             .toString(),
-                        itemName: itemsDelivered[index].itemName!,
+                        itemName: itemsDelivered[index].itemName,
                         quantityReturned:
                             itemsDelivered[index].quantitySalesReturned ?? 0,
                         index: index);
@@ -278,7 +278,7 @@ class _SOPReturnsState extends State<SOPReturns> {
                             quantity: itemsReturned[index]
                                 .quantitySalesReturned
                                 .toString(),
-                            itemName: itemsReturned[index].itemName!,
+                            itemName: itemsReturned[index].itemName,
                             index: index,
                           );
                         },

@@ -1,4 +1,5 @@
 import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,9 @@ class _ContainerHomeInventoryState extends State<ContainerHomeInventory> {
       height: 66.0,
       width: MediaQuery.of(context).size.width / 2.4,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: const Color(0xFFF7F7F7)),
+        borderRadius: BorderRadius.circular(10.0),
+        color: Theme.of(context).scaffoldBackgroundColor,
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
@@ -131,17 +133,16 @@ class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
             context, MaterialPageRoute(builder: (context) => widget.widget));
       },
       child: Container(
-        height: 66.0,
+        height: 76.0,
         width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: const Color(0xFFF7F7F7),
-            borderRadius: BorderRadius.circular(10.0)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10.0)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
               CircleAvatar(
-                  backgroundColor: w,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   child: SvgPicture.asset('lib/icons/truck.svg')),
               const SizedBox(
                 width: 15,
@@ -157,7 +158,7 @@ class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
                   Text(
                     widget.title,
                     style: const TextStyle(fontWeight: FontWeight.w200),
-                    textScaleFactor: 0.8,
+                    textScaleFactor: 1,
                   )
                 ],
               ),
@@ -205,12 +206,12 @@ class ContainerHomeMore extends StatelessWidget {
       case 3:
         name = 'items';
         break;
-        case 4:
+      case 4:
         name = 'vendors';
         break;
-        // case 5:
-        // name = 'settings';
-        // break;
+      // case 5:
+      // name = 'settings';
+      // break;
       default:
         name = 'more';
     }
@@ -225,16 +226,17 @@ class ContainerHomeMore extends StatelessWidget {
             .push(MaterialPageRoute(builder: (context) => action));
       },
       child: Container(
-        height: 66.0,
+        height: 71.0,
         width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: const Color(0xFFF7F7F7),
-            borderRadius: BorderRadius.circular(10.0)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10.0)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              CircleAvatar(backgroundColor: w, child: iconselect(type)),
+              CircleAvatar(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  child: iconselect(type)),
               const SizedBox(
                 width: 15,
               ),
@@ -280,11 +282,10 @@ class ContainerSalesOrder extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
-        height: 105.0,
+        height: 113.0,
         width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: f7.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Column(
@@ -363,9 +364,8 @@ class ContainerPurchaseReturn extends StatelessWidget {
       child: Container(
         height: 80.0,
         width: MediaQuery.of(context).size.width - 64,
-        decoration: BoxDecoration(
-            color: f7.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Column(
@@ -458,9 +458,8 @@ class ContainerSalesReturn extends StatelessWidget {
       child: Container(
         height: 80.0,
         width: MediaQuery.of(context).size.width - 64,
-        decoration: BoxDecoration(
-            color: f7.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: Column(
@@ -553,9 +552,8 @@ class ContainerPurchaseOrder extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: f7.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -614,9 +612,8 @@ class PurchaseActivityTile extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: f7.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -691,9 +688,8 @@ class SalesActivityTile extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: f7.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(10)),
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -770,8 +766,8 @@ class ItemsPageContainer extends StatelessWidget {
       children: [
         Container(
           decoration:
-              BoxDecoration(color: f7, borderRadius: BorderRadius.circular(10)),
-          height: 85,
+              BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
+          height: 92,
           width: double.infinity,
           child: Padding(
             padding:
@@ -838,8 +834,8 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
       children: [
         Container(
           decoration:
-              BoxDecoration(color: f7, borderRadius: BorderRadius.circular(10)),
-          height: 85,
+              BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
+          height: 92,
           width: double.infinity,
           child: Padding(
             padding:
@@ -886,6 +882,77 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
           height: 16,
         )
       ],
+    );
+  }
+}
+
+class NewBomOrderItemTile extends StatelessWidget {
+  final String name;
+  final String quantity;
+  final int index;
+  const NewBomOrderItemTile(
+      {super.key,
+      required this.name,
+      required this.quantity,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final itemProvider = Provider.of<BOMProvider>(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14.0),
+      child: Container(
+        height: 66,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: f7.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14.0,
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5), color: w),
+                child: null,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Units : ${quantity.toString()}',
+                    textScaleFactor: 0.8,
+                    style: TextStyle(
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              IconButton(
+                  onPressed: () {
+                    itemProvider.removeItem(index);
+                  },
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    size: 18,
+                  ))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

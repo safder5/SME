@@ -225,7 +225,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                                 final item = poItemsProvider.poItems[index];
                                 return NewPurchaseOrderItemsTile(
                                   index: index,
-                                  name: item.itemName ?? '',
+                                  name: item.itemName,
                                   quantity: item.quantityPurchase.toString(),
                                 );
                               }),
