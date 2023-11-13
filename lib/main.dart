@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           appBarTheme:
               const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
           snackBarTheme: const SnackBarThemeData(
-            contentTextStyle: TextStyle(color: Colors.white),
+            contentTextStyle: TextStyle(color: Colors.white), 
           ),
           colorScheme: ColorScheme.fromSwatch().copyWith(
               secondary: const Color(colorPrimary),

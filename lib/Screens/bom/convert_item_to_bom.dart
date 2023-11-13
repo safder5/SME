@@ -1,39 +1,25 @@
-import 'package:ashwani/Models/bom_model.dart';
-import 'package:ashwani/Providers/bom_providers.dart';
-import 'package:ashwani/Providers/iq_list_provider.dart';
-import 'package:ashwani/Screens/newOrders/bom/add_new_bom_item.dart';
-import 'package:ashwani/Services/helper.dart';
-import 'package:ashwani/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Models/iq_list.dart';
-import '../../../Models/item_tracking_model.dart';
-import '../../../constantWidgets/boxes.dart';
+import '../../Models/bom_model.dart';
+import '../../Providers/bom_providers.dart';
+import '../../Providers/iq_list_provider.dart';
+import '../../Services/helper.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import '../newOrders/bom/add_new_bom_item.dart';
 
-class NewBOM extends StatefulWidget {
-  const NewBOM({super.key});
+class ConvertItemtoBOM extends StatefulWidget {
+  const ConvertItemtoBOM({super.key, required this.productName});
+  final String productName;
 
   @override
-  State<NewBOM> createState() => _NewBOMState();
+  State<ConvertItemtoBOM> createState() => _ConvertItemtoBOMState();
 }
 
-class _NewBOMState extends State<NewBOM> {
-  final _auth = FirebaseAuth.instance.currentUser;
-  final _fs = FirebaseFirestore.instance;
-  bool itemExists(String name) {
-    final itemsProvider = Provider.of<ItemsProvider>(context, listen: false);
-    if (itemsProvider.getItemNames().contains(name)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
+class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
   Future<void> _executeFutures(BOMmodel bom) async {
     final provider = Provider.of<BOMProvider>(context, listen: false);
     await provider.uploadBOMtoDB(bom);
@@ -42,38 +28,15 @@ class _NewBOMState extends State<NewBOM> {
     uploadtoInventory();
   }
 
-  String? validProductName(String? value) {
-    final itemsProvider = Provider.of<ItemsProvider>(context, listen: false);
-    if (itemsProvider.getItemNames().contains(value)) {
-      return "Item already exists in Inventory";
-    } else if (value == null) {
-      return " Enter Product Name";
-    }
-    return null;
-  }
-
   void uploadtoInventory() async {
     try {
-      CollectionReference collRef =
-          _fs.collection('UserData').doc('${_auth!.email}').collection('Items');
-
-      ItemTrackingModel itm = ItemTrackingModel(
-          orderID: _auth?.email, quantity: 0, reason: 'Created BOM');
-      Item item = Item(
-          imageURL: "",
-          itemName: _productName.text,
-          quantityPurchase: 0,
-          quantitySales: 0,
-          itemQuantity: 0,
-          bom: true,
-          itemTracks: [itm]);
-
       final itemProviderforAddingItem =
           Provider.of<ItemsProvider>(context, listen: false);
-      await itemProviderforAddingItem.addBOMProducttoFBasItem(item, collRef);
-      itemProviderforAddingItem.addInvItemtoProvider(item, itm);
+      await itemProviderforAddingItem
+          .updateItemAsBOMtoFirebase(widget.productName);
+      itemProviderforAddingItem.updateItemAsBOMinProvider(widget.productName);
     } catch (e) {
-      print('error uploading bom to inv #e');
+      print('error uploading existing item as bom to inv $e');
     }
   }
 
@@ -97,14 +60,13 @@ class _NewBOMState extends State<NewBOM> {
   }
 
   bool _isLoading = false;
-  final TextEditingController _productName = TextEditingController();
+  // final TextEditingController _productName = TextEditingController();
   final TextEditingController _notes = TextEditingController();
   final TextEditingController _productCode = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final bomProvider = Provider.of<BOMProvider>(context);
     final itemsProvider = Provider.of<ItemsProvider>(context);
-    print(itemsProvider.getItemNames().length);
     return Stack(
       children: [
         Scaffold(
@@ -130,11 +92,9 @@ class _NewBOMState extends State<NewBOM> {
                       height: 24,
                     ),
                     TextFormField(
-                      validator: validProductName,
-                      // onChanged: (value) {
-                      //   validateName(value);
-                      // },
-                      controller: _productName,
+                      controller:
+                          TextEditingController(text: widget.productName),
+                      readOnly: true,
                       decoration: getInputDecoration(
                           hint: 'Product Name', errorColor: r),
                     ),
@@ -147,44 +107,43 @@ class _NewBOMState extends State<NewBOM> {
                       },
                       child: GestureDetector(
                         onTap: () async {
-                          if (_productName.text.isNotEmpty) {
-                            // validateName(_productName.text);
-                            List<String> itemNames = [];
-                            try {
-                              for (Item element in itemsProvider.allItems) {
-                                itemNames.add(element.itemName);
-                              }
-                            } catch (e) {
-                              print(e);
-                            }
-                            // if the list of get items is empty dont show modal display message add items
-                            // or show modal and create items on the go not an organised way tho
-                            //show BottomModalSheet
-                            if (!context.mounted) return;
-                            showModalBottomSheet<dynamic>(
-                                backgroundColor: t,
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AddNewBOMItems(
-                                      items: itemsProvider.allItems
-                                          .where((element) =>
-                                              element.itemName !=
-                                              _productName.text.trim())
-                                          .map((item) => item.itemName)
-                                          .toList());
-                                });
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: blue,
-                              content: Text(
-                                'Enter Product Name First',
-                                style: TextStyle(color: w),
-                              ),
-                              duration: const Duration(seconds: 2),
-                              elevation: 6,
-                            ));
-                          }
+                          // validateName(_productName.text);
+                          // List<String> itemNames = [];
+                          // try {
+                          //   for (Item element in itemsProvider.allItems) {
+                          //     itemNames.add(element.itemName);
+                          //   }
+                          // } catch (e) {
+                          //   print(e);
+                          // }
+                          // if the list of get items is empty dont show modal display message add items
+                          // or show modal and create items on the go not an organised way tho
+                          //show BottomModalSheet
+                          if (!context.mounted) return;
+                          showModalBottomSheet<dynamic>(
+                              backgroundColor: t,
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AddNewBOMItems(
+                                    items: itemsProvider.allItems
+                                        .where((element) =>
+                                            element.itemName !=
+                                            widget.productName)
+                                        .map((item) => item.itemName)
+                                        .toList());
+                              });
+                          //  else {
+                          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          //     backgroundColor: blue,
+                          //     content: Text(
+                          //       'Enter Product Name First',
+                          //       style: TextStyle(color: w),
+                          //     ),
+                          //     duration: const Duration(seconds: 2),
+                          //     elevation: 6,
+                          //   ));
+                          // }
                         },
                         child: AbsorbPointer(
                           child: Container(
@@ -245,11 +204,9 @@ class _NewBOMState extends State<NewBOM> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (bomProvider.items.isNotEmpty &&
-                            _productName.text.trim().isNotEmpty &&
-                            !itemExists(_productName.text)) {
+                        if (bomProvider.items.isNotEmpty) {
                           BOMmodel bom = BOMmodel(
-                              productName: _productName.text.toString(),
+                              productName: widget.productName,
                               itemswithQuantities: bomProvider.items,
                               notes: _notes.text,
                               productCode: _productCode.text);
@@ -258,29 +215,7 @@ class _NewBOMState extends State<NewBOM> {
                           } catch (e) {
                             print('error in submit $e');
                           }
-                        } else if (_productName.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: blue,
-                            content: Text(
-                              'Itemname is empty',
-                              style: TextStyle(color: w),
-                            ),
-                            duration: const Duration(seconds: 2),
-                            elevation: 6,
-                          ));
-                        } else if (itemExists(_productName.text)) {
-                          // show snackbar that product already exists
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: blue,
-                            content: Text(
-                              'Product Name already Exists!',
-                              style: TextStyle(color: w),
-                            ),
-                            duration: const Duration(seconds: 2),
-                            elevation: 6,
-                          ));
                         }
-
                         // check form sate is valid or fields are not empty
                         // upload the bom model to fb
                         // add this bom model in its provider

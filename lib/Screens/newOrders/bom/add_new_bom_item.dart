@@ -14,8 +14,8 @@ import '../../../constantWidgets/boxes.dart';
 import '../../../constants.dart';
 
 class AddNewBOMItems extends StatefulWidget {
-  const AddNewBOMItems({super.key, this.items});
-  final List<Item>? items;
+  const AddNewBOMItems({super.key, required this.items});
+  final List<String> items;
 
   @override
   State<AddNewBOMItems> createState() => _AddNewBOMItemsState();
@@ -101,7 +101,7 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
                     ),
                   ),
                 ),
-                initialList: itemsProvider.getItemNames(),
+                initialList: widget.items,
               ),
               const SizedBox(
                 height: 24,

@@ -15,6 +15,9 @@ class ItemsProvider with ChangeNotifier {
   List<Item> get poItems => _poItems;
   List<Item> get salesDelivered => _salesDelivered;
 
+  final _auth = FirebaseAuth.instance.currentUser;
+  final _fs = FirebaseFirestore.instance;
+
   void addInvItemtoProvider(Item item, ItemTrackingModel track) {
     Item i = item;
     i.itemTracks = [track];
@@ -82,6 +85,25 @@ class ItemsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateItemAsBOMinProvider(String itemName) {
+    final index =
+        _allItems.indexWhere((element) => element.itemName == itemName);
+    final item = _allItems[index];
+    item.bom = true;
+    _allItems[index] = item;
+    notifyListeners();
+  }
+
+  Future<void> updateItemAsBOMtoFirebase(String itemName) async {
+    DocumentReference collRef = _fs
+        .collection('UserData')
+        .doc('${_auth!.email}')
+        .collection('Items')
+        .doc(itemName);
+
+    await collRef.update({"bom": true});
+  }
+
   Future<void> getItems() async {
     try {
       final auth = FirebaseAuth.instance.currentUser;
@@ -146,7 +168,8 @@ class ItemsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addBOMProducttoFBasItem(Item item, CollectionReference collRef) async {
+  Future<void> addBOMProducttoFBasItem(
+      Item item, CollectionReference collRef) async {
     try {
       await collRef.doc(item.itemName.toString()).set({
         'itemName': item.itemName,
@@ -251,7 +274,7 @@ class ItemsProvider with ChangeNotifier {
 
   Future<void> addSOItemstoFB(CollectionReference collRef) async {}
 
-  List<String?> getItemNames() {
+  List<String> getItemNames() {
     return _allItems.map((item) => item.itemName).toList();
   }
 
