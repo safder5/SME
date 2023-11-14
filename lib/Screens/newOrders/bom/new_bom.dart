@@ -40,6 +40,7 @@ class _NewBOMState extends State<NewBOM> {
     provider.addBOMtoProv(bom);
     // add item to database and provider
     uploadtoInventory();
+    provider.clearItems();
   }
 
   String? validProductName(String? value) {

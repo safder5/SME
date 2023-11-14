@@ -119,7 +119,7 @@ class _SalesReturnsState extends State<SalesReturns> {
                             itemname: salesReturn.itemname,
                             orderId: salesReturn.orderId,
                             quantity: salesReturn.quantitySalesReturned!,
-                            toInventory: salesReturn.toInventory!,
+                            // toInventory: salesReturn.toInventory!,
                           );
                         }),
                   );

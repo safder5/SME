@@ -180,25 +180,25 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                //marking status
-                              },
-                              child: Container(
-                                height: 35,
-                                width: 115,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(width: 0.7, color: w)),
-                                child: Center(
-                                    child: Text(
-                                  'Mark as Recieved',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500, color: w),
-                                  textScaleFactor: 0.8,
-                                )),
-                              ),
-                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     //marking status
+                            //   },
+                            //   child: Container(
+                            //     height: 35,
+                            //     width: 115,
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(5),
+                            //         border: Border.all(width: 0.7, color: w)),
+                            //     child: Center(
+                            //         child: Text(
+                            //       'Mark as Recieved',
+                            //       style: TextStyle(
+                            //           fontWeight: FontWeight.w500, color: w),
+                            //       textScaleFactor: 0.8,
+                            //     )),
+                            //   ),
+                            // ),
                             Text(
                               'Delivery date : ${purchaseOrder.deliveryDate!}',
                               style: TextStyle(color: w),

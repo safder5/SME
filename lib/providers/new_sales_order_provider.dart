@@ -62,6 +62,27 @@ class NSOrderProvider with ChangeNotifier {
     }
   }
 
+  void updateSalesOrderDetailsOnReturninProviders(
+      String name, int qreturned, int orderId) {
+    try {
+      final orderIndex =
+          _so.indexWhere((element) => element.orderID == orderId);
+      final order = _so[orderIndex];
+      final items = order.items ?? [];
+      final itemsToUpdateIndex =
+          items.indexWhere((element) => element.itemName == name);
+      final itemtoUpdate = items[itemsToUpdateIndex];
+      final qSales = itemtoUpdate.quantitySales ?? 0;
+      itemtoUpdate.quantitySales = qSales + qreturned;
+      items[itemsToUpdateIndex] = itemtoUpdate;
+      order.items = items;
+      _so[orderIndex] = order;
+      notifyListeners();
+    } catch (e) {
+      print('error while updating updateSalesOrderDetailsOnReturninProviders');
+    }
+  }
+
   Future<void> addSalesOrder(SalesOrderModel so) async {
     try {
       await _salesOrderCollection.doc(so.orderID.toString()).set({

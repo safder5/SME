@@ -1,6 +1,5 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
-import 'package:ashwani/Models/waste_bucket_model.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
@@ -50,14 +49,13 @@ class _SalesOrderReturnTransactionsState
   int? quantitysr = 0;
   String itemName = '';
   String itemUrl = '';
-  String itemLimit = '';
+  int itemLimit = 0;
   final now = DateTime.now();
   bool _isLoading = false;
   ItemTrackingSalesOrder track = ItemTrackingSalesOrder(itemName: 'itemName');
   bool prevData = false;
 
   Future<void> _executeFutures(ItemTrackingSalesOrder track) async {
-    updateAllProviders();
     await uploadTrack(track);
     await uploadItemInventorytracks(); //done
     await checkPrevItemReturnedData(); // we have this data already in sales order so no need to make this check REMOVE IT WITH REPLACEMENT
@@ -66,36 +64,39 @@ class _SalesOrderReturnTransactionsState
     await updateInventory(); //: await addToWasteBucket();
     await updateItemDelivered(); //keep at last
     await addActivity(); //done
+    updateAllProviders();
   }
 
   void updateAllProviders() {
     try {
-      Provider.of<NSOrderProvider>(context, listen: false)
-          .updateSalesActivityinProvider(track);
+      final prov = Provider.of<NSOrderProvider>(context, listen: false);
+      final itemprov = Provider.of<ItemsProvider>(context, listen: false);
 
-      Provider.of<SalesReturnsProvider>(context, listen: false)
-          .addSalesReturninProvider(rit);
-
-      Provider.of<ItemsProvider>(context, listen: false)
-          .updateItemsonSalesReturninProvider(_itemnameController.text,
-              int.parse(_quantityCtrl.text));
+      itemprov.updateItemsonSalesReturninProvider(
+          _itemnameController.text, int.parse(_quantityCtrl.text));
 
       ItemTrackingModel itemTracking = ItemTrackingModel(
           orderID: widget.orderId.toString(),
           quantity: quantityReturned,
           reason: 'Sales Return');
 
-      Provider.of<ItemsProvider>(context, listen: false)
-          .addItemtrackinProvider(itemTracking, _itemnameController.text);
+      itemprov.addItemtrackinProvider(itemTracking, _itemnameController.text);
 
-      Provider.of<NSOrderProvider>(context, listen: false)
-          .updateSalesItemsReturnedProviders(
-              widget.orderId,
-              _itemnameController.text,
-              int.parse(_quantityCtrl.text),
-              Item(
-                  itemName: _itemnameController.text,
-                  quantitySalesReturned: int.parse(_quantityCtrl.text)));
+      prov.updateSalesActivityinProvider(track);
+
+      prov.updateSalesItemsReturnedProviders(
+          widget.orderId,
+          _itemnameController.text,
+          int.parse(_quantityCtrl.text),
+          Item(
+              itemName: _itemnameController.text,
+              quantitySalesReturned: int.parse(_quantityCtrl.text)));
+
+      prov.updateSalesOrderDetailsOnReturninProviders(_itemnameController.text,
+          int.parse(_quantityCtrl.text), widget.orderId);
+
+      Provider.of<SalesReturnsProvider>(context, listen: false)
+          .addSalesReturninProvider(rit);
     } catch (e) {
       print('error $e');
     }
@@ -166,81 +167,98 @@ class _SalesOrderReturnTransactionsState
   }
 
   Future<void> updateItemDelivered() async {
-    await FirebaseFirestore.instance
-        .collection('UserData')
-        .doc(auth!.email)
-        .collection('orders')
-        .doc('sales')
-        .collection('sales_orders')
-        .doc(widget.orderId.toString())
-        .collection('itemsDelivered')
-        .doc(_itemnameController.text)
-        .update({
-      'quantitySalesReturned':
-          (selectedItem.quantitySalesReturned! + int.parse(_quantityCtrl.text)),
-      'quantitySalesDelivered':
-          (selectedItem.quantitySalesDelivered! - int.parse(_quantityCtrl.text))
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('sales')
+          .collection('sales_orders')
+          .doc(widget.orderId.toString())
+          .collection('itemsDelivered')
+          .doc(_itemnameController.text)
+          .update({
+        'quantitySalesReturned': (selectedItem.quantitySalesReturned! +
+            int.parse(_quantityCtrl.text)),
+        'quantitySalesDelivered': (selectedItem.quantitySalesDelivered! -
+            int.parse(_quantityCtrl.text))
+      });
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('sales')
+          .collection('sales_orders')
+          .doc(widget.orderId.toString())
+          .collection('items')
+          .doc(_itemnameController.text)
+          .update({
+        'quantitySales': (selectedItem.quantitySalesReturned! +
+            int.parse(_quantityCtrl.text)),
+      });
+    } catch (e) {
+      print('error while updating items delivered and details $e');
+    }
   }
 
   Future<void> updateInventory() async {
-    if (rit.toInventory == true) {
-      try {
-        DocumentReference docRef = FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(auth!.email)
-            .collection('Items')
-            .doc(_itemnameController.text);
-        DocumentSnapshot snapshot = await docRef.get();
-        if (snapshot.exists && snapshot.data() != null) {
-          itemQuantity = snapshot.get('itemQuantity');
-          // quantitysr = snapshot.get('quantitySalesReturned');
+    try {
+      DocumentReference docRef = FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('Items')
+          .doc(_itemnameController.text);
+      DocumentSnapshot snapshot = await docRef.get();
+      if (snapshot.exists && snapshot.data() != null) {
+        itemQuantity = snapshot.get('itemQuantity');
+        int qsales = snapshot.get('quantitySales');
+        // quantitysr = snapshot.get('quantitySalesReturned');
 
-          await FirebaseFirestore.instance
-              .collection('UserData')
-              .doc(auth!.email)
-              .collection('Items')
-              .doc(_itemnameController.text)
-              .update({
-            'itemQuantity': (itemQuantity! + quantityReturned),
-            // 'quantitySalesReturned': (quantitysr! + quantityReturned),
-          });
-        }
-        print('3');
-      } catch (e) {
-        print('error uploading to inventory $e');
-      }
-    }
-  }
-
-  Future<void> addToWasteBucket() async {
-    if (rit.toInventory == false) {
-      WasteBucketItem waste = WasteBucketItem(
-          itemname: _itemnameController.text,
-          quantityWasted: quantityReturned,
-          date: rit.date,
-          orderId: widget.orderId,
-          referenceNo: _referencenoCtrl.text,
-          type: 'Sales Return');
-      try {
         await FirebaseFirestore.instance
             .collection('UserData')
             .doc(auth!.email)
-            .collection('waste')
-            .doc(now.millisecondsSinceEpoch.toString())
-            .set({
-          'referenceNo': waste.referenceNo,
-          'orderId': waste.orderId,
-          'itemname': waste.itemname,
-          'quantityWasted': waste.quantityWasted,
-          'date': waste.date,
-          'type': waste.type
+            .collection('Items')
+            .doc(_itemnameController.text)
+            .update({
+          'itemQuantity': (itemQuantity! + quantityReturned),
+          'quantitySales': qsales + quantityReturned
+          // 'quantitySalesReturned': (quantitysr! + quantityReturned),
         });
-      } catch (e) {
-        print(e);
       }
+      print('3');
+    } catch (e) {
+      print('error uploading to inventory $e');
     }
   }
+
+  // Future<void> addToWasteBucket() async {
+  //   if (rit.toInventory == false) {
+  //     WasteBucketItem waste = WasteBucketItem(
+  //         itemname: _itemnameController.text,
+  //         quantityWasted: quantityReturned,
+  //         date: rit.date,
+  //         orderId: widget.orderId,
+  //         referenceNo: _referencenoCtrl.text,
+  //         type: 'Sales Return');
+  //     try {
+  //       await FirebaseFirestore.instance
+  //           .collection('UserData')
+  //           .doc(auth!.email)
+  //           .collection('waste')
+  //           .doc(now.millisecondsSinceEpoch.toString())
+  //           .set({
+  //         'referenceNo': waste.referenceNo,
+  //         'orderId': waste.orderId,
+  //         'itemname': waste.itemname,
+  //         'quantityWasted': waste.quantityWasted,
+  //         'date': waste.date,
+  //         'type': waste.type
+  //       });
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   }
+  // }
 
   Future<void> uploadTrack(ItemTrackingSalesOrder track) async {
     try {
@@ -380,13 +398,11 @@ class _SalesOrderReturnTransactionsState
               selectedItem = i;
               if (i.quantitySalesReturned != null) {
                 if (i.quantitySalesDelivered! > i.quantitySalesReturned!) {
-                  itemLimit =
-                      (i.quantitySalesDelivered! - i.quantitySalesReturned!)
-                          .toString();
+                  itemLimit = (i.quantitySalesDelivered!);
                 }
               } else {
                 i.quantitySalesReturned = 0;
-                itemLimit = (i.quantitySalesDelivered).toString();
+                itemLimit = (i.quantitySalesDelivered!);
               }
             });
             break;
@@ -402,20 +418,20 @@ class _SalesOrderReturnTransactionsState
     return widget.itemsDelivered.map((item) => item.itemName).toList();
   }
 
-  String? validateSOIQ(String? value) {
-    if (selectedItem.itemName.isEmpty) {
-      return null;
-    }
-    if (value == null || value.isEmpty) {
-      return 'Please enter some quantity';
-    }
+  // String? validateSOIQ(String? value) {
+  //   if (selectedItem.itemName.isEmpty) {
+  //     return null;
+  //   }
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please enter some quantity';
+  //   }
 
-    int v = int.parse(value);
-    if (v > int.parse(itemLimit)) {
-      return 'Quantity cannot exceed inventory quantity (${int.parse(itemLimit)}).';
-    }
-    return null;
-  }
+  //   int v = int.parse(value);
+  //   if (v > int.parse(itemLimit)) {
+  //     return 'Quantity cannot exceed inventory quantity (${int.parse(itemLimit)}).';
+  //   }
+  //   return null;
+  // }
 
   bool? validateForm() {
     final FormState form = _formKey.currentState!;
@@ -494,9 +510,10 @@ class _SalesOrderReturnTransactionsState
                     TextFormField(
                       // validator: validateOrderNo,
                       controller: _quantityCtrl,
-                      validator: validateSOIQ,
+                      // validator: validateSOIQ,
                       cursorColor: blue,
                       cursorWidth: 1,
+                      keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                       decoration: getInputDecoration(
                           hint: '1.00', errorColor: Colors.red),
@@ -565,20 +582,39 @@ class _SalesOrderReturnTransactionsState
                       onTap: () async {
                         try {
                           String quantityText = _quantityCtrl.text;
+                          final item = widget.itemsDelivered.firstWhere(
+                              (element) =>
+                                  element.itemName == _itemnameController.text);
+                          final qsd = item.quantitySalesDelivered ?? 0;
 
-                          if (quantityText.isNotEmpty &&
+                          if (selectedItem.itemName.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Select Item First')));
+                          } else if (_quantityCtrl.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Enter some quantity to be returned')));
+                          } else if (int.parse(_quantityCtrl.text) >
+                             qsd) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text('Quantity cannot exceed $qsd')));
+                          } else if (quantityText.isNotEmpty &&
                               quantityText
                                   .trim()
                                   .replaceAll('-', '')
                                   .isNotEmpty) {
                             print('text is $quantityText');
-                            int quantityReturnedValue = int.parse(quantityText);
+                            // int quantityReturnedValue = int.parse(_quantityCtrl.text);
 
                             if (validateForm() == true) {
                               track = ItemTrackingSalesOrder(
                                   itemName: _itemnameController.text,
                                   date: DateFormat('dd-MM-yyyy').format(now),
-                                  quantityReturned: quantityReturnedValue,
+                                  quantityReturned:
+                                      int.parse(_quantityCtrl.text),
                                   customer: widget.customer);
 
                               rit = SalesReturnItemTracking(
@@ -586,7 +622,8 @@ class _SalesOrderReturnTransactionsState
                                   itemname: _itemnameController.text,
                                   referenceNo: _referencenoCtrl.text,
                                   date: DateFormat('dd-MM-yyyy').format(now),
-                                  quantitySalesReturned: quantityReturnedValue);
+                                  quantitySalesReturned:
+                                      int.parse(_quantityCtrl.text));
 
                               _isLoading ? null : _handleSubmit();
                             } else {

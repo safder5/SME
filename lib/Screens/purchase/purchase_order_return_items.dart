@@ -110,6 +110,9 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
       porProvider.purchaseReturnProviderUpdate(widget.orderId,
           _itemnameController.text, int.parse(_quantityCtrl.text), track);
 
+      porProvider.updateDetailsafterReturninProvider(
+          _itemnameController.text, quantityReturned, widget.orderId);
+
       porProvider.updatePurchaseActivityinProvider(track);
 
       Provider.of<PurchaseReturnsProvider>(context, listen: false)
@@ -136,6 +139,14 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
       try {
         int qRt = int.parse(_quantityCtrl.text);
         int qRc = selectedItem.quantityRecieved - qRt;
+        final provider = Provider.of<NPOrderProvider>(context, listen: false);
+        var po = provider.po
+            .firstWhere((element) => element.orderID == widget.orderId);
+        final items = po.items ?? [];
+        final qPd = items
+            .firstWhere(
+                (element) => element.itemName == _itemnameController.text)
+            .quantityPurchase;
         await FirebaseFirestore.instance
             .collection('UserData')
             .doc(auth!.email)
@@ -148,6 +159,19 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
             .update({
           'quantityRecieved': qRc,
           'quantityReturned': qRt,
+        });
+        // also updating details part in here
+        await FirebaseFirestore.instance
+            .collection('UserData')
+            .doc(auth!.email)
+            .collection('orders')
+            .doc('purchases')
+            .collection('purchase_orders')
+            .doc(id)
+            .collection('items')
+            .doc(_itemnameController.text)
+            .update({
+          'quantityPurchase': qPd ?? 0 + quantityReturned,
         });
       } catch (e) {
         print(' error while updating with 0 quantity returned $e');
@@ -490,7 +514,6 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
                                   date: DateFormat('dd-MM-yyyy').format(now),
                                   quantity: quantityReturned);
 
-
                               isLoading ? null : _handleSubmit();
 
                               // if (!context.mounted) return;
@@ -525,7 +548,7 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
                 ),
               ),
             )),
-        if (isLoading)const  LoadingOverlay()
+        if (isLoading) const LoadingOverlay()
       ],
     );
   }

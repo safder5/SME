@@ -7,8 +7,6 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
-import '../../../Models/iq_list.dart';
-import '../../../Providers/iq_list_provider.dart';
 import '../../../Services/helper.dart';
 import '../../../constantWidgets/boxes.dart';
 import '../../../constants.dart';
@@ -39,7 +37,6 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
   final auth = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    final itemsProvider = Provider.of<ItemsProvider>(context);
     final bomItemsP = Provider.of<BOMProvider>(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,

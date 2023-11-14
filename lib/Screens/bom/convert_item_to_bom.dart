@@ -26,6 +26,7 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
     provider.addBOMtoProv(bom);
     // add item to database and provider
     uploadtoInventory();
+    provider.clearItems();
   }
 
   void uploadtoInventory() async {

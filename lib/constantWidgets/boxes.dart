@@ -445,11 +445,11 @@ class ContainerSalesReturn extends StatelessWidget {
       required this.itemname,
       required this.orderId,
       required this.quantity,
-      required this.toInventory});
+      });
   final String itemname;
   final int orderId;
   final int quantity;
-  final bool toInventory;
+  final bool toInventory = true;
 
   @override
   Widget build(BuildContext context) {

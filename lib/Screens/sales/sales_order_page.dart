@@ -184,25 +184,25 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                         const SizedBox(
                           height: 24,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            //marking status
-                          },
-                          child: Container(
-                            height: 35,
-                            width: 115,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(width: 0.7, color: w)),
-                            child: Center(
-                                child: Text(
-                              'Mark as Shipped',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500, color: w),
-                              textScaleFactor: 0.8,
-                            )),
-                          ),
-                        )
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     //marking status
+                        //   },
+                        //   child: Container(
+                        //     // height: 35,
+                        //     width: 115,
+                        //     decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(5),
+                        //         border: Border.all(width: 0.7, color: w)),
+                        //     child: Center(
+                        //         child: Text(
+                        //       'Mark as Shipped',
+                        //       style: TextStyle(
+                        //           fontWeight: FontWeight.w500, color: w),
+                        //       textScaleFactor: 0.8,
+                        //     )),
+                        //   ),
+                        // )
                       ]),
                 ),
               ),

@@ -166,6 +166,27 @@ class NPOrderProvider with ChangeNotifier {
     }
   }
 
+  void updateDetailsafterReturninProvider(
+      String name, int qreturned, int orderId) {
+    try {
+      final orderIndex =
+          _po.indexWhere((element) => element.orderID == orderId);
+      final order = _po[orderIndex];
+      final items = order.items ?? [];
+      final itemsToUpdateIndex =
+          items.indexWhere((element) => element.itemName == name);
+      final itemtoUpdate = items[itemsToUpdateIndex];
+      final qPurchases = itemtoUpdate.quantityPurchase ?? 0;
+      itemtoUpdate.quantityPurchase = qPurchases + qreturned;
+      items[itemsToUpdateIndex] = itemtoUpdate;
+      order.items = items;
+      _po[orderIndex] = order;
+      notifyListeners();
+    } catch (e) {
+      print('error while updating updateSalesOrderDetailsOnReturninProviders');
+    }
+  }
+
   void purchaseReturnProviderUpdate(int orderId, String itemName,
       int quantityReturned, ItemTrackingPurchaseOrder itemReturned) {
     int index = _po.indexWhere((element) => element.orderID == orderId);

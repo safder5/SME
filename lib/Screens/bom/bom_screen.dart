@@ -162,7 +162,7 @@ Future<void> _showListSelection(BuildContext context) {
           ],
           title: const Text('Select Item'),
           content: Consumer<ItemsProvider>(builder: (_, p, __) {
-            final items = p.getItemNames();
+            final items = p.allItems.where((element) => element.bom == false).map((e) => e.itemName).toList();
             return SizedBox(
               width: double.maxFinite,
               child: ListView.builder(
