@@ -50,7 +50,7 @@ class _POPDetailsState extends State<POPDetails> {
     } else {
       int item = itemsDel.indexWhere((element) => element.itemName == itemName);
       final it = itemsDel[item];
-      final q = it.quantityRecieved ?? 0;
+      final q = it.quantityRecieved;
       qt = q;
     }
     return qt;
@@ -69,7 +69,7 @@ class _POPDetailsState extends State<POPDetails> {
       PurchaseOrderModel po =
           op.po.firstWhere((element) => element.orderID == widget.orderId);
       List<Item> items = po.items ?? [];
-      List<ItemTrackingPurchaseOrder> itemsRecieved = po.itemsRecieved ?? [];
+      // List<ItemTrackingPurchaseOrder> itemsRecieved = po.itemsRecieved ?? [];
       // print(widget.orderId);
       // print(items.length);
       if (items.isEmpty) {
@@ -78,7 +78,7 @@ class _POPDetailsState extends State<POPDetails> {
       }
       return Container(
         height: (MediaQuery.of(context).size.height * 0.65) - 70,
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: w,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

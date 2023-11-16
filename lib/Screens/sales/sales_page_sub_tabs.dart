@@ -69,7 +69,7 @@ class _SOPDetailsState extends State<SOPDetails> {
       SalesOrderModel som =
           ip.som.firstWhere((element) => element.orderID == widget.orderId);
       List<Item> items = som.items!;
-      List<Item> itemsDelivered = som.itemsDelivered ?? [];
+      // List<Item> itemsDelivered = som.itemsDelivered ?? [];
       if (items.isEmpty) {
         print('items are null');
         return const Text('empty');

@@ -1,4 +1,4 @@
-import 'package:ashwani/constants.dart';
+
 import 'package:ashwani/Utils/customers/customers_page.dart';
 import 'package:ashwani/Utils/items/items_page.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class MoreFromHomePage extends StatelessWidget {
               action: ItemsPage(),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
             const ContainerHomeMore(
               title: 'Customers',
@@ -48,7 +48,7 @@ class MoreFromHomePage extends StatelessWidget {
               action: CustomersPage(),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
             const ContainerHomeMore(
               title: 'Vendors',
@@ -56,7 +56,7 @@ class MoreFromHomePage extends StatelessWidget {
               action: VendorsPage(),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
           ],
         ),

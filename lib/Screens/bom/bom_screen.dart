@@ -64,10 +64,7 @@ class _BomScreenState extends State<BomScreen> {
                                 //               item: item,
                                 //             )));
                               },
-                              child: ItemsPageContainer(
-                                itemName: item.productName,
-                                sku: '0',
-                              ));
+                              child: BOMContainer(bom: item));
                         })),
               );
             }),

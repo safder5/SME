@@ -1,7 +1,6 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
-import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';

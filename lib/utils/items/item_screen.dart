@@ -2,7 +2,6 @@ import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 

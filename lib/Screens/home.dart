@@ -1,7 +1,6 @@
 import 'package:ashwani/Screens/home/activity_home.dart';
 import 'package:ashwani/Screens/more.dart';
 import 'package:ashwani/Screens/settings/setting_page.dart';
-import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/Utils/Vendors/add_vendors.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/Utils/customers/add_customer.dart';
@@ -67,9 +66,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final inventorySummaryProvider =
-        Provider.of<InventorySummaryProvider>(context);
-
     return Consumer<InventorySummaryProvider>(builder: (_, prov, __) {
       final toRecieve = prov.toRecieve;
       final instock = prov.inHand;
@@ -165,23 +161,17 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 GestureDetector(
-                                  onTap: () {
-                                    
-                                  },
+                                  onTap: () {},
                                   child: ContainerHomeInventory(
                                     title: 'Available Stock',
-                                    amount: instock
-                                        .toString(),
+                                    amount: instock.toString(),
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {
-                                    
-                                  },
+                                  onTap: () {},
                                   child: ContainerHomeInventory(
                                     title: 'To be Recieved',
-                                    amount: toRecieve
-                                        .toString(),
+                                    amount: toRecieve.toString(),
                                   ),
                                 ),
                               ],

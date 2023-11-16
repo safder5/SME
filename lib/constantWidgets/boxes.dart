@@ -1,3 +1,4 @@
+import 'package:ashwani/Models/bom_model.dart';
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/constants.dart';
@@ -143,7 +144,9 @@ class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
             children: [
               CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: widget.title == 'To Be Shipped'?  SvgPicture.asset('lib/icons/truck.svg'): SvgPicture.asset('lib/icons/shoping.svg')),
+                  child: widget.title == 'To Be Shipped'
+                      ? SvgPicture.asset('lib/icons/truck.svg')
+                      : SvgPicture.asset('lib/icons/shoping.svg')),
               const SizedBox(
                 width: 15,
               ),
@@ -281,7 +284,7 @@ class ContainerSalesOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(
         width: double.maxFinite,
         decoration:
@@ -322,7 +325,9 @@ class ContainerSalesOrder extends StatelessWidget {
                       style: TextStyle(color: b.withOpacity(0.5))),
                   const Spacer(),
                   Text(
-                    status == 'open'? 'Order Placed'.toUpperCase():'Order Shipped'.toUpperCase(),
+                    status == 'open'
+                        ? 'Order Placed'.toUpperCase()
+                        : 'Order Shipped'.toUpperCase(),
                     style: TextStyle(color: gn.withOpacity(0.8)),
                     textScaleFactor: 0.9,
                   )
@@ -438,12 +443,12 @@ class ContainerPurchaseReturn extends StatelessWidget {
 }
 
 class ContainerSalesReturn extends StatelessWidget {
-  const ContainerSalesReturn(
-      {super.key,
-      required this.itemname,
-      required this.orderId,
-      required this.quantity,
-      });
+  const ContainerSalesReturn({
+    super.key,
+    required this.itemname,
+    required this.orderId,
+    required this.quantity,
+  });
   final String itemname;
   final int orderId;
   final int quantity;
@@ -547,7 +552,7 @@ class ContainerPurchaseOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     //  double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         width: double.maxFinite,
         decoration:
@@ -816,6 +821,68 @@ class ItemsPageContainer extends StatelessWidget {
   }
 }
 
+class BOMContainer extends StatelessWidget {
+  const BOMContainer({super.key, required this.bom});
+  final BOMmodel bom;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Container(
+        width: double.maxFinite,
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      color: blue,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '#${bom.productCode ?? '0123'}',
+                    // style: const TextStyle(fontWeight: FontWeight.w600),
+                    // textScaleFactor: 0.9,
+                  ),
+                  const Spacer(),
+                  Text(
+                    'Total Items: ${bom.itemswithQuantities.length}',
+                    textScaleFactor: 0.8,
+                    style: TextStyle(color: b.withOpacity(0.5)),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text('Product Name : ${bom.productName}',
+                      textScaleFactor: 0.8,
+                      style: TextStyle(color: b.withOpacity(0.5))),
+                  const Spacer(),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class CustomersPageContainer extends StatefulWidget {
   const CustomersPageContainer(
       {super.key, required this.fullname, required this.companyname});
@@ -863,12 +930,12 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
                       widget.fullname,
                       style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
                       children: [
-                         const Text(
+                        const Text(
                           'Items to be shipped:  ',
                           style: TextStyle(fontWeight: FontWeight.w300),
                           textScaleFactor: 0.8,
@@ -876,11 +943,15 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Container(height: 10,color: b25,width: 1,),
+                        Container(
+                          height: 10,
+                          color: b25,
+                          width: 1,
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                         const Text(
+                        const Text(
                           'Delivered Items:  ',
                           style: TextStyle(fontWeight: FontWeight.w300),
                           textScaleFactor: 0.8,
@@ -889,13 +960,6 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
                     )
                   ],
                 ),
-                // const Spacer(),
-                // space
-                // const Text(
-                //   '',
-                //   textScaleFactor: 1,
-                //   style: TextStyle(fontWeight: FontWeight.w300),
-                // )
               ],
             ),
           ),
@@ -910,8 +974,7 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
 
 class VendorsPageContainer extends StatelessWidget {
   const VendorsPageContainer({super.key, required this.fullname});
-   final String fullname;
-
+  final String fullname;
 
   @override
   Widget build(BuildContext context) {
