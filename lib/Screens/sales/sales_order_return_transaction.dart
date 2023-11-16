@@ -1,6 +1,7 @@
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Providers/new_sales_order_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Screens/sales/sales_order_page.dart';
@@ -92,8 +93,8 @@ class _SalesOrderReturnTransactionsState
               itemName: _itemnameController.text,
               quantitySalesReturned: int.parse(_quantityCtrl.text)));
 
-      prov.updateSalesOrderDetailsOnReturninProviders(_itemnameController.text,
-          int.parse(_quantityCtrl.text), widget.orderId);
+      // prov.updateSalesOrderDetailsOnReturninProviders(_itemnameController.text,
+      //     int.parse(_quantityCtrl.text), widget.orderId);
 
       Provider.of<SalesReturnsProvider>(context, listen: false)
           .addSalesReturninProvider(rit);
@@ -183,19 +184,33 @@ class _SalesOrderReturnTransactionsState
         'quantitySalesDelivered': (selectedItem.quantitySalesDelivered! -
             int.parse(_quantityCtrl.text))
       });
-      await FirebaseFirestore.instance
-          .collection('UserData')
-          .doc(auth!.email)
-          .collection('orders')
-          .doc('sales')
-          .collection('sales_orders')
-          .doc(widget.orderId.toString())
-          .collection('items')
-          .doc(_itemnameController.text)
-          .update({
-        'quantitySales': (selectedItem.quantitySalesReturned! +
-            int.parse(_quantityCtrl.text)),
-      });
+      // we need original quantity here
+      // final p = Provider.of<NPOrderProvider>(context, listen: false);
+      // final orders = p.po;
+      // final orderIndex =
+      //     orders.indexWhere((element) => element.orderID == widget.orderId);
+      // final order = orders[orderIndex];
+      // final items = order.items ?? [];
+      // final itemIndex = items.indexWhere(
+      //     (element) => element.itemName == _itemnameController.text);
+      // final orgQ = items[itemIndex].originalQuantity;
+      // try {
+      //   await FirebaseFirestore.instance
+      //       .collection('UserData')
+      //       .doc(auth!.email)
+      //       .collection('orders')
+      //       .doc('sales')
+      //       .collection('sales_orders')
+      //       .doc(widget.orderId.toString())
+      //       .collection('items')
+      //       .doc(_itemnameController.text)
+      //       .update({
+      //     'quantitySales':
+      //         orgQ! - selectedItem.quantitySalesDelivered! + quantityReturned,
+        // });
+      // } catch (e) {
+      //   print('yahan dekhle $e');
+      // }
     } catch (e) {
       print('error while updating items delivered and details $e');
     }
@@ -596,11 +611,9 @@ class _SalesOrderReturnTransactionsState
                                 const SnackBar(
                                     content: Text(
                                         'Enter some quantity to be returned')));
-                          } else if (int.parse(_quantityCtrl.text) >
-                             qsd) {
+                          } else if (int.parse(_quantityCtrl.text) > qsd) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text('Quantity cannot exceed $qsd')));
+                                content: Text('Quantity cannot exceed $qsd')));
                           } else if (quantityText.isNotEmpty &&
                               quantityText
                                   .trim()

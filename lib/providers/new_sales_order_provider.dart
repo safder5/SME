@@ -27,11 +27,11 @@ class NSOrderProvider with ChangeNotifier {
       .doc(uid)
       .collection('sales_activities');
 
-  void clearAll() {
-    _so.clear();
-    _sa.clear();
-    notifyListeners();
-  }
+  // void clearAll() {
+  //   _so.clear();
+  //   _sa.clear();
+  //   notifyListeners();
+  // }
 
   void updateSalesActivityinProvider(ItemTrackingSalesOrder activity) {
     _sa.add(activity);
@@ -45,6 +45,30 @@ class NSOrderProvider with ChangeNotifier {
     _sa.clear();
 
     notifyListeners();
+  }
+
+  void updateitemDetailsquantityinProvider(
+      int orderId, String itemName, int quantity) {
+    final orders = _so;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q += quantity;
+    item.originalQuantity = q;
+    items[itemIndex] = item;
+    order.items = items;
+    _so[orderIndex] = order;
+    notifyListeners();
+  }
+  Future<void> updateitemDetailsquantityinFireBase(
+      int orderId, String itemName, int quantity) async{
+    
   }
 
   void addSalesOrderInProvider(
@@ -73,7 +97,11 @@ class NSOrderProvider with ChangeNotifier {
           items.indexWhere((element) => element.itemName == name);
       final itemtoUpdate = items[itemsToUpdateIndex];
       final qSales = itemtoUpdate.quantitySales ?? 0;
-      itemtoUpdate.quantitySales = qSales + qreturned;
+      itemtoUpdate.quantitySales =
+          qSales + qreturned > itemtoUpdate.originalQuantity!
+              ? itemtoUpdate.originalQuantity!
+              : qSales + qreturned;
+      // itemtoUpdate.quantitySales = qSales + qreturned;
       items[itemsToUpdateIndex] = itemtoUpdate;
       order.items = items;
       _so[orderIndex] = order;
@@ -325,74 +353,3 @@ class NSOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
-      // Item? itemDelivered = itemDeliveredList!
-      //     .firstWhere((element) => element.itemName == itemName);
-      // itemDelivered.quantitySalesDelivered =
-      //     itemDelivered.quantitySalesDelivered! - quantityReturned;
-      // itemDelivered.quantitySalesReturned =
-      //     itemDelivered.quantitySalesReturned! - quantityReturned;
-
-      // final itemReturnedList = foundOrder.itemsReturned;
-      // Item? itemReturned = itemReturnedList!
-      //     .firstWhere((element) => element.itemName == itemName);
-      // itemReturned.quantitySalesReturned =
-      //     itemReturned.quantitySalesReturned! + quantityReturned;
-      
-  // void addSalesReturnInProvider(
-  //   int orderId,
-  //   String itemName,
-  //   Item itemReturned,
-  // ) {
-  //   try {
-  //     SalesOrderModel? foundOrder = _so.firstWhere(
-  //       (order) => order.orderID == orderId,
-  //     );
-  //     if (foundOrder == _lastUpdatedSalesOrder) {
-  //       print('its last updated order');
-  //     }
-  //     if (foundOrder.orderID != 0) {
-  //       final itemsReturned = foundOrder.itemsReturned ?? [];
-  //       itemsReturned.add(itemReturned);
-  //       foundOrder.itemsReturned = itemsReturned;
-  //       _lastUpdatedSalesOrder = foundOrder;
-  //       _sa.clear();
-  //     }
-  //     notifyListeners();
-  //   } catch (e) {
-  //     print('error addSalesReturnInProvider $e');
-  //   }
-  // }
-
-  // void addSalesDeliveredInProvider(
-  //   int orderId,
-  //   String itemName,
-  //   Item itemDelivered,
-  // ) {
-  //   try {
-  //     int foundIndex = _so.indexWhere(
-  //       (order) => order.orderID == orderId,
-  //     );
-  //     if (_so[foundIndex].items == null) {
-  //       print('items are null');
-  //     } else {
-  //       print('items are present');
-  //     }
-  //     if (foundIndex != -1) {
-  //       List<Item> delivered = _so[foundIndex].itemsDelivered ?? [];
-  //       delivered.add(itemDelivered);
-  //       _so[foundIndex].itemsDelivered = delivered;
-  //       print(_so[foundIndex].items?.length);
-  //       _lastUpdatedSalesOrder = _so[foundIndex];
-  //       _sa.clear();
-  //     } else {
-  //       print('not found order');
-  //     }
-  //     notifyListeners();
-  //   } catch (e) {
-  //     print('error in addSalesDeliveredInProvider $e');
-  //   }
-  
-
-  // make a function to open close status of sales order
-

@@ -26,6 +26,7 @@ class _PurchaseOrdersState extends State<PurchaseOrders> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
           heroTag: '/newPurchaseOrder',
           // elevation: 0,
           tooltip: 'New Purchase Order',

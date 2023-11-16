@@ -33,7 +33,7 @@ class _SalesOrderTransactionsShippedState
 
   Item selectedItem =
       Item(itemName: 'itemName', itemQuantity: 0, quantitySales: 0);
-
+  int quantitySalesPreviouslyDelivered = 0;
   int quantityShipped = 0;
   int? itemQuantity = 0;
   String itemName = '';
@@ -314,6 +314,32 @@ class _SalesOrderTransactionsShippedState
     }
   }
 
+  void checkPrevItemDeliveredDatainProvider() {
+    try {
+      final prov = Provider.of<NSOrderProvider>(context, listen: false);
+      int orderIndex =
+          prov.som.indexWhere((element) => element.orderID == widget.orderId);
+      final order = prov.som[orderIndex];
+      final itemsDel = order.itemsDelivered ?? <Item>[];
+      if (itemsDel.isEmpty) {
+        setState(() {
+          prevData = false;
+        });
+      } else {
+        int item = itemsDel.indexWhere(
+            (element) => element.itemName == _itemnameController.text);
+        final it = itemsDel[item];
+        final q = it.quantitySalesDelivered ?? 0;
+        setState(() {
+          prevData = true;
+          quantitySalesPreviouslyDelivered = q;
+        });
+      }
+    } catch (e) {
+      print('not selected item properly yet');
+    }
+  }
+
   void getData() async {
     String itemname = _itemnameController.text;
     if (itemname.isNotEmpty && widget.items != null) {
@@ -322,7 +348,9 @@ class _SalesOrderTransactionsShippedState
           if (i.itemName == itemname) {
             setState(() {
               selectedItem = i;
-              itemLimit = i.quantitySales.toString();
+              itemLimit =
+                  (i.originalQuantity! - quantitySalesPreviouslyDelivered)
+                      .toString();
             });
             break;
           }
@@ -365,7 +393,9 @@ class _SalesOrderTransactionsShippedState
   void initState() {
     // TODO: implement initState
     super.initState();
+    // checkPrevItemDeliveredDatainProvider();
     _itemnameController.addListener(getData);
+    _itemnameController.addListener(checkPrevItemDeliveredDatainProvider);
   }
 
   @override

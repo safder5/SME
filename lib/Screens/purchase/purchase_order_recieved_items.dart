@@ -40,6 +40,7 @@ class _PurchaseOrderRecievedItemsState
   int itemLimit = 0;
   String refNumber = '';
   int quantityRecieved = 0;
+  int quantityPreviouslyRecieved = 0;
   final now = DateTime.now();
   bool prevData = false;
   int? itemQuantity = 0;
@@ -81,7 +82,7 @@ class _PurchaseOrderRecievedItemsState
 
   Future<void> _executeFutures(ItemTrackingPurchaseOrder track) async {
     try {
-       updateRespectiveProviders();
+      updateRespectiveProviders();
 
       await prevItemsRecievedData();
       // checks what quantity has been recieved earlier and marks #prevdata = true (if it has data). done
@@ -103,7 +104,6 @@ class _PurchaseOrderRecievedItemsState
 
       await updateItemTrack();
       // updates item track/activity in main inventory. done
-     
     } catch (e) {
       print('Error executing futures $e');
     }
@@ -117,19 +117,19 @@ class _PurchaseOrderRecievedItemsState
       print('D');
 
       porProvider.updatePurchaseActivityinProvider(track);
-       print('D');
+      print('D');
 
       Provider.of<ItemsProvider>(context, listen: false)
           .updateItemsonPurchaseTransactioninProvider(
               _itemnameController.text, int.parse(_quantityCtrl.text));
-               print('D');
+      print('D');
       ItemTrackingModel itemTracking = ItemTrackingModel(
           orderID: widget.orderId.toString(),
           quantity: quantityRecieved,
           reason: 'Purchase Recieved');
       Provider.of<ItemsProvider>(context, listen: false)
           .addItemtrackinProvider(itemTracking, _itemnameController.text);
-           print('D');
+      print('D');
     } catch (e) {
       print("Error in updating all providers $e");
     }
@@ -305,6 +305,32 @@ class _PurchaseOrderRecievedItemsState
     return widget.itemsofOrder!.map((item) => item.itemName).toList();
   }
 
+  void checkPrevItemRecievedDatainProvider() {
+    try {
+      final prov = Provider.of<NPOrderProvider>(context, listen: false);
+      int orderIndex =
+          prov.po.indexWhere((element) => element.orderID == widget.orderId);
+      final order = prov.po[orderIndex];
+      final itemsDel = order.itemsRecieved ?? <ItemTrackingPurchaseOrder>[];
+      if (itemsDel.isEmpty) {
+        setState(() {
+          prevData = false;
+        });
+      } else {
+        int item = itemsDel.indexWhere(
+            (element) => element.itemName == _itemnameController.text);
+        final it = itemsDel[item];
+        final q = it.quantityRecieved;
+        setState(() {
+          prevData = true;
+          quantityPreviouslyRecieved = q;
+        });
+      }
+    } catch (e) {
+      print('not selected item properly yet');
+    }
+  }
+
   getData() async {
     String itemName = _itemnameController.text;
     if (itemName.isNotEmpty && widget.itemsofOrder != null) {
@@ -313,7 +339,7 @@ class _PurchaseOrderRecievedItemsState
           if (i.itemName == itemName) {
             setState(() {
               selectedItem = i;
-              itemLimit = i.quantityPurchase!;
+              itemLimit = i.originalQuantity! - quantityPreviouslyRecieved;
             });
             break;
           }
@@ -351,6 +377,7 @@ class _PurchaseOrderRecievedItemsState
   void initState() {
     super.initState();
     _itemnameController.addListener(getData);
+    _itemnameController.addListener(checkPrevItemRecievedDatainProvider);
   }
 
   @override
@@ -364,7 +391,7 @@ class _PurchaseOrderRecievedItemsState
             child: Container(
               height: MediaQuery.of(context).size.height * 0.85,
               decoration: BoxDecoration(
-                  color:  Theme.of(context).scaffoldBackgroundColor,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25))),
@@ -494,7 +521,7 @@ class _PurchaseOrderRecievedItemsState
                 ),
               ),
             )),
-        if (_isLoading)const  LoadingOverlay()
+        if (_isLoading) const LoadingOverlay()
       ],
     );
   }

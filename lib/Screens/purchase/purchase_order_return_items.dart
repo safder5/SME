@@ -110,8 +110,8 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
       porProvider.purchaseReturnProviderUpdate(widget.orderId,
           _itemnameController.text, int.parse(_quantityCtrl.text), track);
 
-      porProvider.updateDetailsafterReturninProvider(
-          _itemnameController.text, quantityReturned, widget.orderId);
+      // porProvider.updateDetailsafterReturninProvider(
+      //     _itemnameController.text, quantityReturned, widget.orderId);
 
       porProvider.updatePurchaseActivityinProvider(track);
 
@@ -134,19 +134,19 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
   }
 
   Future<void> updateItemRecievedforReturns() async {
+    // final provider = Provider.of<NPOrderProvider>(context, listen: false);
+    // var po =
+    //     provider.po.firstWhere((element) => element.orderID == widget.orderId);
+    // final items = po.items ?? [];
+    // final qPd = items
+    //     .firstWhere((element) => element.itemName == _itemnameController.text)
+    //     .quantityPurchase;
     String id = widget.orderId.toString();
     if (selectedItem.quantityReturned == 0) {
       try {
         int qRt = int.parse(_quantityCtrl.text);
         int qRc = selectedItem.quantityRecieved - qRt;
-        final provider = Provider.of<NPOrderProvider>(context, listen: false);
-        var po = provider.po
-            .firstWhere((element) => element.orderID == widget.orderId);
-        final items = po.items ?? [];
-        final qPd = items
-            .firstWhere(
-                (element) => element.itemName == _itemnameController.text)
-            .quantityPurchase;
+        
         await FirebaseFirestore.instance
             .collection('UserData')
             .doc(auth!.email)
@@ -161,18 +161,18 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
           'quantityReturned': qRt,
         });
         // also updating details part in here
-        await FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(auth!.email)
-            .collection('orders')
-            .doc('purchases')
-            .collection('purchase_orders')
-            .doc(id)
-            .collection('items')
-            .doc(_itemnameController.text)
-            .update({
-          'quantityPurchase': qPd ?? 0 + quantityReturned,
-        });
+        // await FirebaseFirestore.instance
+        //     .collection('UserData')
+        //     .doc(auth!.email)
+        //     .collection('orders')
+        //     .doc('purchases')
+        //     .collection('purchase_orders')
+        //     .doc(id)
+        //     .collection('items')
+        //     .doc(_itemnameController.text)
+        //     .update({
+        //   'quantityPurchase': qPd ?? 0 + quantityReturned,
+        // });
       } catch (e) {
         print(' error while updating with 0 quantity returned $e');
       }
@@ -193,6 +193,18 @@ class _PurchaseOrderReturnItemsState extends State<PurchaseOrderReturnItems> {
           'quantityRecieved': qRc,
           'quantityReturned': qRt,
         });
+        //  await FirebaseFirestore.instance
+        //     .collection('UserData')
+        //     .doc(auth!.email)
+        //     .collection('orders')
+        //     .doc('purchases')
+        //     .collection('purchase_orders')
+        //     .doc(id)
+        //     .collection('items')
+        //     .doc(_itemnameController.text)
+        //     .update({
+        //   'quantityPurchase': qPd ?? 0 + quantityReturned,
+        // });
       } catch (e) {
         print(' error uploading with quantity returned > 0 $e');
       }

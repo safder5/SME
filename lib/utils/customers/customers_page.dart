@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-class CustomerPage extends StatefulWidget {
-  const CustomerPage({super.key});
+import 'customer_page.dart';
+
+class CustomersPage extends StatefulWidget {
+  const CustomersPage({super.key});
 
   @override
-  State<CustomerPage> createState() => _CustomerPageState();
+  State<CustomersPage> createState() => _CustomersPageState();
 }
 
-class _CustomerPageState extends State<CustomerPage> {
+class _CustomersPageState extends State<CustomersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +55,7 @@ class _CustomerPageState extends State<CustomerPage> {
               ),
               Consumer<CustomerProvider>(builder: (context, customerP, child) {
                 final customers = customerP.customers;
-                print(customers.length);
+                // print(customers.length);
                 if (customers.isEmpty) {
                   return const Center(
                     child: Text('No Customers yet, Add Below '),
@@ -64,9 +66,17 @@ class _CustomerPageState extends State<CustomerPage> {
                   child: ListView.builder(
                       itemCount: customers.length,
                       itemBuilder: (context, index) {
-                        return CustomersPageContainer(
-                            fullname: customers[index].name!,
-                            companyname: customers[index].companyName!);
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => CustomerPage(customerName: customers[index].name?? ''))));
+                          },
+                          child: CustomersPageContainer(
+                              fullname: customers[index].name!,
+                              companyname: customers[index].companyName!),
+                        );
                       }),
                 );
               })

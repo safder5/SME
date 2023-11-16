@@ -1,5 +1,6 @@
 import 'package:ashwani/Providers/vendor_provider.dart';
 import 'package:ashwani/Utils/Vendors/add_vendors.dart';
+import 'package:ashwani/Utils/Vendors/vendor_page.dart';
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
@@ -7,8 +8,8 @@ import 'package:provider/provider.dart';
 
 import '../../constantWidgets/boxes.dart';
 
-class VendorPage extends StatelessWidget {
-  const VendorPage({super.key});
+class VendorsPage extends StatelessWidget {
+  const VendorsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,8 @@ class VendorPage extends StatelessWidget {
         heroTag: '/vendor',
         tooltip: 'Add Vendor',
         onPressed: (() {
-          Navigator.push(
-              context, MaterialPageRoute(builder: ((context) => const AddVendor())));
+          Navigator.push(context,
+              MaterialPageRoute(builder: ((context) => const AddVendor())));
         }),
         child: Icon(
           LineIcons.plus,
@@ -86,10 +87,17 @@ class VendorPage extends StatelessWidget {
                   return ListView.builder(
                       itemCount: vendors.length,
                       itemBuilder: (context, index) {
-                        return CustomersPageContainer(
-                            fullname: vendors[index].name?? ' ',
-                            companyname: vendors[index].companyName?? ' '
-                                );
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VendorPage(vendorName: vendors[index].name??'',)));
+                          },
+                          child: VendorsPageContainer(
+                            fullname: vendors[index].name ?? ' ',
+                          ),
+                        );
                       });
                 })),
               )

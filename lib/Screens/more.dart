@@ -13,7 +13,7 @@ class MoreFromHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -45,7 +45,7 @@ class MoreFromHomePage extends StatelessWidget {
             const ContainerHomeMore(
               title: 'Customers',
               type: 2,
-              action: CustomerPage(),
+              action: CustomersPage(),
             ),
             const SizedBox(
               height: 15,
@@ -53,7 +53,7 @@ class MoreFromHomePage extends StatelessWidget {
             const ContainerHomeMore(
               title: 'Vendors',
               type: 4,
-              action: VendorPage(),
+              action: VendorsPage(),
             ),
             const SizedBox(
               height: 15,

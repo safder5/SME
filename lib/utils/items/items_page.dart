@@ -19,18 +19,18 @@ class _ItemsPageState extends State<ItemsPage> {
   // final _auth = FirebaseAuth.instance.currentUser;
   List<Item> items = [];
 
-  Future<void> fetchItems(BuildContext context) async {
-    final itemProvider = Provider.of<ItemsProvider>(context, listen: false);
+  // Future<void> fetchItems(BuildContext context) async {
+  //   final itemProvider = Provider.of<ItemsProvider>(context, listen: false);
 
-    try {
-      await itemProvider.getItems();
-      setState(() {
-        items = itemProvider.allItems;
-      });
-    } catch (e) {
-      print('error getting fetchitems item screen $e');
-    }
-  }
+  //   try {
+  //     await itemProvider.getItems();
+  //     setState(() {
+  //       items = itemProvider.allItems;
+  //     });
+  //   } catch (e) {
+  //     print('error getting fetchitems item screen $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

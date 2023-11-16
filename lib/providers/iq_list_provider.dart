@@ -24,6 +24,48 @@ class ItemsProvider with ChangeNotifier {
     _allItems.add(i);
   }
 
+  Future<void> stockAdjustinFB(
+      int newQuantity, String itemName, DateTime now, int trackQ) async {
+    try {
+      DocumentReference dRef = _fs
+          .collection('UserData')
+          .doc('${_auth!.email}')
+          .collection('Items')
+          .doc(itemName);
+      dRef.update({'itemQuantity': newQuantity});
+      await dRef
+          .collection('tracks')
+          .doc(now.millisecondsSinceEpoch.toString())
+          .set({
+        "orderID": now.millisecondsSinceEpoch.toString(),
+        'quantity': trackQ,
+        'reason': 'Stock Adjustment',
+      });
+      notifyListeners();
+    } catch (e) {
+      print('error uploading stokc adjust $e');
+    }
+  }
+
+  void stockAdjustinProvider(int newQuantity, String itemName, DateTime now,int trackQ) {
+    try {
+      int index =
+          _allItems.indexWhere((element) => element.itemName == itemName);
+      final item = _allItems[index];
+      item.itemQuantity = newQuantity;
+      var tracks = item.itemTracks ?? [];
+      tracks.add(ItemTrackingModel(
+          orderID: now.millisecondsSinceEpoch.toString(),
+          quantity: trackQ,
+          reason: 'Stock Adjustment'));
+      item.itemTracks = tracks;
+      _allItems[index] = item;
+      notifyListeners();
+    } catch (e) {
+      print('$e');
+    }
+  }
+
   void updateItemsonSalesTransactioninProvider(
       String itemName, int quantityShipped) {
     final index =

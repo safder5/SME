@@ -137,28 +137,28 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                   const SizedBox(width: 10),
                   const Text('New Purchase Order'),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      //submit everything after validation is processed
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18.0, vertical: 10.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.transparent,
-                          border: Border.all(width: 0.6, color: blue)),
-                      // width: double.infinity,
-                      // height: 48,
-                      child: Center(
-                          child: Text(
-                        'Save Draft',
-                        style:
-                            TextStyle(color: blue, fontWeight: FontWeight.w300),
-                        textScaleFactor: 1,
-                      )),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     //submit everything after validation is processed
+                  //   },
+                  //   child: Container(
+                  //     padding: const EdgeInsets.symmetric(
+                  //         horizontal: 18.0, vertical: 10.0),
+                  //     decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(5),
+                  //         color: Colors.transparent,
+                  //         border: Border.all(width: 0.6, color: blue)),
+                  //     // width: double.infinity,
+                  //     // height: 48,
+                  //     child: Center(
+                  //         child: Text(
+                  //       'Save Draft',
+                  //       style:
+                  //           TextStyle(color: blue, fontWeight: FontWeight.w300),
+                  //       textScaleFactor: 1,
+                  //     )),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(

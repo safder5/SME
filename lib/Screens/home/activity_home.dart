@@ -1,7 +1,7 @@
-import 'package:ashwani/Screens/home/all_activity_home.dart';
 import 'package:ashwani/Screens/home/to_be_delivered.dart';
 import 'package:ashwani/Screens/home/to_be_shipped.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../../constants.dart';
 
@@ -17,26 +17,45 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       initialIndex: widget.currentIndex,
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            // title: Text('Activity'),
-            // leading: IconButton(
-            //     onPressed: () {
-            //       Navigator.pop(context);
-            //     },
-            //     icon: const Icon(Icons.close)),
+            title: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Recent Activity',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              ),
+            ),
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(LineIcons.angleLeft)),
             backgroundColor: w,
             elevation: 0.5,
             bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(00.0),
+                preferredSize: const Size.fromHeight(50.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //  Row(
+                    //     children: [
+                    //       GestureDetector(
+                    //           onTap: () {
+                    //             Navigator.pop(context);
+                    //           },
+                    //           child: const Icon(LineIcons.angleLeft)),
+                    //       const SizedBox(width: 10),
+                    //       const Text('Current Activity'),
+                    //       const Spacer(),
+                    //     ],
+                    //   ),
+                    // SizedBox(height: 10,),
                     TabBar(
-                      // mouseCursor: MouseCursor.defer,
+                        // mouseCursor: MouseCursor.defer,
                         isScrollable: true,
                         unselectedLabelColor: b32,
                         indicatorColor: blue,
@@ -49,7 +68,7 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
                             child: SizedBox(
                                 child: Center(
                                     child: Text(
-                              "All",
+                              "To Be Shipped",
                               textScaleFactor: 0.8,
                               style: TextStyle(fontWeight: FontWeight.w400),
                             ))),
@@ -58,16 +77,7 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
                             child: SizedBox(
                                 child: Center(
                                     child: Text(
-                              "Shipped",
-                              textScaleFactor: 0.8,
-                              style: TextStyle(fontWeight: FontWeight.w400),
-                            ))),
-                          ),
-                          Tab(
-                            child: SizedBox(
-                                child: Center(
-                                    child: Text(
-                              "Delivered",
+                              "To Be Recieved",
                               textScaleFactor: 0.8,
                               style: TextStyle(fontWeight: FontWeight.w400),
                             ))),
@@ -81,8 +91,8 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
           ),
           body: const TabBarView(
             children: <Widget>[
-              AllActivityHome(), ToBeShipped(),
-              ToBeDelivered()
+              ToBeShipped(),
+              ToBeRecieved()
               // ItemsPage()
             ],
           )),

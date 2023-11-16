@@ -6,6 +6,8 @@ import 'package:ashwani/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Services/helper.dart';
+
 class SOPDetails extends StatefulWidget {
   const SOPDetails({super.key, required this.orderId});
 
@@ -18,6 +20,7 @@ class SOPDetails extends StatefulWidget {
 class _SOPDetailsState extends State<SOPDetails> {
   bool allDelivered = false;
   int leftquantities = 0;
+
   checkIfAllDelivered() {
     final prov = Provider.of<NSOrderProvider>(context, listen: false);
     SalesOrderModel som =
@@ -36,6 +39,24 @@ class _SOPDetailsState extends State<SOPDetails> {
     }
   }
 
+  int checkPrevItemDeliveredDatainProvider(String itemName) {
+    int qt = 0;
+    final prov = Provider.of<NSOrderProvider>(context, listen: false);
+    int orderIndex =
+        prov.som.indexWhere((element) => element.orderID == widget.orderId);
+    final order = prov.som[orderIndex];
+    final itemsDel = order.itemsDelivered ?? <Item>[];
+    if (itemsDel.isEmpty) {
+      qt = 0;
+    } else {
+      int item = itemsDel.indexWhere((element) => element.itemName == itemName);
+      final it = itemsDel[item];
+      final q = it.quantitySalesDelivered ?? 0;
+      qt = q;
+    }
+    return qt;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +69,7 @@ class _SOPDetailsState extends State<SOPDetails> {
       SalesOrderModel som =
           ip.som.firstWhere((element) => element.orderID == widget.orderId);
       List<Item> items = som.items!;
+      List<Item> itemsDelivered = som.itemsDelivered ?? [];
       if (items.isEmpty) {
         print('items are null');
         return const Text('empty');
@@ -109,11 +131,110 @@ class _SOPDetailsState extends State<SOPDetails> {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return SOPDetailsItemTile(
-                      name: items[index].itemName,
-                      quantity: items[index].quantitySales.toString(),
-                      index: index,
-                      original: items[index].originalQuantity ?? 0,
+                    int qty = checkPrevItemDeliveredDatainProvider(
+                        items[index].itemName);
+                    int toship = (items[index].originalQuantity! - qty);
+                    return GestureDetector(
+                      onLongPress: () {
+                        // Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          elevation: 10,
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          content: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Edit Quantity for ${items[index].itemName}?',
+                                    style: TextStyle(color: b),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      // increase quantity
+                                      _showDialogIncreaseQuantity(
+                                          context,
+                                          items[index].itemName,
+                                          widget.orderId);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                        surfaceTintColor: gn,
+                                        backgroundColor:
+                                            Colors.green.withOpacity(0.25)),
+                                    child: Text(
+                                      'Increase Quantity',
+                                      style: TextStyle(color: gn),
+                                    ),
+                                  ),
+                                  toship == items[index].originalQuantity
+                                      ? OutlinedButton(
+                                          onPressed: () {
+                                            // limit is toship
+                                            // item can be removed
+                                            _showDialogReduceQtyAndALsoRemoveItemEntirely(
+                                                context,
+                                                items[index].itemName,
+                                                widget.orderId);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor:
+                                                  Colors.red.withOpacity(0.25)),
+                                          child: Text(
+                                            'Remove Quantity',
+                                            style: TextStyle(color: r),
+                                          ),
+                                        )
+                                      : toship == 0
+                                          ? SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              child: Text(
+                                                'Cannot Reduce Quantity',
+                                                style: TextStyle(color: b),
+                                              ))
+                                          : OutlinedButton(
+                                              onPressed: () {
+                                                // limit to change is toship
+                                                // item cannot be removed
+                                                _showDialogReduceQuantityOnly(
+                                                    context,
+                                                    items[index].itemName,
+                                                    widget.orderId,
+                                                    toship);
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                  backgroundColor: Colors.red
+                                                      .withOpacity(0.25)),
+                                              child: Text(
+                                                'Remove Quantity',
+                                                style: TextStyle(color: r),
+                                              ),
+                                            )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ));
+                      },
+                      child: SOPDetailsItemTile(
+                        name: items[index].itemName,
+                        quantity:
+                            (items[index].originalQuantity! - qty).toString(),
+                        index: index,
+                        original: items[index].originalQuantity ?? 0,
+                      ),
                     );
                   },
                   itemCount: items.length,
@@ -291,4 +412,161 @@ class _SOPReturnsState extends State<SOPReturns> {
       );
     });
   }
+}
+
+void _showDialogIncreaseQuantity(
+    BuildContext context, String itemName, int orderId) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController quantityController = TextEditingController();
+        return AlertDialog(
+          surfaceTintColor: w,
+          backgroundColor: w,
+          title: Text('Increase Quantity of $itemName by value?'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            controller: quantityController,
+            decoration: getInputDecoration(
+                hint: 'Increase quantity by ', errorColor: r),
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: blue),
+                    )),
+                const Spacer(),
+                TextButton(
+                    onPressed: () async {
+                      int q = int.parse(quantityController.text);
+                      final prov =
+                          Provider.of<NSOrderProvider>(context, listen: false);
+                      prov.updateitemDetailsquantityinProvider(
+                          orderId, itemName, q);
+                      prov.updateitemDetailsquantityinFireBase(
+                          orderId, itemName, q);
+                      //update itemdetails in salesorder in providers
+                      // update the same in firebase
+
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Save',
+                      style: TextStyle(color: blue),
+                    )),
+              ],
+            )
+          ],
+        );
+      });
+}
+
+void _showDialogReduceQtyAndALsoRemoveItemEntirely(
+  BuildContext context,
+  String itemName,
+  int orderId,
+) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController quantityController = TextEditingController();
+        return AlertDialog(
+          surfaceTintColor: w,
+          backgroundColor: w,
+          title: Text('Reduce Quantity of $itemName by value?'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            controller: quantityController,
+            decoration: getInputDecoration(
+                hint: 'Increase quantity by ', errorColor: r),
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: blue),
+                    )),
+                const Spacer(),
+                // another button of remove item entirely
+                TextButton(
+                    onPressed: () async {
+                      // final now = DateTime.now();
+                      // //save quantity and update
+                      // final int q =
+                      //     int.parse(quantityController.text) + (sih ?? 0);
+                      // int tQ = int.parse(quantityController.text);
+                      // await prov.stockAdjustinFB(q, itemName, now, tQ);
+                      // prov.stockAdjustinProvider(q, itemName, now, tQ);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Save',
+                      style: TextStyle(color: blue),
+                    )),
+              ],
+            )
+          ],
+        );
+      });
+}
+
+void _showDialogReduceQuantityOnly(
+    BuildContext context, String itemName, int orderId, int limit) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController quantityController = TextEditingController();
+        return AlertDialog(
+          surfaceTintColor: w,
+          backgroundColor: w,
+          title: Text('Increase Quantity of $itemName by value?'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            controller: quantityController,
+            decoration: getInputDecoration(
+                hint: 'Increase quantity by ', errorColor: r),
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: blue),
+                    )),
+                const Spacer(),
+                TextButton(
+                    onPressed: () async {
+                      // final now = DateTime.now();
+                      // //save quantity and update
+                      // final int q =
+                      //     int.parse(quantityController.text) + (sih ?? 0);
+                      // int tQ = int.parse(quantityController.text);
+                      // await prov.stockAdjustinFB(q, itemName, now, tQ);
+                      // prov.stockAdjustinProvider(q, itemName, now, tQ);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Save',
+                      style: TextStyle(color: blue),
+                    )),
+              ],
+            )
+          ],
+        );
+      });
 }

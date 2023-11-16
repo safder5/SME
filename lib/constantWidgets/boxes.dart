@@ -143,21 +143,22 @@ class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
             children: [
               CircleAvatar(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: SvgPicture.asset('lib/icons/truck.svg')),
+                  child: widget.title == 'To Be Shipped'?  SvgPicture.asset('lib/icons/truck.svg'): SvgPicture.asset('lib/icons/shoping.svg')),
               const SizedBox(
                 width: 15,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    widget.amt,
-                    style: const TextStyle(),
-                    textScaleFactor: 1.2,
-                  ),
+                  // Text(
+                  //   widget.amt,
+                  //   style: const TextStyle(),
+                  //   textScaleFactor: 1.2,
+                  // ),
                   Text(
                     widget.title,
-                    style: const TextStyle(fontWeight: FontWeight.w200),
+                    style: const TextStyle(fontWeight: FontWeight.w300),
                     textScaleFactor: 1,
                   )
                 ],
@@ -282,12 +283,11 @@ class ContainerSalesOrder extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
-        height: 113.0,
         width: double.maxFinite,
         decoration:
             BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -302,12 +302,12 @@ class ContainerSalesOrder extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    width: 15,
+                    width: 10,
                   ),
                   Text(
                     '#$orderID',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                    textScaleFactor: 0.9,
+                    // style: const TextStyle(fontWeight: FontWeight.w600),
+                    // textScaleFactor: 0.9,
                   ),
                   const Spacer(),
                 ],
@@ -315,29 +315,27 @@ class ContainerSalesOrder extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
+                  Text('Name: $name',
+                      textScaleFactor: 0.8,
+                      style: TextStyle(color: b.withOpacity(0.5))),
+                  const Spacer(),
                   Text(
-                    name,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    date,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
-                  ),
+                    status == 'open'? 'Order Placed'.toUpperCase():'Order Shipped'.toUpperCase(),
+                    style: TextStyle(color: gn.withOpacity(0.8)),
+                    textScaleFactor: 0.9,
+                  )
                 ],
               ),
-              const SizedBox(
-                height: 16,
+              Text(
+                'Date: $date',
+                textScaleFactor: 0.8,
+                style: TextStyle(color: b.withOpacity(0.5)),
               ),
+              // const SizedBox(
+              //   height: 16,
+              // ),
               //Triple Rows Start Here
             ],
           ),
@@ -834,7 +832,7 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
       children: [
         Container(
           decoration:
-              BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
+              BoxDecoration(color: w, borderRadius: BorderRadius.circular(5)),
           height: 92,
           width: double.infinity,
           child: Padding(
@@ -842,32 +840,147 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
                 const EdgeInsets.symmetric(horizontal: 19.0, vertical: 21.0),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: blue,
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
+                // CircleAvatar(
+                //   backgroundColor: blue,
+                // ),
+                // const SizedBox(
+                //   width: 20,
+                // ),
                 //space
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Text(
+                    //   widget.companyname,
+                    //   style: const TextStyle(fontWeight: FontWeight.w600),
+                    //   textScaleFactor: 1.2,
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
                     Text(
-                      widget.companyname,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      textScaleFactor: 1.2,
+                      widget.fullname,
+                      style: const TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                     const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                         const Text(
+                          'Items to be shipped:  ',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                          textScaleFactor: 0.8,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(height: 10,color: b25,width: 1,),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                         const Text(
+                          'Delivered Items:  ',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                          textScaleFactor: 0.8,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                // const Spacer(),
+                // space
+                // const Text(
+                //   '',
+                //   textScaleFactor: 1,
+                //   style: TextStyle(fontWeight: FontWeight.w300),
+                // )
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
+}
+
+class VendorsPageContainer extends StatelessWidget {
+  const VendorsPageContainer({super.key, required this.fullname});
+   final String fullname;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          decoration:
+              BoxDecoration(color: w, borderRadius: BorderRadius.circular(5)),
+          height: 92,
+          width: double.infinity,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 19.0, vertical: 21.0),
+            child: Row(
+              children: [
+                // CircleAvatar(
+                //   backgroundColor: blue,
+                // ),
+                // const SizedBox(
+                //   width: 20,
+                // ),
+                //space
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Text(
+                    //   widget.companyname,
+                    //   style: const TextStyle(fontWeight: FontWeight.w600),
+                    //   textScaleFactor: 1.2,
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    Text(
+                      fullname,
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      widget.fullname,
-                      textScaleFactor: 0.8,
+                    Row(
+                      children: [
+                        const Text(
+                          'Items to be shipped:  ',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                          textScaleFactor: 0.8,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          height: 10,
+                          color: b25,
+                          width: 1,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Delivered Items:  ',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                          textScaleFactor: 0.8,
+                        ),
+                      ],
                     )
                   ],
                 ),
-                const Spacer(),
+                // const Spacer(),
                 // space
                 // const Text(
                 //   '',
