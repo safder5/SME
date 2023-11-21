@@ -1,5 +1,7 @@
+import 'package:ashwani/Models/bom_model.dart';
 import 'package:ashwani/Models/iq_list.dart';
 import 'package:ashwani/Models/item_tracking_model.dart';
+import 'package:ashwani/Models/production_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,8 @@ class ItemsProvider with ChangeNotifier {
     }
   }
 
-  void stockAdjustinProvider(int newQuantity, String itemName, DateTime now,int trackQ) {
+  void stockAdjustinProvider(
+      int newQuantity, String itemName, DateTime now, int trackQ) {
     try {
       int index =
           _allItems.indexWhere((element) => element.itemName == itemName);
@@ -144,6 +147,16 @@ class ItemsProvider with ChangeNotifier {
         .doc(itemName);
 
     await collRef.update({"bom": true});
+  }
+
+  List<Item> getProductionItems(final List<BOMItem> bomitems) {
+    List<Item> items = [];
+    for (final i in bomitems) {
+      final item =
+          _allItems.firstWhere((element) => element.itemName == i.itemname);
+      items.add(item);
+    }
+    return items;
   }
 
   Future<void> getItems() async {
@@ -311,6 +324,80 @@ class ItemsProvider with ChangeNotifier {
       } catch (e) {
         print(e);
       }
+    }
+  }
+
+  Future<void> makeProductionReductions(
+      List<CombinedItem> cd, int qop, String productionID) async {
+    final auth = FirebaseAuth.instance.currentUser;
+    CollectionReference cr = FirebaseFirestore.instance
+        .collection('UserData')
+        .doc(auth!.email)
+        .collection('Items');
+    for (final item in cd) {
+      try {
+        final fq =
+            item.itemQuantity! - (qop * item.bomQuantity); //final quantity
+        await cr.doc(item.itemName).update({
+          'itemQuantity': fq,
+        });
+        await cr.doc(item.itemName).collection('tracks').doc(productionID).set({
+          'orderID': productionID,
+          'quantity': qop * item.bomQuantity,
+          'reason': 'Production of ${item.itemName}',
+        });
+      } catch (e) {
+        print('error while makeProductionReductions $e');
+      }
+    }
+    notifyListeners();
+  }
+
+  void makeProductionReductionsProvider(
+      List<CombinedItem> cd, int qop, String productionID) {
+    for (final item in cd) {
+      try {
+        final ItemTrackingModel track = ItemTrackingModel(
+            orderID: productionID,
+            quantity: qop * item.bomQuantity,
+            reason: 'Production of ${item.itemName}');
+        final it = _allItems
+            .indexWhere((element) => element.itemName == item.itemName);
+        var ii = _allItems[it];
+        ii.itemQuantity = item.itemQuantity! - (qop * item.bomQuantity);
+        List<ItemTrackingModel> t = ii.itemTracks ?? [];
+        t.add(track);
+        ii.itemTracks = t;
+        _allItems[it] = ii;
+      } catch (e) {
+        print('error in makeProductionReductionsProvider $e');
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateItemProduced(String itemname, int finalquantity) async {
+    try {
+      await _fs
+          .collection('UserData')
+          .doc('${_auth!.email}')
+          .collection('Items')
+          .doc(itemname)
+          .update({'itemQuantity': finalquantity});
+    } catch (e) {
+      print('$e trying updateItemProduced');
+    }
+  }
+
+  void updateItemProducedinProv(String itemname, int finalquantity) {
+    try {
+      final i = _allItems.indexWhere((element) => element.itemName == itemname);
+      Item item = _allItems[i];
+      item.itemQuantity = finalquantity;
+      _allItems[i] = item;
+      notifyListeners();
+    } catch (e) {
+      print('$e trying updateItemProducedinProv');
     }
   }
 

@@ -166,7 +166,7 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
                     if (validateForm() == true) {
                       bomItemsP.addItem(BOMItem(
                           itemname: _itemnameController.text.trim(),
-                          quantity: double.parse(_quantityCtrl.text)));
+                          quantity: int.parse(_quantityCtrl.text)));
                       Navigator.pop(context);
                     } else {
                       print('error');

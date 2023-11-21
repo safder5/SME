@@ -61,3 +61,96 @@ use
 
  Navigator.pushNamedAndRemoveUntil(context, "destination_route", ModalRoute.withName('/')); 
 
+
+
+class MyPage extends StatefulWidget {
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  bool _isProcessing = false;
+
+  Future<void> _submitData() async {
+    // Prevent multiple taps
+    if (_isProcessing) {
+      return;
+    }
+
+    setState(() {
+      _isProcessing = true;
+    });
+
+    // Perform your database operations or CRUD methods here
+    try {
+      // Your async database operations here
+
+      // Simulating a delay
+      await Future.delayed(Duration(seconds: 2));
+
+      // Set _isProcessing to false when done
+      setState(() {
+        _isProcessing = false;
+      });
+
+      // Show success message or navigate to another screen
+      _showSuccessDialog();
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+      });
+      // Handle error
+      print('Error: $e');
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text('Data submitted successfully.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Submit Data'),
+      ),
+      body: Stack(
+        children: [
+          // Your content here
+          Center(
+            child: ElevatedButton(
+              onPressed: _submitData,
+              child: Text('Submit'),
+            ),
+          ),
+          // ModalBarrier to block user interactions
+          if (_isProcessing)
+            ModalBarrier(
+              color: Colors.black.withOpacity(0.3),
+            ),
+          // Show a loading indicator or overlay while processing
+          if (_isProcessing)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+}

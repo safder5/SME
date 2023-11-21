@@ -2,6 +2,7 @@ import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/Providers/bs_address_provider.dart';
 import 'package:ashwani/Providers/customer_provider.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/Providers/production.dart';
 import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Providers/vendor_provider.dart';
@@ -98,6 +99,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(create: (context) => SalesReturnsProvider()),
         ChangeNotifierProvider(create: (context) => PurchaseReturnsProvider()),
         ChangeNotifierProvider(create: (context) => BOMProvider()),
+        ChangeNotifierProvider(create: (context) => ProductionProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -108,7 +110,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           appBarTheme:
               const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
           snackBarTheme: const SnackBarThemeData(
-            contentTextStyle: TextStyle(color: Colors.white), 
+            contentTextStyle: TextStyle(color: Colors.white),
           ),
           colorScheme: ColorScheme.fromSwatch().copyWith(
               secondary: const Color(colorPrimary),
@@ -171,6 +173,8 @@ class _LoadInventoryState extends State<LoadInventory> {
     final purchaseRP =
         Provider.of<PurchaseReturnsProvider>(context, listen: false);
     final bomP = Provider.of<BOMProvider>(context, listen: false);
+    final prodP = Provider.of<ProductionProvider>(context, listen: false);
+
     try {
       await customerP.fetchAllCustomers();
       await vendorP.fetchAllVendors();
@@ -184,6 +188,7 @@ class _LoadInventoryState extends State<LoadInventory> {
       await purchaseOP.fetchPurchaseActivity();
       await purchaseRP.fetchPurchaseReturns();
       await bomP.fetchBOMS();
+      await prodP.fetchProductions();
 
       setState(() {
         _loadData = true;

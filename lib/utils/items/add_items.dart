@@ -27,6 +27,7 @@ class _AddItemsState extends State<AddItems> {
   final int qfs = 0; //quantity for sale orders
   final int qfp = 0; // quantity from purchase orders
   TextEditingController itemQuantityCtrl = TextEditingController();
+  TextEditingController inCtrl = TextEditingController();
 
   // Uint8List? _image;
 
@@ -122,7 +123,7 @@ class _AddItemsState extends State<AddItems> {
                 reason: 'By User');
             Item item = Item(
                 imageURL: imgUrl,
-                itemName: itemName,
+                itemName: inCtrl.text.trim().toString(),
                 quantityPurchase: qfp,
                 quantitySales: qfs,
                 itemQuantity: int.parse(sIh),
@@ -214,6 +215,7 @@ class _AddItemsState extends State<AddItems> {
                 height: 24,
               ),
               TextFormField(
+                controller: inCtrl,
                 onChanged: (value) => itemName = value,
                 decoration:
                     getInputDecoration(hint: 'Item Name', errorColor: r),

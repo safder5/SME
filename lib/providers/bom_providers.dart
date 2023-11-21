@@ -42,6 +42,35 @@ class BOMProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addProductoinIDtoBOM(String productionId, String bomName) async {
+    try {
+      await _bomCollection
+          .doc(bomName)
+          .collection('productionIDs')
+          .doc(productionId)
+          .set({
+        'productionId': productionId,
+      });
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  void addProductoinIDtoBOMProvider(String productionId, String bomName) {
+    try {
+      final bomIndex =
+          _boms.indexWhere((element) => element.productName == bomName);
+      BOMmodel bom = _boms[bomIndex];
+      List<String> productionIDS = bom.productionIDs ?? [];
+      productionIDS.add(productionId);
+      bom.productionIDs = productionIDS;
+      _boms[bomIndex] = bom;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> uploadBOMtoDB(BOMmodel bom) async {
     try {
       await _bomCollection.doc(bom.productName).set({
@@ -87,6 +116,7 @@ class BOMProvider extends ChangeNotifier {
           itemswithQuantities: items,
           notes: data['notes'],
           productCode: data['productCode'],
+          productionIDs: data['productionIDs']
         );
         _boms.add(bom);
       }

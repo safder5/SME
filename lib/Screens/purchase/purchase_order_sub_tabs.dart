@@ -48,10 +48,16 @@ class _POPDetailsState extends State<POPDetails> {
     if (itemsDel.isEmpty) {
       qt = 0;
     } else {
-      int item = itemsDel.indexWhere((element) => element.itemName == itemName);
-      final it = itemsDel[item];
-      final q = it.quantityRecieved;
-      qt = q;
+      try {
+        int item =
+            itemsDel.indexWhere((element) => element.itemName == itemName);
+        final it = itemsDel[item];
+        final q = it.quantityRecieved;
+        qt = q;
+      } catch (e) {
+        qt = 0;
+        print('error$e');
+      }
     }
     return qt;
   }
@@ -408,7 +414,6 @@ class _POPReturnsState extends State<POPReturns> {
     });
   }
 }
-
 
 void _showDialogIncreaseQuantity(
     BuildContext context, String itemName, int orderId) {

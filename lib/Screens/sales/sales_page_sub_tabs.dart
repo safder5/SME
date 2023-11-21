@@ -49,10 +49,16 @@ class _SOPDetailsState extends State<SOPDetails> {
     if (itemsDel.isEmpty) {
       qt = 0;
     } else {
-      int item = itemsDel.indexWhere((element) => element.itemName == itemName);
-      final it = itemsDel[item];
-      final q = it.quantitySalesDelivered ?? 0;
-      qt = q;
+      try {
+        int item =
+            itemsDel.indexWhere((element) => element.itemName == itemName);
+        final it = itemsDel[item];
+        final q = it.quantitySalesDelivered ?? 0;
+        qt = q;
+      } catch (e) {
+        qt = 0;
+        print('error$e');
+      }
     }
     return qt;
   }
@@ -168,9 +174,10 @@ class _SOPDetailsState extends State<SOPDetails> {
                                           widget.orderId);
                                     },
                                     style: OutlinedButton.styleFrom(
+                                      // elevation: 10,
                                         surfaceTintColor: gn,
                                         backgroundColor:
-                                            Colors.green.withOpacity(0.25)),
+                                            Colors.green.withOpacity(0.25),),
                                     child: Text(
                                       'Increase Quantity',
                                       style: TextStyle(color: gn),

@@ -1,5 +1,6 @@
 import 'package:ashwani/Models/bom_model.dart';
 import 'package:ashwani/Models/iq_list.dart';
+import 'package:ashwani/Models/production_model.dart';
 import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
@@ -870,6 +871,68 @@ class BOMContainer extends StatelessWidget {
               Row(
                 children: [
                   Text('Product Name : ${bom.productName}',
+                      textScaleFactor: 0.8,
+                      style: TextStyle(color: b.withOpacity(0.5))),
+                  const Spacer(),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductionContainer extends StatelessWidget {
+  const ProductionContainer({super.key, required this.prod});
+  final ProductionModel prod;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Container(
+        width: double.maxFinite,
+        decoration:
+            BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      color: blue,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '#${prod.productionID}',
+                    // style: const TextStyle(fontWeight: FontWeight.w600),
+                    // textScaleFactor: 0.9,
+                  ),
+                  const Spacer(),
+                  Text(
+                    ' Quantity Produced: ${prod.quantityofBOMProduced}',
+                    textScaleFactor: 0.8,
+                    style: TextStyle(color: b.withOpacity(0.5)),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text('Product Name : ${prod.nameofBOM}',
                       textScaleFactor: 0.8,
                       style: TextStyle(color: b.withOpacity(0.5))),
                   const Spacer(),

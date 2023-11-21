@@ -1,5 +1,5 @@
 import 'package:ashwani/Screens/bom/bom_screen.dart';
-import 'package:ashwani/Screens/bom/production.dart';
+import 'package:ashwani/Screens/bom/productions.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
