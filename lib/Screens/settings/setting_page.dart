@@ -1,3 +1,4 @@
+import 'package:ashwani/Providers/providers_reset_manager.dart';
 import 'package:ashwani/Screens/settings/customer_support.dart';
 import 'package:ashwani/Screens/settings/rate_app.dart';
 import 'package:ashwani/Screens/settings/setting_screens/about.dart';
@@ -105,6 +106,8 @@ class _SettingsPageState extends State<SettingsPage> {
               GestureDetector(
                   onTap: () async {
                     try {
+                      ProviderManager().resetAll();
+                      await Future.delayed(Duration(seconds: 1));
                       await FirebaseAuth.instance.signOut();
                       // if (FirebaseAuth.instance.currentUser == null) {
                       //   try {

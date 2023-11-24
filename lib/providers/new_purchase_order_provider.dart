@@ -107,7 +107,7 @@ class NPOrderProvider with ChangeNotifier {
 
   Future<void> reduceItemsDetailsQtyFB(
       int orderId, String itemName, int quantity) async {
-        final orders = _po;
+    final orders = _po;
     final orderIndex = orders.indexWhere(
       (element) => element.orderID == orderId,
     );
@@ -128,7 +128,7 @@ class NPOrderProvider with ChangeNotifier {
     } catch (e) {
       print('$e reduceItemsDetailsQtyFB');
     }
-      }
+  }
 
   Future<void> addPurchaseOrder(PurchaseOrderModel puchaseOrder) async {
     try {
@@ -365,6 +365,12 @@ class NPOrderProvider with ChangeNotifier {
     } catch (e) {
       print('error in main provider update $e');
     }
+  }
+
+  void reset() {
+    _pa.clear();
+    _po.clear();
+    notifyListeners();
   }
 }
 

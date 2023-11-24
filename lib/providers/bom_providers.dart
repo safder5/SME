@@ -112,17 +112,22 @@ class BOMProvider extends ChangeNotifier {
         }
         final data = doc.data() as Map<String, dynamic>;
         final bom = BOMmodel(
-          productName: data['productName'],
-          itemswithQuantities: items,
-          notes: data['notes'],
-          productCode: data['productCode'],
-          productionIDs: data['productionIDs']
-        );
+            productName: data['productName'],
+            itemswithQuantities: items,
+            notes: data['notes'],
+            productCode: data['productCode'],
+            productionIDs: data['productionIDs']);
         _boms.add(bom);
       }
       notifyListeners();
     } catch (e) {
       print('$e error to hai ');
     }
+  }
+
+   void reset() {
+    _boms.clear();
+    _items.clear();
+    notifyListeners();
   }
 }

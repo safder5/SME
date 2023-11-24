@@ -469,4 +469,12 @@ class ItemsProvider with ChangeNotifier {
     _salesDelivered.clear();
     notifyListeners();
   }
+
+  void reset() {
+    _allItems.clear();
+    _poItems.clear();
+    _soItems.clear();
+    _salesDelivered.clear();
+    notifyListeners();
+  }
 }

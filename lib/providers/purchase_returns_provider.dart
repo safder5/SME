@@ -41,4 +41,8 @@ class PurchaseReturnsProvider with ChangeNotifier {
     _pr.add(prit);
     notifyListeners();
   }
+  void reset() {
+    _pr.clear();
+    notifyListeners();
+  }
 }

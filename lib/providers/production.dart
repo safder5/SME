@@ -67,4 +67,10 @@ class ProductionProvider with ChangeNotifier {
     _prod.remove(_prod[index]);
     notifyListeners();
   }
+
+  void reset() {
+    _prod.clear();
+
+    notifyListeners();
+  }
 }

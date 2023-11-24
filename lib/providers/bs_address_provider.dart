@@ -23,4 +23,10 @@ class BSAddressProvider with ChangeNotifier {
     _billing = null;
     _shipping = null;
   }
+
+  void reset() {
+    _billing = null;
+    _shipping == null;
+    notifyListeners();
+  }
 }

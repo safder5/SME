@@ -59,10 +59,17 @@ class InventorySummaryProvider with ChangeNotifier {
       print('Error fetching in hand items: $e');
     }
   }
- 
 
- // do it using providers data
- 
+  void reset() {
+    _toRecieve = 0;
+    _inHand = 0;
+    _inventoryItems.clear();
+    _purchaseOrderItems.clear();
+    notifyListeners();
+  }
+
+  // do it using providers data
+
   // Future<void> totalTobeRecieved() async {
   //   try {
   //     // sotre all items in inventory items

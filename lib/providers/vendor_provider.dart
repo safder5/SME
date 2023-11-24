@@ -107,4 +107,8 @@ class VendorProvider with ChangeNotifier {
       print('error uploadOrderinCustomerProfile $e');
     }
   }
+  void reset() {
+    _vendors.clear();
+    notifyListeners();
+  }
 }

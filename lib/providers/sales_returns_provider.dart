@@ -46,4 +46,8 @@ class SalesReturnsProvider with ChangeNotifier {
     _sr.add(ret);
     notifyListeners();
   }
+  void reset() {
+    _sr.clear();
+    notifyListeners();
+  }
 }

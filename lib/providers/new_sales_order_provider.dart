@@ -469,4 +469,9 @@ class NSOrderProvider with ChangeNotifier {
     _so[index] = foundOrder;
     notifyListeners();
   }
+  void reset() {
+    _sa.clear();
+    _so.clear();
+    notifyListeners();
+  }
 }

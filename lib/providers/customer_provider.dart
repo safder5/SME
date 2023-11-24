@@ -127,4 +127,10 @@ class CustomerProvider with ChangeNotifier {
       print('error uploadOrderinCustomerProfile $e');
     }
   }
+
+  void reset() {
+    _customerNames.clear();
+    _customers.clear();
+    notifyListeners();
+  }
 }
