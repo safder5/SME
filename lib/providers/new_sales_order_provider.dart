@@ -47,6 +47,24 @@ class NSOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteSalesOrderFB(int orderId) async {
+    try {
+      await _salesOrderCollection.doc(orderId.toString()).delete();
+      notifyListeners();
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  void deleteSO(int orderId) {
+    final orders = _so;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    _so.removeAt(orderIndex);
+    notifyListeners();
+  }
+
   void updateitemDetailsquantityinProvider(
       int orderId, String itemName, int quantity) {
     final orders = _so;
@@ -66,9 +84,108 @@ class NSOrderProvider with ChangeNotifier {
     _so[orderIndex] = order;
     notifyListeners();
   }
+
   Future<void> updateitemDetailsquantityinFireBase(
-      int orderId, String itemName, int quantity) async{
-    
+      int orderId, String itemName, int quantity) async {
+    final orders = _so;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q += quantity;
+    try {
+      await _salesOrderCollection
+          .doc(orderId.toString())
+          .collection('items')
+          .doc(itemName)
+          .update({'originalQuantity': q});
+      notifyListeners();
+    } catch (e) {
+      print('$e updateitemDetailsquantityinFireBase');
+    }
+  }
+
+  void reduceItemsDetailsQuantity(int orderId, String itemName, int quantity) {
+    final orders = _so;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q -= quantity;
+    item.originalQuantity = q;
+    items[itemIndex] = item;
+    order.items = items;
+    _so[orderIndex] = order;
+    notifyListeners();
+  }
+
+  Future<void> reduseItemsDetailsQuantityFB(
+      int orderId, String itemName, int quantity) async {
+    final orders = _so;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q -= quantity;
+    try {
+      await _salesOrderCollection
+          .doc(orderId.toString())
+          .collection('items')
+          .doc(itemName)
+          .update({'originalQuantity': q});
+      notifyListeners();
+    } catch (e) {
+      print('$e updateitemDetailsquantityinFireBase');
+    }
+  }
+
+  void removeSalesItementirely(
+    int orderId,
+    String itemName,
+  ) {
+    final orders = _so;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    items.removeAt(itemIndex);
+    order.items = items;
+    _so[orderIndex] = order;
+    notifyListeners();
+  }
+
+  Future<void> removeSOItemEntirelyFB(
+    int orderId,
+    String itemName,
+  ) async {
+    try {
+      await _salesOrderCollection
+          .doc(orderId.toString())
+          .collection('items')
+          .doc(itemName)
+          .delete();
+      notifyListeners();
+    } catch (e) {
+      print('$e updateitemDetailsquantityinFireBase');
+    }
   }
 
   void addSalesOrderInProvider(

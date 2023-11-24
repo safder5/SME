@@ -17,9 +17,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
+
+GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
+  'email,https://www.googleapis.com/auth/contacts.readonly'
+]);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -130,7 +135,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         color: const Color(colorPrimary),
         initialRoute: FirebaseAuth.instance.currentUser == null
-            ? '/loginPage'
+            ? '/signupPage'
             : '/loadInventory',
         routes: {
           '/myApp': (context) => const MyApp(),
@@ -180,7 +185,7 @@ class _LoadInventoryState extends State<LoadInventory> {
       await vendorP.fetchAllVendors();
       await itemsP.getItems();
       await invSummP.totalInHand();
-      await invSummP.totalTobeRecieved();
+
       await salesOP.fetchSalesOrders();
       await salesOP.fetchActivity();
       await salesRP.fetchSalesReturns();
@@ -189,7 +194,7 @@ class _LoadInventoryState extends State<LoadInventory> {
       await purchaseRP.fetchPurchaseReturns();
       await bomP.fetchBOMS();
       await prodP.fetchProductions();
-
+      // await invSummP.totalTobeRecieved();
       setState(() {
         _loadData = true;
       });
@@ -270,10 +275,7 @@ class _LoadInventoryState extends State<LoadInventory> {
 //   }
 // }
 
-
-
-
-// animations links 
-// https://lottiefiles.com/animations/loading-iew43eMiJN.   
-// https://lottiefiles.com/animations/factory-industry-house-home-building-maison-mocca-animation-97rg4awLxc. 
+// animations links
+// https://lottiefiles.com/animations/loading-iew43eMiJN.
+// https://lottiefiles.com/animations/factory-industry-house-home-building-maison-mocca-animation-97rg4awLxc.
 // https://lottiefiles.com/animations/simple-loading-rXNTJsH6UW

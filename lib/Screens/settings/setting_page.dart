@@ -1,4 +1,3 @@
-import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:ashwani/Screens/settings/customer_support.dart';
 import 'package:ashwani/Screens/settings/rate_app.dart';
 import 'package:ashwani/Screens/settings/setting_screens/about.dart';
@@ -6,13 +5,11 @@ import 'package:ashwani/Screens/settings/setting_screens/feedback.dart';
 import 'package:ashwani/Screens/settings/setting_screens/org_profile.dart';
 import 'package:ashwani/Screens/settings/setting_screens/privacy_security.dart';
 import 'package:ashwani/Screens/settings/setting_screens/user.dart';
-import 'package:ashwani/Services/authorizeUser/loginauth.dart';
+import 'package:ashwani/Services/authorizeUser/signupauth.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -106,38 +103,38 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const Spacer(),
               GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     try {
-                      FirebaseAuth.instance.signOut();
-                      if (FirebaseAuth.instance.currentUser == null) {
-                        try {
-                          // Provider.of<NSOrderProvider>(context, listen: false)
-                          //     .clearAll();
-                          // print('1');
-                          // Provider.of<NPOrderProvider>(context, listen: false)
-                          //     .clearAll(); print('1');
-                          Provider.of<InventorySummaryProvider>(context,
-                                  listen: false)
-                              .clearAll();
-                          print('1');
-                          // Provider.of<PurchaseReturnsProvider>(context,
-                          //         listen: false)
-                          //     .clearPurchaseReturns(); print('1');
-                          // Provider.of<SalesReturnsProvider>(context,
-                          //         listen: false)
-                          //     .clearSalesReturns(); print('1');
-                        } catch (e) {
-                          print('error clearing providers $e');
-                        }
-                      }
+                      await FirebaseAuth.instance.signOut();
+                      // if (FirebaseAuth.instance.currentUser == null) {
+                      //   try {
+                      //     // Provider.of<NSOrderProvider>(context, listen: false)
+                      //     //     .clearAll();
+                      //     // print('1');
+                      //     // Provider.of<NPOrderProvider>(context, listen: false)
+                      //     //     .clearAll(); print('1');
+                      //     // Provider.of<InventorySummaryProvider>(context,
+                      //     //         listen: false)
+                      //     //     .clearAll();
+                      //     print('1');
+                      //     // Provider.of<PurchaseReturnsProvider>(context,
+                      //     //         listen: false)
+                      //     //     .clearPurchaseReturns(); print('1');
+                      //     // Provider.of<SalesReturnsProvider>(context,
+                      //     //         listen: false)
+                      //     //     .clearSalesReturns(); print('1');
+                      //   } catch (e) {
+                      //     print('error clearing providers $e');
+                      //   }
+                      // }
                     } catch (e) {
                       print('error');
                     }
-
+                    if (!context.mounted) return;
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const LoginAuthPage()));
+                        builder: (context) => const SignUpAuthPage()));
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/loginPage', (route) => false);
+                        '/signupPage', (route) => false);
                   },
                   child: Container(
                       width: double.infinity,

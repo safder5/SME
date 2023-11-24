@@ -59,7 +59,6 @@ class _ItemScreenState extends State<ItemScreen> {
                             textScaleFactor: 1.2,
                           ),
                           const Spacer(),
-                        
                         ],
                       ),
                       Padding(
@@ -148,7 +147,7 @@ class _ItemScreenState extends State<ItemScreen> {
                           child: Container(
                             // margin: EdgeInsets.symmetric(horizontal: 12,vertical: 6),
                             height: 45,
-                            width: MediaQuery.of(context).size.width*0.45,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             decoration: BoxDecoration(
                                 color:
                                     isSelected[i] ? blue : b.withOpacity(0.03),
@@ -168,12 +167,14 @@ class _ItemScreenState extends State<ItemScreen> {
                 ],
               ),
             ),
-            if (isSelected[0]) ItemDetails(item: item,),
+            if (isSelected[0])
+              ItemDetails(
+                item: item,
+              ),
             if (isSelected[1])
               ItemTransactionHistory(
                 item: item,
               ),
-           
           ],
         ),
       );
@@ -221,6 +222,7 @@ Future<void> _showDialog(BuildContext context, String itemName) async {
                       int tQ = int.parse(quantityController.text);
                       await prov.stockAdjustinFB(q, itemName, now, tQ);
                       prov.stockAdjustinProvider(q, itemName, now, tQ);
+                      if (!context.mounted) return;
                       Navigator.of(context).pop();
                     },
                     child: Text(
@@ -241,7 +243,7 @@ class ItemDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const  EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           Container(
@@ -307,8 +309,7 @@ class ItemDetails extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            (item.itemQuantity! -
-                                    item.quantitySales!)
+                            (item.itemQuantity! - item.quantitySales!)
                                 .toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.w300, color: blue),
@@ -329,7 +330,6 @@ class ItemDetails extends StatelessWidget {
               ],
             ),
           ),
-         
         ],
       ),
     );
@@ -372,7 +372,7 @@ class ItemTransactionHistory extends StatelessWidget {
               text = 'Waste';
               c = r;
             }
-    
+
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -403,8 +403,7 @@ class ItemTransactionHistory extends StatelessWidget {
                       Text(
                         itemTrack.quantity.toString(),
                         textScaleFactor: 1.2,
-                        style: TextStyle(
-                            color: c, fontWeight: FontWeight.w300),
+                        style: TextStyle(color: c, fontWeight: FontWeight.w300),
                       ),
                     ],
                   ),

@@ -91,7 +91,7 @@ class _SalesOrdersState extends State<SalesOrders> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
           heroTag: null,
           // elevation: 0,
           tooltip: 'New Sales Order',

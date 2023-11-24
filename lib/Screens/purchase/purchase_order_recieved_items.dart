@@ -90,7 +90,7 @@ class _PurchaseOrderRecievedItemsState
       await uploadItemsRecieved();
       // uploads item recieved creating a new items column in there if prevData = false .done
 
-      await updatePurchaseOrderItemDetails();
+      // await updatePurchaseOrderItemDetails();
       // subtracts what values have been recieved and reduces the purchase quantity to be recieved
 
       await uploadPurchaseActivity(track);
@@ -190,27 +190,27 @@ class _PurchaseOrderRecievedItemsState
     }
   }
 
-  Future<void> updatePurchaseOrderItemDetails() async {
-    final String orderId = widget.orderId.toString();
-    final String item = _itemnameController.text;
-    try {
-      CollectionReference cRref = FirebaseFirestore.instance
-          .collection('UserData')
-          .doc(auth!.email)
-          .collection('orders')
-          .doc('purchases')
-          .collection('purchase_orders')
-          .doc(orderId)
-          .collection('items');
-      DocumentSnapshot docSnap = await cRref.doc(item).get();
-      int prevItemQuantity = docSnap.get('quantityPurchase');
-      await cRref
-          .doc(item)
-          .update({'quantityPurchase': prevItemQuantity - quantityRecieved});
-    } catch (e) {
-      print('error while updating purchase order details');
-    }
-  }
+  // Future<void> updatePurchaseOrderItemDetails() async {
+  //   final String orderId = widget.orderId.toString();
+  //   final String item = _itemnameController.text;
+  //   try {
+  //     CollectionReference cRref = FirebaseFirestore.instance
+  //         .collection('UserData')
+  //         .doc(auth!.email)
+  //         .collection('orders')
+  //         .doc('purchases')
+  //         .collection('purchase_orders')
+  //         .doc(orderId)
+  //         .collection('items');
+  //     DocumentSnapshot docSnap = await cRref.doc(item).get();
+  //     int prevItemQuantity = docSnap.get('quantityPurchase');
+  //     await cRref
+  //         .doc(item)
+  //         .update({'quantityPurchase': prevItemQuantity - quantityRecieved});
+  //   } catch (e) {
+  //     print('error while updating purchase order details');
+  //   }
+  // }
 
   Future<void> uploadPurchaseActivity(ItemTrackingPurchaseOrder track) async {
     try {

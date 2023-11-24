@@ -59,6 +59,7 @@ dependencies:
   country_picker: ^2.0.21
   lottie: ^2.7.0
   flutter_svg: ^2.0.9
+  google_sign_in: ^6.1.6
   
 
 

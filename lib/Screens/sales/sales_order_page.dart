@@ -27,7 +27,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
     return Consumer<NSOrderProvider>(builder: (_, sop, __) {
       SalesOrderModel salesorder =
           sop.som.firstWhere((element) => element.orderID == widget.orderId);
-      print(' this is order page items length ${salesorder.items!.length}');
+      // print(' this is order page items length ${salesorder.items.isEmpty?? 0}');
       return Scaffold(
         backgroundColor: w,
         floatingActionButton: Visibility(

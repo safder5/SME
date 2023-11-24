@@ -1,10 +1,11 @@
 import 'package:ashwani/Models/purchase_order.dart';
 import 'package:ashwani/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/Screens/purchase/edit_purchase_order.dart/increase_details_item_qty.dart';
+import 'package:ashwani/Screens/purchase/edit_purchase_order.dart/reduce_item_qty.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/iq_list.dart';
-import '../../Services/helper.dart';
 import '../../constantWidgets/boxes.dart';
 import '../../constants.dart';
 
@@ -148,12 +149,22 @@ class _POPDetailsState extends State<POPDetails> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   OutlinedButton(
-                                    onPressed: () {
+                                    onPressed: () async{
                                       // increase quantity
-                                      _showDialogIncreaseQuantity(
+                                     ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 500));
+                                      if (!context.mounted) return;
+                                      Navigator.push(
                                           context,
-                                          items[index].itemName,
-                                          widget.orderId);
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  IncreaseDetailsItemQtyPO(
+                                                      itemName:
+                                                          items[index].itemName,
+                                                      orderId:
+                                                          widget.orderId)));
                                     },
                                     style: OutlinedButton.styleFrom(
                                         surfaceTintColor: gn,
@@ -164,25 +175,7 @@ class _POPDetailsState extends State<POPDetails> {
                                       style: TextStyle(color: gn),
                                     ),
                                   ),
-                                  toRecieve == items[index].originalQuantity
-                                      ? OutlinedButton(
-                                          onPressed: () {
-                                            // limit is toRecieve
-                                            // item can be removed
-                                            _showDialogReduceQtyAndALsoRemoveItemEntirely(
-                                                context,
-                                                items[index].itemName,
-                                                widget.orderId);
-                                          },
-                                          style: OutlinedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.red.withOpacity(0.25)),
-                                          child: Text(
-                                            'Remove Quantity',
-                                            style: TextStyle(color: r),
-                                          ),
-                                        )
-                                      : toRecieve == 0
+                                   toRecieve == 0
                                           ? SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -193,25 +186,57 @@ class _POPDetailsState extends State<POPDetails> {
                                                 style: TextStyle(color: b),
                                               ))
                                           : OutlinedButton(
-                                              onPressed: () {
+                                              onPressed: () async{
                                                 // limit to change is toship
                                                 // item cannot be removed
-                                                _showDialogReduceQuantityOnly(
-                                                    context,
-                                                    items[index].itemName,
-                                                    widget.orderId,
-                                                    toRecieve);
+                                               ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 500));
+                                      if (!context.mounted) return;
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ReduceItemQty(
+                                                      itemName:
+                                                          items[index].itemName,
+                                                      orderId:
+                                                          widget.orderId, limit: toRecieve,)));
                                               },
                                               style: OutlinedButton.styleFrom(
                                                   backgroundColor: Colors.red
                                                       .withOpacity(0.25)),
                                               child: Text(
-                                                'Remove Quantity',
+                                                'Reduce Quantity',
                                                 style: TextStyle(color: r),
                                               ),
                                             )
                                 ],
                               ),
+                              // Row(
+                              //   children: [
+                              //     toRecieve == items[index].originalQuantity
+                              //         ? OutlinedButton(
+                              //             onPressed: () {
+                              //               // limit is toRecieve
+                              //               // item can be removed
+                              //               _showDialogReduceQtyAndALsoRemoveItemEntirely(
+                              //                   context,
+                              //                   items[index].itemName,
+                              //                   widget.orderId);
+                              //             },
+                              //             style: OutlinedButton.styleFrom(
+                              //                 backgroundColor:
+                              //                     Colors.red.withOpacity(0.25)),
+                              //             child: Text(
+                              //               'Remove Quantity',
+                              //               style: TextStyle(color: r),
+                              //             ),
+                              //           )
+                              //         :Container()
+                              //   ],
+                              // )
                             ],
                           ),
                         ));
@@ -415,156 +440,156 @@ class _POPReturnsState extends State<POPReturns> {
   }
 }
 
-void _showDialogIncreaseQuantity(
-    BuildContext context, String itemName, int orderId) {
-  showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController quantityController = TextEditingController();
-        return AlertDialog(
-          surfaceTintColor: w,
-          backgroundColor: w,
-          title: Text('Increase Quantity of $itemName by value?'),
-          content: TextField(
-            keyboardType: TextInputType.number,
-            controller: quantityController,
-            decoration: getInputDecoration(
-                hint: 'Increase quantity by ', errorColor: r),
-          ),
-          actions: [
-            Row(
-              children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: blue),
-                    )),
-                const Spacer(),
-                TextButton(
-                    onPressed: () async {
-                      // final now = DateTime.now();
-                      // //save quantity and update
-                      // final int q =
-                      //     int.parse(quantityController.text) + (sih ?? 0);
-                      // int tQ = int.parse(quantityController.text);
-                      // await prov.stockAdjustinFB(q, itemName, now, tQ);
-                      // prov.stockAdjustinProvider(q, itemName, now, tQ);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Save',
-                      style: TextStyle(color: blue),
-                    )),
-              ],
-            )
-          ],
-        );
-      });
-}
+// void _showDialogIncreaseQuantity(
+//     BuildContext context, String itemName, int orderId) {
+//   showDialog(
+//       context: context,
+//       builder: (context) {
+//         TextEditingController quantityController = TextEditingController();
+//         return AlertDialog(
+//           surfaceTintColor: w,
+//           backgroundColor: w,
+//           title: Text('Increase Quantity of $itemName by value?'),
+//           content: TextField(
+//             keyboardType: TextInputType.number,
+//             controller: quantityController,
+//             decoration: getInputDecoration(
+//                 hint: 'Increase quantity by ', errorColor: r),
+//           ),
+//           actions: [
+//             Row(
+//               children: [
+//                 TextButton(
+//                     onPressed: () {
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       'Cancel',
+//                       style: TextStyle(color: blue),
+//                     )),
+//                 const Spacer(),
+//                 TextButton(
+//                     onPressed: () async {
+//                       // final now = DateTime.now();
+//                       // //save quantity and update
+//                       // final int q =
+//                       //     int.parse(quantityController.text) + (sih ?? 0);
+//                       // int tQ = int.parse(quantityController.text);
+//                       // await prov.stockAdjustinFB(q, itemName, now, tQ);
+//                       // prov.stockAdjustinProvider(q, itemName, now, tQ);
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       'Save',
+//                       style: TextStyle(color: blue),
+//                     )),
+//               ],
+//             )
+//           ],
+//         );
+//       });
+// }
 
-void _showDialogReduceQtyAndALsoRemoveItemEntirely(
-  BuildContext context,
-  String itemName,
-  int orderId,
-) {
-  showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController quantityController = TextEditingController();
-        return AlertDialog(
-          surfaceTintColor: w,
-          backgroundColor: w,
-          title: Text('Reduce Quantity of $itemName by value?'),
-          content: TextField(
-            keyboardType: TextInputType.number,
-            controller: quantityController,
-            decoration: getInputDecoration(
-                hint: 'Increase quantity by ', errorColor: r),
-          ),
-          actions: [
-            Row(
-              children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: blue),
-                    )),
-                const Spacer(),
-                // another button of remove item entirely
-                TextButton(
-                    onPressed: () async {
-                      // final now = DateTime.now();
-                      // //save quantity and update
-                      // final int q =
-                      //     int.parse(quantityController.text) + (sih ?? 0);
-                      // int tQ = int.parse(quantityController.text);
-                      // await prov.stockAdjustinFB(q, itemName, now, tQ);
-                      // prov.stockAdjustinProvider(q, itemName, now, tQ);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Save',
-                      style: TextStyle(color: blue),
-                    )),
-              ],
-            )
-          ],
-        );
-      });
-}
+// void _showDialogReduceQtyAndALsoRemoveItemEntirely(
+//   BuildContext context,
+//   String itemName,
+//   int orderId,
+// ) {
+//   showDialog(
+//       context: context,
+//       builder: (context) {
+//         TextEditingController quantityController = TextEditingController();
+//         return AlertDialog(
+//           surfaceTintColor: w,
+//           backgroundColor: w,
+//           title: Text('Reduce Quantity of $itemName by value?'),
+//           content: TextField(
+//             keyboardType: TextInputType.number,
+//             controller: quantityController,
+//             decoration: getInputDecoration(
+//                 hint: 'Increase quantity by ', errorColor: r),
+//           ),
+//           actions: [
+//             Row(
+//               children: [
+//                 TextButton(
+//                     onPressed: () {
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       'Cancel',
+//                       style: TextStyle(color: blue),
+//                     )),
+//                 const Spacer(),
+//                 // another button of remove item entirely
+//                 TextButton(
+//                     onPressed: () async {
+//                       // final now = DateTime.now();
+//                       // //save quantity and update
+//                       // final int q =
+//                       //     int.parse(quantityController.text) + (sih ?? 0);
+//                       // int tQ = int.parse(quantityController.text);
+//                       // await prov.stockAdjustinFB(q, itemName, now, tQ);
+//                       // prov.stockAdjustinProvider(q, itemName, now, tQ);
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       'Save',
+//                       style: TextStyle(color: blue),
+//                     )),
+//               ],
+//             )
+//           ],
+//         );
+//       });
+// }
 
-void _showDialogReduceQuantityOnly(
-    BuildContext context, String itemName, int orderId, int limit) {
-  showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController quantityController = TextEditingController();
-        return AlertDialog(
-          surfaceTintColor: w,
-          backgroundColor: w,
-          title: Text('Increase Quantity of $itemName by value?'),
-          content: TextField(
-            keyboardType: TextInputType.number,
-            controller: quantityController,
-            decoration: getInputDecoration(
-                hint: 'Increase quantity by ', errorColor: r),
-          ),
-          actions: [
-            Row(
-              children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: blue),
-                    )),
-                const Spacer(),
-                TextButton(
-                    onPressed: () async {
-                      // final now = DateTime.now();
-                      // //save quantity and update
-                      // final int q =
-                      //     int.parse(quantityController.text) + (sih ?? 0);
-                      // int tQ = int.parse(quantityController.text);
-                      // await prov.stockAdjustinFB(q, itemName, now, tQ);
-                      // prov.stockAdjustinProvider(q, itemName, now, tQ);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Save',
-                      style: TextStyle(color: blue),
-                    )),
-              ],
-            )
-          ],
-        );
-      });
-}
+// void _showDialogReduceQuantityOnly(
+//     BuildContext context, String itemName, int orderId, int limit) {
+//   showDialog(
+//       context: context,
+//       builder: (context) {
+//         TextEditingController quantityController = TextEditingController();
+//         return AlertDialog(
+//           surfaceTintColor: w,
+//           backgroundColor: w,
+//           title: Text('Increase Quantity of $itemName by value?'),
+//           content: TextField(
+//             keyboardType: TextInputType.number,
+//             controller: quantityController,
+//             decoration: getInputDecoration(
+//                 hint: 'Increase quantity by ', errorColor: r),
+//           ),
+//           actions: [
+//             Row(
+//               children: [
+//                 TextButton(
+//                     onPressed: () {
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       'Cancel',
+//                       style: TextStyle(color: blue),
+//                     )),
+//                 const Spacer(),
+//                 TextButton(
+//                     onPressed: () async {
+//                       // final now = DateTime.now();
+//                       // //save quantity and update
+//                       // final int q =
+//                       //     int.parse(quantityController.text) + (sih ?? 0);
+//                       // int tQ = int.parse(quantityController.text);
+//                       // await prov.stockAdjustinFB(q, itemName, now, tQ);
+//                       // prov.stockAdjustinProvider(q, itemName, now, tQ);
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       'Save',
+//                       style: TextStyle(color: blue),
+//                     )),
+//               ],
+//             )
+//           ],
+//         );
+//       });
+// }

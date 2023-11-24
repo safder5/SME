@@ -41,6 +41,95 @@ class NPOrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateitemDetailsquantityinProvider(
+      int orderId, String itemName, int quantity) {
+    final orders = _po;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q += quantity;
+    item.originalQuantity = q;
+    items[itemIndex] = item;
+    order.items = items;
+    _po[orderIndex] = order;
+    notifyListeners();
+  }
+
+  Future<void> updateitemDetailsquantityinFireBase(
+      int orderId, String itemName, int quantity) async {
+    final orders = _po;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q += quantity;
+    try {
+      await _purchaseOrderCollection
+          .doc(orderId.toString())
+          .collection('items')
+          .doc(itemName)
+          .update({'originalQuantity': q});
+      notifyListeners();
+    } catch (e) {
+      print('$e updateitemDetailsquantityinFireBase Purchase');
+    }
+  }
+
+  void reduceItemsDetailsQTY(int orderId, String itemName, int quantity) {
+    final orders = _po;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q -= quantity;
+    item.originalQuantity = q;
+    items[itemIndex] = item;
+    order.items = items;
+    _po[orderIndex] = order;
+    notifyListeners();
+  }
+
+  Future<void> reduceItemsDetailsQtyFB(
+      int orderId, String itemName, int quantity) async {
+        final orders = _po;
+    final orderIndex = orders.indexWhere(
+      (element) => element.orderID == orderId,
+    );
+    final order = orders[orderIndex];
+    final items = order.items ?? [];
+    final itemIndex =
+        items.indexWhere((element) => element.itemName == itemName);
+    final item = items[itemIndex];
+    var q = item.originalQuantity!;
+    q -= quantity;
+    try {
+      await _purchaseOrderCollection
+          .doc(orderId.toString())
+          .collection('items')
+          .doc(itemName)
+          .update({'originalQuantity': q});
+      notifyListeners();
+    } catch (e) {
+      print('$e reduceItemsDetailsQtyFB');
+    }
+      }
+
   Future<void> addPurchaseOrder(PurchaseOrderModel puchaseOrder) async {
     try {
       await _purchaseOrderCollection

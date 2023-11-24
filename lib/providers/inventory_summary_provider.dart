@@ -59,28 +59,31 @@ class InventorySummaryProvider with ChangeNotifier {
       print('Error fetching in hand items: $e');
     }
   }
+ 
 
-  Future<void> totalTobeRecieved() async {
-    try {
-      // sotre all items in inventory items
-      final querySnapshot = await tobeRecieved.get();
-      for (final doc in querySnapshot.docs) {
-        final itemsCollection = doc.reference.collection('items');
-        final itemDocs = await itemsCollection.get();
-        for (final itemDoc in itemDocs.docs) {
-          final itemData = itemDoc.data();
-          if (itemData['quantityPurchase'] != null && itemData['quantityPurchase'] is int) {
-          final quantityPurchase = itemData['quantityPurchase'] as int;
-          _toRecieve += quantityPurchase;
-        } else {
-          // Handle the case when 'itemQuantity' is null or not an integer
-          print('Invalid or null itemQuantity for document: ${itemDoc.id}');
-        }
-        }
-      }
-      notifyListeners();
-    } catch (e) {
-      print('Error fetching : $e');
-    }
-  }
+ // do it using providers data
+ 
+  // Future<void> totalTobeRecieved() async {
+  //   try {
+  //     // sotre all items in inventory items
+  //     final querySnapshot = await tobeRecieved.get();
+  //     for (final doc in querySnapshot.docs) {
+  //       final itemsCollection = doc.reference.collection('itemsRecieved');
+  //       final itemDocs = await itemsCollection.get();
+  //       for (final itemDoc in itemDocs.docs) {
+  //         final itemData = itemDoc.data();
+  //         if (itemData['quantityRecieved'] != null && itemData['quantityRecieved'] is int) {
+  //         final quantityPurchase = itemData['quantityRecieved'] - itemData['quantityRecieved'] as int;
+  //         _toRecieve += quantityPurchase;
+  //       } else {
+  //         // Handle the case when 'itemQuantity' is null or not an integer
+  //         print('Invalid or null itemQuantity for document: ${itemDoc.id}');
+  //       }
+  //       }
+  //     }
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print('Error fetching : $e');
+  //   }
+  // }
 }

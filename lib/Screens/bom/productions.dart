@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../../Providers/iq_list_provider.dart';
 
 class Production extends StatefulWidget {
   const Production({super.key});

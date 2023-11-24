@@ -247,8 +247,8 @@ class _SalesOrderTransactionsShippedState
             .collection('Items')
             .doc(_itemnameController.text)
             .update({
-          'itemQuantity': (itemQuantity! - quantityShipped),
-          'quantitySales': (selectedItem.quantitySales! - quantityShipped),
+          'itemQuantity': (itemQuantity! - int.parse(_quantityCtrl.text)),
+          'quantitySales': (selectedItem.quantitySales! + int.parse(_quantityCtrl.text)),
         });
       }
     } catch (e) {
