@@ -20,11 +20,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'Services/NetworkService/network_service.dart';
 import 'constants.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
   'email,https://www.googleapis.com/auth/contacts.readonly'
 ]);
+NetworkService _networkService = NetworkService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +66,34 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // _networkService.connectionStatusStream.listen((bool isConnected) {
+    //   if (!isConnected) {
+    //     // Show a modal barrier or display a message indicating no internet connection
+    //     // Example: Show a modal dialog with a message
+    //    MaterialApp(
+    //       home: Scaffold(
+    //         body: Container(
+    //           color: Colors.white,
+    //           child: const Center(
+    //             child: Column(children: [
+    //               Icon(
+    //                 Icons.error_outline,
+    //                 color: Colors.red,
+    //                 size: 25,
+    //               ),
+    //               SizedBox(height: 16),
+    //               Text(
+    //                 'No Internet Connection',
+    //                 style: TextStyle(color: Colors.red, fontSize: 25),
+    //               ),
+    //             ]),
+    //           ),
+    //         ),
+    //       ),
+    //     );
+    //   }
+    // });
+
     if (_error) {
       return MaterialApp(
         home: Scaffold(
@@ -133,7 +163,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //         secondary: const Color(colorPrimary),
         //         brightness: Brightness.dark)),
         debugShowCheckedModeBanner: false,
-        color: const Color(colorPrimary),
+        color: const Color(bluePrimary),
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? '/signupPage'
             : '/loadInventory',

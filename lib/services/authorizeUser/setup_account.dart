@@ -6,10 +6,11 @@ import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../db_created.dart';
+import 'signupauth.dart';
 
 class SetupAccount extends StatefulWidget {
-  const SetupAccount({super.key});
+  const SetupAccount({super.key, required this.photoURL});
+  final String photoURL;
 
   @override
   State<SetupAccount> createState() => _SetupAccountState();
@@ -32,8 +33,8 @@ class _SetupAccountState extends State<SetupAccount> {
         'orgName': _companyNameCtrl.text.trim(),
         'orgType': 'SME',
         'inventory_start_date': cdate,
-        'phone_number': _auth!.phoneNumber?? 0
-
+        'phone_number': _auth!.phoneNumber ?? 0,
+        'photoURL': widget.photoURL
       });
     } catch (e) {
       print("Error in creating database $e");
@@ -44,6 +45,20 @@ class _SetupAccountState extends State<SetupAccount> {
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _companyNameCtrl = TextEditingController();
   final TextEditingController _countryCtrl = TextEditingController();
+
+  // Widget displayProfilePicture() {
+  //   return CircleAvatar(
+  //     backgroundColor: blue,
+  //     radius: 30, // Adjust the radius as needed
+  //     backgroundImage: widget.photoURL != 'na'
+  //         ? NetworkImage(widget.photoURL)
+  //         : const AssetImage('assets/default_profile_image.png')
+  //             as ImageProvider,
+  //     // Use a default image in case photoURL is null or fails to load
+  //     // Replace 'default_profile_image.png' with your default image asset path
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,19 +70,52 @@ class _SetupAccountState extends State<SetupAccount> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                        onTap: () {
-                          // logout and go back to the previous page
-                        },
-                        child: const Icon(Icons.logout_outlined)),
+                    Expanded(
+                      flex: 9,
+                      child: Text(
+                        'Let\'s Setup Your Account',
+                        style: TextStyle(
+                            color: b,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                          onPressed: () async {
+                            // logout and go back to the previous page
+                            await FirebaseAuth.instance.signOut();
+                            if (!context.mounted) return;
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SignUpAuthPage()));
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/signupPage', (route) => false);
+                          },
+                          child: Icon(
+                            Icons.more_vert,
+                            color: b,
+                          )),
+                    ),
                   ],
                 ),
-                Text(
-                  'Let\'s Setup Your Account',
-                  style: TextStyle(
-                      color: b, fontSize: 32, fontWeight: FontWeight.w800),
+                const SizedBox(
+                  height: 24,
+                ),
+                // displayProfilePicture(),
+                CircleAvatar(
+                  backgroundColor: blue,
+                  radius: 30, // Adjust the radius as needed
+                  backgroundImage: widget.photoURL != 'na'
+                      ? NetworkImage(widget.photoURL)
+                      : const AssetImage('assets/default_profile_image.png')
+                          as ImageProvider,
+                  // Use a default image in case photoURL is null or fails to load
+                  // Replace 'default_profile_image.png' with your default image asset path
                 ),
                 const SizedBox(
                   height: 24,
@@ -177,8 +225,10 @@ class _SetupAccountState extends State<SetupAccount> {
                         _nameCtrl.text.isNotEmpty &&
                         _countryCtrl.text.isNotEmpty) {
                       if (!context.mounted) return;
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const MyApp()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyApp()));
                     } else {
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -214,6 +264,9 @@ class _SetupAccountState extends State<SetupAccount> {
                           ),
                         ),
                       )),
+                ),
+                const SizedBox(
+                  height: 48,
                 ),
               ],
             ),

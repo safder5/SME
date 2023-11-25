@@ -21,21 +21,16 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
+      
         // Access Firestore and check for data associated with the user's UID
         DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
             .instance
-            .collection('UserData')
-            .doc(user.email)
-            .collection('AllData')
-            .doc('PersonalDetails') // Assuming 'users' is your collection name
+            .collection('Users')
+            .doc(user!.email)// Assuming 'users' is your collection name
             .get();
-        final String? name = userData['name'];
-        return name!.isNotEmpty; // Return true if data exists for the user
-      } else {
-        // User is not logged in
-        return false;
-      }
+        final bool present = userData['id'] == user.email;
+        return present; // Return true if data exists for the user
+      
     } catch (e) {
       print('Error checking user data: $e');
       return false; // Handle the error as needed
@@ -126,7 +121,7 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                                 MaterialPageRoute(
                                     builder: (context) => emailExists
                                         ? const MyApp()
-                                        : const SetupAccount()));
+                                        :  SetupAccount(photoURL: user.photoURL?? 'na',)));
                           } else {
                             if (!context.mounted) return;
                             // Handle sign-in failure or cancellation

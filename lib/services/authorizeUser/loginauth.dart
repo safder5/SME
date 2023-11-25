@@ -1,6 +1,4 @@
 import 'package:ashwani/Services/authorizeUser/authentication.dart';
-import 'package:ashwani/Services/authorizeUser/signupauth.dart';
-import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,10 +13,8 @@ class LoginAuthPage extends StatefulWidget {
 }
 
 class _LoginAuthPageState extends State<LoginAuthPage> {
-  final _auth = FirebaseAuth.instance;
   String email = '';
   String password = '';
-  bool _obscureText = false;
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _pwdCtrl = TextEditingController();
   Color bgEmail = b.withOpacity(0.02);

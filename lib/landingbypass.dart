@@ -3,9 +3,11 @@ import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 import 'Screens/bom.dart';
 import 'Screens/purchase.dart';
 import 'Screens/sales.dart';
+import 'Services/NetworkService/network_service.dart';
 
 class LandingBypass extends StatefulWidget {
   const LandingBypass({super.key});
@@ -31,31 +33,31 @@ class _LandingBypassState extends State<LandingBypass> {
     List<PersistentBottomNavBarItem> navBarItems() {
       return [
         PersistentBottomNavBarItem(
-            inactiveIcon:SvgPicture.asset('lib/icons/home.svg'),
-            icon:SvgPicture.asset('lib/icons/home_active.svg'),
+            inactiveIcon: SvgPicture.asset('lib/icons/home.svg'),
+            icon: SvgPicture.asset('lib/icons/home_active.svg'),
             title: 'Home',
             textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
         PersistentBottomNavBarItem(
-            inactiveIcon:SvgPicture.asset('lib/icons/sales.svg'),
+            inactiveIcon: SvgPicture.asset('lib/icons/sales.svg'),
             icon: SvgPicture.asset('lib/icons/sales_active.svg'),
             title: 'Sales',
-             textStyle: const TextStyle(fontWeight: FontWeight.w300),
+            textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
         PersistentBottomNavBarItem(
             inactiveIcon: SvgPicture.asset('lib/icons/purchase.svg'),
-            icon:SvgPicture.asset('lib/icons/purchase_active.svg'),
+            icon: SvgPicture.asset('lib/icons/purchase_active.svg'),
             title: 'Purchase',
-             textStyle: const TextStyle(fontWeight: FontWeight.w300),
+            textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
         PersistentBottomNavBarItem(
             inactiveIcon: SvgPicture.asset('lib/icons/bom.svg'),
             icon: SvgPicture.asset('lib/icons/bom_active.svg'),
             title: 'BOM',
-             textStyle: const TextStyle(fontWeight: FontWeight.w300),
+            textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue)
       ];
