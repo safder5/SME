@@ -87,7 +87,9 @@ class _ItemsPageState extends State<ItemsPage> {
                               },
                               child: ItemsPageContainer(
                                   itemName: items[index].itemName,
-                                  sku: items[index].itemQuantity.toString()),
+                                  sku: items[index].itemQuantity.toString(),
+                                  imgUrl: items[index].imageURL?? '',
+                                  unitType: items[index].unitType?? 'None',),
                             );
                           })),
                 );

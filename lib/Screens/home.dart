@@ -1,3 +1,5 @@
+import 'package:ashwani/Models/user_model.dart';
+import 'package:ashwani/Providers/user_provider.dart';
 import 'package:ashwani/Screens/home/activity_home.dart';
 import 'package:ashwani/Screens/more.dart';
 import 'package:ashwani/Screens/settings/setting_page.dart';
@@ -7,7 +9,6 @@ import 'package:ashwani/Utils/customers/add_customer.dart';
 import 'package:ashwani/Utils/items/add_items.dart';
 import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:ashwani/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   bool isDisposed = false;
   bool hasData = false;
 
-  final _auth = FirebaseAuth.instance.currentUser;
+  // final _auth = FirebaseAuth.instance.currentUser;
 
   // Future<void> getRequiredHomeData() async {
   //   final inventorySummaryProvider =
@@ -66,6 +67,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userP = Provider.of<UserProvider>(context, listen: false);
+    final UserModel user = userP.user[0];
     return Consumer<InventorySummaryProvider>(builder: (_, prov, __) {
       final toRecieve = prov.toRecieve;
       final instock = prov.inHand;
@@ -100,14 +103,16 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Row(
                               children: [
-                                const CircleAvatar(
+                                CircleAvatar(
+                                  backgroundColor: blue,
                                   maxRadius: 20,
-                                  child: Image(
-                                    width: 40,
-                                    height: 40,
-                                    image:
-                                        AssetImage('lib/images/logoashapp.png'),
-                                    fit: BoxFit.cover,
+                                  child: ClipOval(
+                                    child: Image(
+                                      width: 40,
+                                      height: 40,
+                                      image: NetworkImage(user.photo),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -116,12 +121,12 @@ class _HomePageState extends State<HomePage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'Company Name',
+                                    Text(
+                                      user.companyName,
                                       textScaleFactor: 1.2,
                                     ),
                                     Text(
-                                      _auth!.email ?? 'Name',
+                                      user.name,
                                       textScaleFactor: 0.8,
                                       style: const TextStyle(
                                           color: Colors.black54,

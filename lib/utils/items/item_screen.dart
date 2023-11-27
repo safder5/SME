@@ -1,8 +1,13 @@
+import 'dart:io';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/iq_list.dart';
@@ -21,6 +26,94 @@ class _ItemScreenState extends State<ItemScreen> {
     ('Details'),
     ('Transactions'),
   ];
+  late String imgUrl;
+  final FirebaseStorage firebase_storage = FirebaseStorage.instance;
+  //  late ImageProvider imageProvider;
+  Future<void> _checkPermission(ImageSource source) async {
+    PermissionStatus status = await Permission.photos.status;
+    if (!status.isGranted) {
+      status = await Permission.storage.request();
+      if (!status.isGranted) {
+        // Handle denied permissions
+        print('Permission denied');
+        return;
+      }
+    }
+    await _getImage(source);
+  }
+
+  void showOptions() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: w,
+        content: Column(
+          children: [
+             Text('Change Image ',style: TextStyle(color: b,),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      _checkPermission(ImageSource.camera);
+                    },
+                    child: const Text('Camera')),
+                OutlinedButton(
+                    onPressed: () {
+                      _checkPermission(ImageSource.gallery);
+                    },
+                    child: const Text('Gallery'))
+              ],
+            ),
+          ],
+        )));
+  }
+
+  final ImagePicker _imagePicker = ImagePicker();
+  File? imageFile;
+
+  Future<void> _getImage(ImageSource source) async {
+    try {
+      final pickedFile = await _imagePicker.pickImage(source: source);
+
+      if (pickedFile != null) {
+        setState(() {
+          imageFile = File(pickedFile.path);
+        });
+      } else {
+        setState(() {
+          imageFile = null;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadImageAndUrl() async {
+    if (imageFile != null) {
+      String url = (imageFile!.path);
+
+      try {
+        final Reference ref = firebase_storage.ref().child('images/$url.png');
+
+        final UploadTask uploadTask = ref.putFile(imageFile!);
+
+        final TaskSnapshot snapshot = await uploadTask
+            .whenComplete(() async => {imgUrl = await ref.getDownloadURL()});
+
+        url = await snapshot.ref.getDownloadURL();
+      } catch (e) {
+        print('Error uploading image : $e');
+      }
+    }
+  }
+  // Future<void> updateUrl(){
+
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +171,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'SIH: ${item.itemQuantity}',
+                                  'SIH: ${item.itemQuantity} ${item.unitType}',
                                   style: TextStyle(
                                       color: w, fontWeight: FontWeight.w300),
                                   textScaleFactor: 1,
@@ -86,15 +179,50 @@ class _ItemScreenState extends State<ItemScreen> {
                               ],
                             ),
                             const Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: w,
-                                  borderRadius: BorderRadius.circular(10)),
-                              height: 100,
-                              width: 100,
-                              child: const Image(
-                                  image:
-                                      AssetImage('lib/images/logoashapp.png')),
+                            GestureDetector(
+                              onLongPress: () {
+                                // add image
+                                showOptions();
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: w,
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 100,
+                                width: 100,
+                                child: widget.item.imageURL == ''
+                                    ? const Image(
+                                        image: AssetImage(
+                                            'lib/images/logoashapp.png'))
+                                    : Image.network(
+                                        widget.item.imageURL!,
+                                        width: 200,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          } else {
+                                            return const Center(
+                                              child: SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 1,
+                                                  )),
+                                            );
+                                          }
+                                        },
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace? stackTrace) {
+                                          return const Icon(Icons.error);
+                                        },
+                                      ),
+                              ),
                             )
                           ],
                         ),

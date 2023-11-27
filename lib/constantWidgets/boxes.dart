@@ -4,6 +4,7 @@ import 'package:ashwani/Models/production_model.dart';
 import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/constants.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icons.dart';
@@ -760,10 +761,16 @@ class SalesActivityTile extends StatelessWidget {
 
 class ItemsPageContainer extends StatelessWidget {
   const ItemsPageContainer(
-      {super.key, required this.itemName, required this.sku});
+      {super.key,
+      required this.itemName,
+      required this.sku,
+      required this.imgUrl, required this.unitType});
   final String itemName;
   final String sku;
+  final String imgUrl;
+  final String unitType;
   //to add - units availableand image url loading
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -771,45 +778,43 @@ class ItemsPageContainer extends StatelessWidget {
         Container(
           decoration:
               BoxDecoration(color: w, borderRadius: BorderRadius.circular(10)),
-          height: 92,
+          // height: 92,
           width: double.infinity,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 19.0, vertical: 21.0),
+                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: blue,
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
+                // CachedNetworkImage(imageUrl: imgUrl,),
+                // const SizedBox(
+                //   width: 20,
+                // ),
                 //space
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      itemName,
+                      'Item Name: $itemName',
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       textScaleFactor: 1.2,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
                     Text(
-                      sku,
+                      'Units Available: $sku $unitType',
                       textScaleFactor: 0.8,
                     )
                   ],
                 ),
                 const Spacer(),
                 // space
-                const Text(
-                  'Unit: xx Box',
-                  textScaleFactor: 1,
-                  style: TextStyle(fontWeight: FontWeight.w300),
-                )
+                // const Text(
+                //   'Unit Type: ',
+                //   textScaleFactor: 1,
+                //   style: TextStyle(fontWeight: FontWeight.w300),
+                // )
               ],
             ),
           ),

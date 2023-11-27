@@ -179,6 +179,7 @@ class ItemsProvider with ChangeNotifier {
           itemTracks: [],
           imageURL: data['imageURL'],
           bom: data['bom'],
+          unitType: data['unitType']
         );
 
         final trackSnapshot = await doc.reference.collection('tracks').get();
@@ -206,6 +207,8 @@ class ItemsProvider with ChangeNotifier {
         'quantityPurchase': item.quantityPurchase,
         'quantitySales': item.quantitySales,
         'bom': false,
+        'imageURL': item.imageURL,
+        'unitType':item.unitType
       });
 
       CollectionReference cr =

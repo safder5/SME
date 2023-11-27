@@ -11,19 +11,20 @@ class Item {
   List<ItemTrackingModel>? itemTracks;
   String? imageURL;
   bool? bom;
+  String? unitType;
 
-  Item({
-    required this.itemName,
-    this.originalQuantity,
-    this.itemQuantity,
-    this.quantityPurchase,
-    this.quantitySales,
-    this.itemTracks,
-    this.imageURL,
-    this.quantitySalesDelivered,
-    this.quantitySalesReturned,
-    this.bom
-  });
+  Item(
+      {required this.itemName,
+      this.originalQuantity,
+      this.itemQuantity,
+      this.quantityPurchase,
+      this.quantitySales,
+      this.itemTracks,
+      this.imageURL,
+      this.quantitySalesDelivered,
+      this.quantitySalesReturned,
+      this.bom,
+      this.unitType});
 }
 
 class ItemTrackingSalesOrder {

@@ -3,11 +3,10 @@ import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'package:provider/provider.dart';
 import 'Screens/bom.dart';
 import 'Screens/purchase.dart';
 import 'Screens/sales.dart';
-import 'Services/NetworkService/network_service.dart';
+// import 'Services/NetworkService/network_service.dart';
 
 class LandingBypass extends StatefulWidget {
   const LandingBypass({super.key});

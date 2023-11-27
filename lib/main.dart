@@ -5,6 +5,7 @@ import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Providers/production.dart';
 import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
+import 'package:ashwani/Providers/user_provider.dart';
 import 'package:ashwani/Providers/vendor_provider.dart';
 import 'package:ashwani/Services/authorizeUser/loginauth.dart';
 import 'package:ashwani/Services/authorizeUser/more_user_details.dart';
@@ -124,6 +125,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => ItemsProvider()),
         ChangeNotifierProvider(create: (context) => NSOrderProvider()),
         ChangeNotifierProvider(create: (context) => NPOrderProvider()),
@@ -209,8 +211,9 @@ class _LoadInventoryState extends State<LoadInventory> {
         Provider.of<PurchaseReturnsProvider>(context, listen: false);
     final bomP = Provider.of<BOMProvider>(context, listen: false);
     final prodP = Provider.of<ProductionProvider>(context, listen: false);
-
+    final userP = Provider.of<UserProvider>(context, listen: false);
     try {
+      await userP.getUserDetails();
       await customerP.fetchAllCustomers();
       await vendorP.fetchAllVendors();
       await itemsP.getItems();

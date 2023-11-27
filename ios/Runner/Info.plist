@@ -60,11 +60,11 @@
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
 		<key>NSCameraUsageDescription</key>
-		<string>Camera usage</string>
+		<string>Requesting permission to use the camera for taking photos</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Microphone usage</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Photo Library usage</string>
+		<string>Requesting permission to access the photo library</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 	</dict>
