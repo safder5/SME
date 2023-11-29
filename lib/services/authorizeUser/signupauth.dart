@@ -1,12 +1,10 @@
 import 'package:ashwani/Services/authorizeUser/authentication.dart';
-import 'package:ashwani/Services/authorizeUser/loginauth.dart';
 import 'package:ashwani/Services/authorizeUser/setup_account.dart';
 import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
 
@@ -60,7 +58,7 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                 //   Icons.group_add,
                 //   size: 32,
                 // ),
-                Spacer(),
+                const Spacer(),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

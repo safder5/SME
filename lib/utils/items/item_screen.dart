@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:ashwani/Providers/iq_list_provider.dart';
 import 'package:ashwani/Services/helper.dart';
 import 'package:ashwani/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

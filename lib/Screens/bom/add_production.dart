@@ -320,7 +320,7 @@ class StockDetails extends StatelessWidget {
                       height: 12,
                       width: 12,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     quantityofProduction == 0
@@ -328,7 +328,7 @@ class StockDetails extends StatelessWidget {
                         : Text(possibility
                             ? 'Stock quantities are sufficient.'
                             : 'Stock quantities are insufficient!'),
-                    Spacer(),
+                    const Spacer(),
                     CircleAvatar(
                       radius: 15,
                       backgroundColor: quantityofProduction == 0

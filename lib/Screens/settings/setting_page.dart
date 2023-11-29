@@ -107,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onTap: () async {
                     try {
                       ProviderManager().resetAll();
-                      await Future.delayed(Duration(seconds: 1));
+                      await Future.delayed(const Duration(seconds: 1));
                       await FirebaseAuth.instance.signOut();
                       // if (FirebaseAuth.instance.currentUser == null) {
                       //   try {

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../constantWidgets/boxes.dart';
 import '../../constants.dart';
-import '../newOrders/bom/new_bom.dart';
 import 'convert_item_to_bom.dart';
 
 class BomScreen extends StatefulWidget {
@@ -76,73 +75,73 @@ class _BomScreenState extends State<BomScreen> {
   }
 }
 
-void _showMaterialAlert(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Does this Product already exist in Inventory?',
-            style: TextStyle(fontSize: 16),
-          ),
-          // content: const Text('Does this Product already exist in Inventory?'),
-          backgroundColor: w,
-          surfaceTintColor: t,
-          shadowColor: blue,
-          actions: [
-            Row(
-              children: [
-                TextButton(
-                  // style: TextButton.styleFrom(),
-                  onPressed: () {
-                    // Navigate to the second page when the second option is selected
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(color: r),
-                  ),
-                ),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to the first page when the first option is selected
-                    Navigator.of(context).pop(); // Close the dialog
-                    // Navigator.of(context, rootNavigator: true).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const NewBOM(),
-                    //   ),
-                    // );
-                    //add another dialog to select the item
-                    _showListSelection(context);
-                  },
-                  child: Text(
-                    'Yes',
-                    style: TextStyle(color: blue),
-                  ),
-                ),
-                TextButton(
-                  // style: TextButton.styleFrom(),
-                  onPressed: () {
-                    // Navigate to the second page when the second option is selected
-                    Navigator.of(context).pop(); // Close the dialog
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                        builder: (context) => const NewBOM(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'New',
-                    style: TextStyle(color: blue),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      });
-}
+// void _showMaterialAlert(BuildContext context) {
+//   showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text(
+//             'Does this Product already exist in Inventory?',
+//             style: TextStyle(fontSize: 16),
+//           ),
+//           // content: const Text('Does this Product already exist in Inventory?'),
+//           backgroundColor: w,
+//           surfaceTintColor: t,
+//           shadowColor: blue,
+//           actions: [
+//             Row(
+//               children: [
+//                 TextButton(
+//                   // style: TextButton.styleFrom(),
+//                   onPressed: () {
+//                     // Navigate to the second page when the second option is selected
+//                     Navigator.of(context).pop(); // Close the dialog
+//                   },
+//                   child: Text(
+//                     'Cancel',
+//                     style: TextStyle(color: r),
+//                   ),
+//                 ),
+//                 const Spacer(),
+//                 TextButton(
+//                   onPressed: () {
+//                     // Navigate to the first page when the first option is selected
+//                     Navigator.of(context).pop(); // Close the dialog
+//                     // Navigator.of(context, rootNavigator: true).push(
+//                     //   MaterialPageRoute(
+//                     //     builder: (context) => const NewBOM(),
+//                     //   ),
+//                     // );
+//                     //add another dialog to select the item
+//                     _showListSelection(context);
+//                   },
+//                   child: Text(
+//                     'Yes',
+//                     style: TextStyle(color: blue),
+//                   ),
+//                 ),
+//                 TextButton(
+//                   // style: TextButton.styleFrom(),
+//                   onPressed: () {
+//                     // Navigate to the second page when the second option is selected
+//                     Navigator.of(context).pop(); // Close the dialog
+//                     Navigator.of(context, rootNavigator: true).push(
+//                       MaterialPageRoute(
+//                         builder: (context) => const NewBOM(),
+//                       ),
+//                     );
+//                   },
+//                   child: Text(
+//                     'New',
+//                     style: TextStyle(color: blue),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ],
+//         );
+//       });
+// }
 
 Future<void> _showListSelection(BuildContext context) {
   return showDialog(

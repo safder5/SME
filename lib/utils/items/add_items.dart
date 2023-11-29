@@ -456,7 +456,7 @@ class _AddItemsState extends State<AddItems> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: MediaQuery.of(context).size.height * 0.8,
           child: SingleChildScrollView(
             child: Padding(

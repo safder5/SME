@@ -3,7 +3,6 @@ import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Screens/purchase/edit_purchase_order.dart/increase_details_item_qty.dart';
 import 'package:ashwani/Screens/purchase/edit_purchase_order.dart/reduce_item_qty.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/iq_list.dart';
@@ -310,7 +309,7 @@ class _POPRecievedState extends State<POPRecieved> {
       List<ItemTrackingPurchaseOrder> items = po.itemsRecieved ?? [];
       if (items.isEmpty) {
         print('items are null');
-        return Column(
+        return const Column(
           children: [
             SizedBox(height: 200,),
             Text('No Quantities Recieved',style: TextStyle(fontWeight: FontWeight.w300),),
@@ -408,7 +407,7 @@ class _POPReturnsState extends State<POPReturns> {
      
       if (items.isEmpty) {
         print('items are null');
-        return Column(
+        return const Column(
           children: [
             SizedBox(
               height: 200,

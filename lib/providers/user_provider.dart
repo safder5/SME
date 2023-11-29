@@ -15,7 +15,7 @@ class UserProvider with ChangeNotifier {
           .collection('AllData');
       final snap = await fs.get();
       for (var doc in snap.docs) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        Map<String, dynamic> data = doc.data();
         UserModel u = UserModel(
           name: data['name'],
           companyName: data['orgName'],

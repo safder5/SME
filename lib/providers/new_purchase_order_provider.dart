@@ -389,7 +389,7 @@ class NPOrderProvider with ChangeNotifier {
               qit += item.originalQuantity ?? 0;
             }
             for (final itemRec in ir) {
-              qitr += itemRec.quantityRecieved ?? 0;
+              qitr += itemRec.quantityRecieved;
             }
             ttr = qit - qitr;
           }
