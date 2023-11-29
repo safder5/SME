@@ -59,10 +59,10 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                 //   size: 32,
                 // ),
                 const Spacer(),
-                const Row(
+                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(image: AssetImage('lib/images/sme.png'),width: 150,),
+                    Image(image: AssetImage('lib/images/applogo.png'),width: 150,),
                   ],
                 ),
                 // SvgPicture.asset('lib/icons/sme.svg',width: 100,height: 100,),
