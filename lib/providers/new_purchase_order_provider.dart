@@ -382,11 +382,13 @@ class NPOrderProvider with ChangeNotifier {
         int qit = 0;
         int qitr = 0;
         for (final order in po) {
-          if (order.items != null || order.itemsRecieved != null) {
-            for (final item in order.items!) {
+          final i = order.items ?? [];
+          final ir = order.itemsRecieved ?? [];
+          if ( i.isNotEmpty || ir.isNotEmpty) {
+            for (final item in i) {
               qit += item.originalQuantity ?? 0;
             }
-            for (final itemRec in order.itemsRecieved!) {
+            for (final itemRec in ir) {
               qitr += itemRec.quantityRecieved ?? 0;
             }
             ttr = qit - qitr;
@@ -405,7 +407,7 @@ class NPOrderProvider with ChangeNotifier {
         print('khali hai');
       }
     } catch (e) {
-      print(e);
+      print(' yahan hai galti $e');
       _toRecieve = 0;
       // notifyListeners();
     }

@@ -142,6 +142,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+          primaryColor: Colors.white,
+          // primarySwatch:  ,
           useMaterial3: true,
           brightness: Brightness.light,
           scaffoldBackgroundColor: const Color(0xFFF1F3F5),
@@ -266,7 +268,7 @@ class _LoadInventoryState extends State<LoadInventory> {
               ),
               SizedBox(height: 16),
               Text(
-                'Failed To Load Database! Try REopening the App ',
+                'Failed To Load Database! Try RE-starting the App ',
                 style: TextStyle(color: Colors.red, fontSize: 25),
               ),
             ]),

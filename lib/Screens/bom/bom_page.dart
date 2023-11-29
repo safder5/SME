@@ -107,8 +107,13 @@ class _BOMPageState extends State<BOMPage> {
               ),
             )),
           ),
-          const SizedBox(height: 16,),
-          const Text('BOM Items with Quantities',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 14),),
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            'BOM Items with Quantities',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+          ),
           Container(
             height: MediaQuery.of(context).size.height / 2,
             decoration: BoxDecoration(
@@ -117,19 +122,22 @@ class _BOMPageState extends State<BOMPage> {
             ),
             child: Column(
               children: [
-                
                 Expanded(
                     child: ListView.builder(
                         itemCount: widget.bom.itemswithQuantities.length,
-                        itemBuilder: ((context, index) {final item = widget.bom.itemswithQuantities[index];
-                          final ip = Provider.of<ItemsProvider>(context,listen: false);
-                          final p = ip.allItems.firstWhere((element) => element.itemName == item.itemname);
-                          Color c = item.quantity < p.itemQuantity!? gn: r; 
+                        itemBuilder: ((context, index) {
+                          final item = widget.bom.itemswithQuantities[index];
+                          final ip = Provider.of<ItemsProvider>(context,
+                              listen: false);
+                          final p = ip.allItems.firstWhere(
+                              (element) => element.itemName == item.itemname);
+                          Color c = item.quantity < p.itemQuantity! ? gn : r;
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   borderRadius: BorderRadius.circular(10)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -142,8 +150,10 @@ class _BOMPageState extends State<BOMPage> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           color: w,
-                                          border:
-                                              Border.all(width: 1, color: b32)),
+                                          // border:
+                                          //     Border.all(width: 1, color: b32)),
+                                      ),
+                                              child: const Icon(LineIcons.box),
                                     ),
                                     const SizedBox(
                                       width: 10,

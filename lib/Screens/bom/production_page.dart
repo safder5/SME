@@ -49,7 +49,7 @@ class _ProductionPageState extends State<ProductionPage> {
                           )),
                       const SizedBox(width: 10),
                       Text(
-                        'BOM',
+                        'Production',
                         style: TextStyle(color: w),
                         textScaleFactor: 1.2,
                       ),
@@ -158,8 +158,10 @@ class _ProductionPageState extends State<ProductionPage> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           color: w,
-                                          border:
-                                              Border.all(width: 1, color: b32)),
+                                          // border:
+                                          //     Border.all(width: 1, color: b32)
+                                              ),
+                                              child: const Icon(LineIcons.box),
                                     ),
                                     const SizedBox(
                                       width: 10,

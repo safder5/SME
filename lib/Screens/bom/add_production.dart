@@ -389,6 +389,7 @@ class StockDetails extends StatelessWidget {
                                             color: w,
                                             border: Border.all(
                                                 width: 1, color: b32)),
+                                                child: const Icon(LineIcons.box),
                                       ),
                                       const SizedBox(
                                         width: 10,

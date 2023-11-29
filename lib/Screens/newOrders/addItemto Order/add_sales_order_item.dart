@@ -128,6 +128,8 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                 height: 24,
               ),
               TextFieldSearch(
+                // scrollbarDecoration: ScrollbarDecoration(controller: controller, theme: theme),
+
                 minStringLength: 1,
                 label: 'Search Item',
                 controller: _itemnameController,
@@ -236,8 +238,8 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                (selectedItem.itemQuantity! -
-                                        selectedItem.quantitySales!)
+                                (selectedItem.itemQuantity! 
+                                        )
                                     .toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w300, color: blue),

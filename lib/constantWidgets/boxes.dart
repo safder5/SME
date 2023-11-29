@@ -785,6 +785,20 @@ class ItemsPageContainer extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
             child: Row(
               children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: w,
+                    // border:
+                    //     Border.all(width: 1, color: b32)),
+                  ),
+                  child: const Icon(LineIcons.box),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
                 // CachedNetworkImage(imageUrl: imgUrl,),
                 // const SizedBox(
                 //   width: 20,
@@ -1163,7 +1177,7 @@ class NewBomOrderItemTile extends StatelessWidget {
                 width: 44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5), color: w),
-                child: null,
+                child: const Icon(LineIcons.box),
               ),
               const SizedBox(
                 width: 10,
@@ -1377,7 +1391,7 @@ class SOPDetailsItemTile extends StatelessWidget {
                 width: 44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5), color: w),
-                child: null,
+                child: const Icon(LineIcons.box),
               ),
               const SizedBox(
                 width: 10,
@@ -1656,7 +1670,7 @@ class PoDetailsItemTile extends StatelessWidget {
                 width: 44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5), color: w),
-                child: null,
+                child: const Icon(LineIcons.box),
               ),
               const SizedBox(
                 width: 10,

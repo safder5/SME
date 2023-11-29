@@ -9,7 +9,6 @@ import 'package:ashwani/Utils/Vendors/add_vendors.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/Utils/customers/add_customer.dart';
 import 'package:ashwani/Utils/items/add_items.dart';
-import 'package:ashwani/Providers/inventory_summary_provider.dart';
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
