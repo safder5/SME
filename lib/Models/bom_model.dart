@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class BOMmodel {
   final String productName;
   String? productCode;
   String? notes;
   final List<BOMItem> itemswithQuantities;
   List<String>? productionIDs;
-  BOMmodel(
+  // final DateTime date;
+  BOMmodel( 
       {required this.productName,
       this.productCode,
       this.notes,

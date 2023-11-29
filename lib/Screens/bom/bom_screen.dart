@@ -1,5 +1,6 @@
 import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:ashwani/Screens/bom/bom_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,8 @@ class _BomScreenState extends State<BomScreen> {
           ),
           onPressed: () {
             // show options dialog
-            _showMaterialAlert(context);
+            // _showMaterialAlert(context);
+            _showListSelection(context);
             // Navigator.of(context, rootNavigator: true)
             //     .push(MaterialPageRoute(builder: (context) => const NewBOM()));
           }),
@@ -45,26 +47,25 @@ class _BomScreenState extends State<BomScreen> {
         child: Column(
           children: [
             Consumer<BOMProvider>(builder: (_, prov, __) {
-              final items = prov.boms.reversed.toList();
+              final boms = prov.boms.reversed.toList();
               return Expanded(
-                child: ((items.isEmpty)
+                child: ((boms.isEmpty)
                     ? const Center(child: Text('No BOMS, Add below'))
                     : ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: items.length,
+                        itemCount: boms.length,
                         itemBuilder: (context, index) {
-                          final item = items[index];
+                          final bom = boms[index];
                           return GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => ItemScreen(
-                                //               item: item,
-                                //             )));
+                                Navigator.of(context, rootNavigator: true)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) => BOMPage(
+                                              bom: bom,
+                                            )));
                               },
-                              child: BOMContainer(bom: item));
+                              child: BOMContainer(bom: bom));
                         })),
               );
             }),
@@ -159,7 +160,10 @@ Future<void> _showListSelection(BuildContext context) {
           ],
           title: const Text('Select Item'),
           content: Consumer<ItemsProvider>(builder: (_, p, __) {
-            final items = p.allItems.where((element) => element.bom == false).map((e) => e.itemName).toList();
+            final items = p.allItems
+                .where((element) => element.bom == false)
+                .map((e) => e.itemName)
+                .toList();
             return SizedBox(
               width: double.maxFinite,
               child: ListView.builder(

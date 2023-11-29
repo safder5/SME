@@ -43,7 +43,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
           if (i.itemName == item) {
             setState(() {
               selectedItem = i;
-              itemLimit = (i.itemQuantity! - i.quantitySales!).toString();
+              itemLimit = (i.itemQuantity! ).toString();
               print(itemLimit);
             });
             break;

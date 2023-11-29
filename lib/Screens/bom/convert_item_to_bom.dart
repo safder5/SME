@@ -207,6 +207,7 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
                       onTap: () {
                         if (bomProvider.items.isNotEmpty) {
                           BOMmodel bom = BOMmodel(
+                           
                               productName: widget.productName,
                               itemswithQuantities: bomProvider.items,
                               notes: _notes.text,

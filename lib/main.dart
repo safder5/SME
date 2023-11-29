@@ -7,6 +7,7 @@ import 'package:ashwani/Providers/purchase_returns_provider.dart';
 import 'package:ashwani/Providers/sales_returns_provider.dart';
 import 'package:ashwani/Providers/user_provider.dart';
 import 'package:ashwani/Providers/vendor_provider.dart';
+import 'package:ashwani/Screens/settings/setting_page.dart';
 import 'package:ashwani/Services/authorizeUser/loginauth.dart';
 import 'package:ashwani/Services/authorizeUser/more_user_details.dart';
 import 'package:ashwani/Services/authorizeUser/signupauth.dart';
@@ -176,6 +177,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           '/signupPage': (context) => const SignUpAuthPage(),
           '/moreDetails': (context) => const MoreUserDetails(),
           '/loadInventory': (context) => const LoadInventory(),
+          '/settings': (context) => const SettingsPage()
         },
       ),
     );

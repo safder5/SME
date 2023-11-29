@@ -357,47 +357,73 @@ class _AddItemsState extends State<AddItems> {
                   const SizedBox(
                     height: 24,
                   ),
-                  Row(
-                    children: [
-                      const Text('Select Unit Type:'),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      // DropdownButton<String>(
-                      //   value: selectedOption,
-                      //   focusColor: blue,
-                      //   dropdownColor: w,
-                      //   onChanged: (String? newValue) {
-                      //     if (newValue != null) {
-                      //       // Update selected option when the value changes
-                      //       setState(() {
-                      //         selectedOption = newValue;
-                      //       });
-                      //     }
-                      //   },
-                      //   items: unitTypes
-                      //       .map<DropdownMenuItem<String>>((String value) {
-                      //     return DropdownMenuItem<String>(
-                      //       value: value,
-                      //       child: Text(value,style: TextStyle(
+                  GestureDetector(
+                    onTap: () {
+                      _showOptionsModal(context);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(
+                              color: b.withOpacity(0.1), width: 1.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Row(
+                          children: [
+                            // SizedBox(
+                            //   width: 14,
+                            // ),
+                            Text(
+                              'Unit Type:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 12,
+                                  color: b32),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            // DropdownButton<String>(
+                            //   value: selectedOption,
+                            //   focusColor: blue,
+                            //   dropdownColor: w,
+                            //   onChanged: (String? newValue) {
+                            //     if (newValue != null) {
+                            //       // Update selected option when the value changes
+                            //       setState(() {
+                            //         selectedOption = newValue;
+                            //       });
+                            //     }
+                            //   },
+                            //   items: unitTypes
+                            //       .map<DropdownMenuItem<String>>((String value) {
+                            //     return DropdownMenuItem<String>(
+                            //       value: value,
+                            //       child: Text(value,style: TextStyle(
 
-                      //             fontSize: 12,
-                      //             color: b32),),
-                      //     );
-                      //   }).toList(),
-                      // ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      // _showOptionsModal(context);
-                      //   },
-                      //   child: Text(selectedOption),
-                      // ),
-                      TextButton(
-                          onPressed: () {
-                            _showOptionsModal(context);
-                          },
-                          child: Text(selectedOption,style: TextStyle(color: b),))
-                    ],
+                            //             fontSize: 12,
+                            //             color: b32),),
+                            //     );
+                            //   }).toList(),
+                            // ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            // _showOptionsModal(context);
+                            //   },
+                            //   child: Text(selectedOption),
+                            // ),
+                            Text(
+                              selectedOption,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 12,
+                                  color: b32),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   // TextFormField(
                   //   controller: itemQuantityCtrl,

@@ -313,19 +313,36 @@ class StockDetails extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     vertical: 12.0, horizontal: 16.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    SvgPicture.asset(
+                      'lib/icons/info.svg',
+                      height: 12,
+                      width: 12,
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
                     quantityofProduction == 0
                         ? const Text('Enter Quantity to check')
                         : Text(possibility
                             ? 'Stock quantities are sufficient.'
                             : 'Stock quantities are insufficient!'),
+                    Spacer(),
                     CircleAvatar(
                       radius: 15,
-                      backgroundColor: possibility ? gn : r,
-                      child: possibility
-                          ? const Icon(LineIcons.check)
-                          : const Icon(LineIcons.exclamation),
+                      backgroundColor: quantityofProduction == 0
+                          ? blue
+                          : possibility
+                              ? gn
+                              : r,
+                      child: quantityofProduction == 0
+                          ? const Icon(
+                              LineIcons.questionCircle,
+                            )
+                          : possibility
+                              ? const Icon(LineIcons.checkCircle)
+                              : const Icon(LineIcons.exclamationCircle),
                     )
                   ],
                 ),

@@ -93,6 +93,7 @@ flutter:
     - lib/images/itemimage.png
     - lib/images/gicon.png
     - lib/images/aicon.png
+    - lib/images/sme.png
     - lib/animation/
     - lib/icons/
 

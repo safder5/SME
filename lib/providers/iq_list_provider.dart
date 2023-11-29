@@ -7,11 +7,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ItemsProvider with ChangeNotifier {
+  int _sih = 0;
   final List<Item> _soItems = [];
   final List<Item> _allItems = [];
   final List<Item> _poItems = [];
   final List<Item> _salesDelivered = [];
 
+  int get sih => _sih;
   List<Item> get soItems => _soItems;
   List<Item> get allItems => _allItems;
   List<Item> get poItems => _poItems;
@@ -172,15 +174,14 @@ class ItemsProvider with ChangeNotifier {
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
         final item = Item(
-          itemName: data['itemName'],
-          itemQuantity: data['itemQuantity'],
-          quantityPurchase: data['quantityPurchase'],
-          quantitySales: data['quantitySales'],
-          itemTracks: [],
-          imageURL: data['imageURL'],
-          bom: data['bom'],
-          unitType: data['unitType']
-        );
+            itemName: data['itemName'],
+            itemQuantity: data['itemQuantity'],
+            quantityPurchase: data['quantityPurchase'],
+            quantitySales: data['quantitySales'],
+            itemTracks: [],
+            imageURL: data['imageURL'],
+            bom: data['bom'],
+            unitType: data['unitType']);
 
         final trackSnapshot = await doc.reference.collection('tracks').get();
         for (final trackDoc in trackSnapshot.docs) {
@@ -208,7 +209,7 @@ class ItemsProvider with ChangeNotifier {
         'quantitySales': item.quantitySales,
         'bom': false,
         'imageURL': item.imageURL,
-        'unitType':item.unitType
+        'unitType': item.unitType
       });
 
       CollectionReference cr =
@@ -479,5 +480,20 @@ class ItemsProvider with ChangeNotifier {
     _soItems.clear();
     _salesDelivered.clear();
     notifyListeners();
+  }
+
+  void calculateStockInHand() {
+    int fq = 0;
+    try {
+      if (allItems.isNotEmpty) {
+        for (final item in _allItems) {
+          fq += item.itemQuantity ?? 0;
+        }
+        _sih = fq;
+      }
+    } catch (e) {
+      print(e);
+      _sih = 0;
+    }
   }
 }

@@ -8,6 +8,8 @@ final _auth = FirebaseAuth.instance.currentUser;
 String? uid = _auth!.email;
 
 class NPOrderProvider with ChangeNotifier {
+  int _toRecieve = 0;
+  int get toRecieve => _toRecieve;
   final List<PurchaseOrderModel> _po = [];
   List<PurchaseOrderModel> get po => _po;
   final List<ItemTrackingPurchaseOrder> _pa = [];
@@ -371,6 +373,42 @@ class NPOrderProvider with ChangeNotifier {
     _pa.clear();
     _po.clear();
     notifyListeners();
+  }
+
+  void totalToBeRecieved() {
+    try {
+      if (_po.isNotEmpty) {
+        int ttr = 0;
+        int qit = 0;
+        int qitr = 0;
+        for (final order in po) {
+          if (order.items != null || order.itemsRecieved != null) {
+            for (final item in order.items!) {
+              qit += item.originalQuantity ?? 0;
+            }
+            for (final itemRec in order.itemsRecieved!) {
+              qitr += itemRec.quantityRecieved ?? 0;
+            }
+            ttr = qit - qitr;
+          }
+        }
+
+        // int totalToReceive = po.fold<int>(
+        //   0,
+        //   (previousValue, order) => order.calculateQuantityToReceive(),
+        // );
+
+        _toRecieve = ttr;
+        print(_toRecieve);
+        // notifyListeners();
+      } else {
+        print('khali hai');
+      }
+    } catch (e) {
+      print(e);
+      _toRecieve = 0;
+      // notifyListeners();
+    }
   }
 }
 

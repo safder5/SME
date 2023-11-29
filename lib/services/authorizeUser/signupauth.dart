@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
 
@@ -21,16 +22,14 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
-      
-        // Access Firestore and check for data associated with the user's UID
-        DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
-            .instance
-            .collection('Users')
-            .doc(user!.email)// Assuming 'users' is your collection name
-            .get();
-        final bool present = userData['id'] == user.email;
-        return present; // Return true if data exists for the user
-      
+      // Access Firestore and check for data associated with the user's UID
+      DocumentSnapshot<Map<String, dynamic>> userData =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user!.email) // Assuming 'users' is your collection name
+              .get();
+      final bool present = userData['id'] == user.email;
+      return present; // Return true if data exists for the user
     } catch (e) {
       print('Error checking user data: $e');
       return false; // Handle the error as needed
@@ -43,7 +42,7 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F3F3),
+      backgroundColor: w,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
@@ -53,44 +52,53 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
+                  // child: Center(
+                  //   child:  Image(image: AssetImage('lib/images/sme.png')),
+                  // ),
                 ),
-                const Icon(
-                  Icons.group_add,
-                  size: 32,
-                ),
-                Text(
-                  'Register',
-                  style: TextStyle(
-                      color: b.withOpacity(0.8),
-                      fontSize: 32,
-                      fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
+                // const Icon(
+                //   Icons.group_add,
+                //   size: 32,
+                // ),
+                Spacer(),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Got an account'),
-                    const Spacer(),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginAuthPage()));
-                        },
-                        child: Text(
-                          'Log in here',
-                          style: TextStyle(
-                              color: blue, fontWeight: FontWeight.w500),
-                        )),
-                    Icon(
-                      Icons.arrow_forward,
-                      size: 14,
-                      color: blue,
-                    )
+                    Image(image: AssetImage('lib/images/sme.png'),width: 150,),
                   ],
                 ),
+                // SvgPicture.asset('lib/icons/sme.svg',width: 100,height: 100,),
+                // Text(
+                //   'Register',
+                //   style: TextStyle(
+                //       color: b.withOpacity(0.8),
+                //       fontSize: 32,
+                //       fontWeight: FontWeight.w800),
+                // ),
+                
+                // Row(
+                //   children: [
+                //     const Text('Got an account ?'),
+                //     const Spacer(),
+                //     GestureDetector(
+                //         onTap: () {
+                //           Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                   builder: (context) => const LoginAuthPage()));
+                //         },
+                //         child: Text(
+                //           'Log in here',
+                //           style: TextStyle(
+                //               color: blue, fontWeight: FontWeight.w500),
+                //         )),
+                //     Icon(
+                //       Icons.arrow_forward,
+                //       size: 14,
+                //       color: blue,
+                //     )
+                //   ],
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -121,7 +129,9 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                                 MaterialPageRoute(
                                     builder: (context) => emailExists
                                         ? const MyApp()
-                                        :  SetupAccount(photoURL: user.photoURL?? 'na',)));
+                                        : SetupAccount(
+                                            photoURL: user.photoURL ?? 'na',
+                                          )));
                           } else {
                             if (!context.mounted) return;
                             // Handle sign-in failure or cancellation
@@ -141,15 +151,17 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                         // width: ,
                         decoration: BoxDecoration(
                             color: w,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 3), // changes the shadow position
-                              ),
-                            ],
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.black.withOpacity(0.1),
+                            //     spreadRadius: 2,
+                            //     blurRadius: 5,
+                            //     offset: const Offset(
+                            //         0, 3), // changes the shadow position
+                            //   ),
+                            // ],
+                            border: Border.all(width: 1,color: b.withOpacity(0.07)),
+
                             borderRadius: BorderRadius.circular(20)),
                         child: const Padding(
                           padding: EdgeInsets.all(24.0),
@@ -190,16 +202,17 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                         // width: ,
                         decoration: BoxDecoration(
                             color: w,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 3), // changes the shadow position
-                              ),
-                            ],
-                            // border: Border.all(width: 0.1),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.black.withOpacity(0.1),
+                            //     spreadRadius: 2,
+                            //     blurRadius: 5,
+                            //     offset: const Offset(
+                            //         0, 3), // changes the shadow position
+                            //   ),
+                            // ],
+                            border: Border.all(width: 1,color: b.withOpacity(0.07
+                            )),
                             borderRadius: BorderRadius.circular(20)),
                         child: const Padding(
                           padding: EdgeInsets.all(24.0),

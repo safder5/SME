@@ -29,7 +29,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
       PurchaseOrderModel purchaseOrder =
           pop.po.firstWhere((element) => element.orderID == widget.orderId);
       return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: w,
         floatingActionButton: Visibility(
             visible: isSelected[0] ? false : true,
             child: FloatingActionButton(
@@ -55,18 +55,27 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                   // show modal sheet to add items for returned order
                   // #DONOT
                   //forget the reason why it was returned
-
-                  showModalBottomSheet<dynamic>(
-                      backgroundColor: t,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return PurchaseOrderReturnItems(
-                          itemsRecieved: purchaseOrder.itemsRecieved,
-                          orderId: purchaseOrder.orderID,
-                          vendor: purchaseOrder.vendorName!,
-                        );
-                      });
+                  final k = purchaseOrder.itemsRecieved??[];
+                  if (k.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: w,
+                        content: Text(
+                          'No Items Recieved Yet!',
+                          style: TextStyle(color: blue,fontSize: 16),
+                        )));
+                  } else {
+                    showModalBottomSheet<dynamic>(
+                        backgroundColor: t,
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PurchaseOrderReturnItems(
+                            itemsRecieved: purchaseOrder.itemsRecieved,
+                            orderId: purchaseOrder.orderID,
+                            vendor: purchaseOrder.vendorName!,
+                          );
+                        });
+                  }
                 }
               },
               backgroundColor: blue,
@@ -210,6 +219,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                 ),
               ),
             ),
+
             Container(
               // height: MediaQuery.of(context).size.height * 0.66,
               color: w,
@@ -259,6 +269,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                 ],
               ),
             ),
+            // SizedBox(height: 20,),
             if (isSelected[0])
               POPDetails(
                 orderId: widget.orderId,

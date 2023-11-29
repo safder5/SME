@@ -48,13 +48,14 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                     });
               }
               if (isSelected[2]) {
-                if (salesorder.itemsDelivered!.isEmpty) {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) => const AlertDialog(
-                            title: Text("No Items Recieved"),
-                            // content: Text("This")
-                          ));
+                final k = salesorder.itemsDelivered ?? [];
+                if (k.isEmpty) {
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: w,
+                      content: Text(
+                        'No Items Delivered Yet!',
+                        style: TextStyle(color: blue, fontSize: 16),
+                      )));
                 } else {
                   showModalBottomSheet<dynamic>(
                       backgroundColor: t,

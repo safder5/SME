@@ -30,4 +30,20 @@ class PurchaseOrderModel {
     this.itemsReturned,
     this.tracks,
   });
+
+  // int calculateQuantityToReceive() {
+  //   if (items == null || itemsRecieved == null) {
+  //     return 0;
+  //   }
+
+  //   int totalOrdered = items!.fold<int>(0,
+  //       (previousValue, item) =>  (item.originalQuantity ?? 0));
+
+  //   int totalReceived = itemsRecieved!.fold<int>(
+  //       0,
+  //       (previousValue, receivedItem) =>
+  //             (receivedItem.quantityRecieved ?? 0));
+
+  //   return totalOrdered - totalReceived;
+  // }
 }

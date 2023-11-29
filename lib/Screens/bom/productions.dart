@@ -1,12 +1,12 @@
 import 'package:ashwani/Providers/bom_providers.dart';
 import 'package:ashwani/Providers/production.dart';
 import 'package:ashwani/Screens/bom/add_production.dart';
+import 'package:ashwani/Screens/bom/production_page.dart';
 import 'package:ashwani/constantWidgets/boxes.dart';
 import 'package:ashwani/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-
 
 class Production extends StatefulWidget {
   const Production({super.key});
@@ -48,8 +48,14 @@ class _ProductionState extends State<Production> {
                     child: ListView.builder(
                         itemCount: prods.length,
                         itemBuilder: (context, index) {
-                          return ProductionContainer(
-                            prod: prods[index],
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
+                                  builder: (context) => ProductionPage(prod: prods[index])));
+                            },
+                            child: ProductionContainer(
+                              prod: prods[index],
+                            ),
                           );
                         }))
               ],

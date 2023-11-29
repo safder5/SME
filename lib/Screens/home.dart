@@ -1,4 +1,6 @@
 import 'package:ashwani/Models/user_model.dart';
+import 'package:ashwani/Providers/iq_list_provider.dart';
+import 'package:ashwani/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/Providers/user_provider.dart';
 import 'package:ashwani/Screens/home/activity_home.dart';
 import 'package:ashwani/Screens/more.dart';
@@ -58,235 +60,250 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
+  // void getInvSummValues() {
+  //   final p = Provider.of<InventorySummaryProvider>(context, listen: false);
+  //   p.totalToBeRecieved();
+  //   totaltobeRecieved = p.toRecieve;
+  // }
+
   // @override
   // void initState() {
   //   super.initState();
-  //   checkforProviderData();
-  //   getRequiredHomeData();
+  //   // getInvSummValues();
   // }
 
   @override
   Widget build(BuildContext context) {
     final userP = Provider.of<UserProvider>(context, listen: false);
     final UserModel user = userP.user[0];
-    return Consumer<InventorySummaryProvider>(builder: (_, prov, __) {
-      final toRecieve = prov.toRecieve;
-      final instock = prov.inHand;
-      return Scaffold(
-        backgroundColor: w,
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(children: [
-                //top bar with company name and notifications
-                Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: w,
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30)),
-                      //             boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.black.withOpacity(0.5),
-                      //     spreadRadius: 2,
-                      //     blurRadius: 3,
-                      //     offset: Offset(0, 2),
-                      //   ),
-                      // ],
-                    ),
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: blue,
-                                  maxRadius: 20,
-                                  child: ClipOval(
-                                    child: Image(
-                                      width: 40,
-                                      height: 40,
-                                      image: NetworkImage(user.photo),
-                                      fit: BoxFit.cover,
+    return Consumer<NPOrderProvider>(builder: (_, prov, __) {
+      prov.totalToBeRecieved();
+      final totaltoRecieve = prov.toRecieve;
+      // prov.totalToBeRecieved();
+      // totaltobeRecieved = prov.toRecieve;
+      return Consumer<ItemsProvider>(builder: (___, pvdr, ____) {
+        pvdr.calculateStockInHand();
+        final sih = pvdr.sih;
+        return Scaffold(
+          backgroundColor: w,
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(children: [
+                  //top bar with company name and notifications
+                  Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: w,
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30)),
+                        //             boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black.withOpacity(0.5),
+                        //     spreadRadius: 2,
+                        //     blurRadius: 3,
+                        //     offset: Offset(0, 2),
+                        //   ),
+                        // ],
+                      ),
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: blue,
+                                    maxRadius: 20,
+                                    child: ClipOval(
+                                      child: Image(
+                                        width: 40,
+                                        height: 40,
+                                        image: NetworkImage(user.photo),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      user.companyName,
-                                      textScaleFactor: 1.2,
-                                    ),
-                                    Text(
-                                      user.name,
-                                      textScaleFactor: 0.8,
-                                      style: const TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context, rootNavigator: true)
-                                          .push(MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const SettingsPage()));
-                                    },
-                                    icon: SvgPicture.asset(
-                                        'lib/icons/settings.svg')),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 32,
-                            ),
-                            //inventory Summary
-                            const Row(
-                              children: [
-                                Text(
-                                  'Inventory Summary',
-                                  style: TextStyle(fontWeight: FontWeight.w500),
-                                  textScaleFactor: 1.2,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 32,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: ContainerHomeInventory(
-                                    title: 'Available Stock',
-                                    amount: instock.toString(),
+                                  const SizedBox(
+                                    width: 15,
                                   ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: ContainerHomeInventory(
-                                    title: 'To be Recieved',
-                                    amount: toRecieve.toString(),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        user.companyName,
+                                        textScaleFactor: 1.2,
+                                      ),
+                                      Text(
+                                        user.name,
+                                        textScaleFactor: 0.8,
+                                        style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  const Spacer(),
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const SettingsPage()));
+                                      },
+                                      icon: SvgPicture.asset(
+                                          'lib/icons/settings.svg')),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              //inventory Summary
+                              const Row(
+                                children: [
+                                  Text(
+                                    'Inventory Summary',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w500),
+                                    textScaleFactor: 1.2,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: ContainerHomeInventory(
+                                      title: 'Available Stock',
+                                      amount: sih.toString(),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: ContainerHomeInventory(
+                                      title: 'To be Recieved',
+                                      amount: totaltoRecieve.toString(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
 
-                Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 32,
-                        ),
-                        //activity portion
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Trading Activity',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                              textScaleFactor: 1.2,
-                            ),
-                            SizedBox(
-                              height: 18.0,
-                            ),
-                            ContainerHomeActivity(
-                              amt: '0',
-                              title: 'To Be Shipped',
-                              widget: AllHomeActivity(
-                                currentIndex: 0,
+                  Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 32,
+                          ),
+                          //activity portion
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Trading Activity',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                                textScaleFactor: 1.2,
                               ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            ContainerHomeActivity(
-                              amt: '0',
-                              title: 'To Be Recieved',
-                              widget: AllHomeActivity(
-                                currentIndex: 1,
+                              SizedBox(
+                                height: 18.0,
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        //more portion
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              ' More',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                              textScaleFactor: 1.2,
-                            ),
-                            SizedBox(
-                              height: 24.0,
-                            ),
-                            ContainerHomeMore(
-                              title: 'Add new items',
-                              type: 0,
-                              action: AddItems(),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            ContainerHomeMore(
-                              title: 'Add new costumer',
-                              type: 1,
-                              action: AddCustomer(),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            ContainerHomeMore(
-                              title: 'Add new vendor',
-                              type: 1,
-                              action: AddVendor(),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            ContainerHomeMore(
-                              title: 'More',
-                              type: 2,
-                              action: MoreFromHomePage(),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                          ],
-                        ),
-                      ],
+                              ContainerHomeActivity(
+                                amt: '0',
+                                title: 'To Be Shipped',
+                                widget: AllHomeActivity(
+                                  currentIndex: 0,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              ContainerHomeActivity(
+                                amt: '0',
+                                title: 'To Be Recieved',
+                                widget: AllHomeActivity(
+                                  currentIndex: 1,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 24,
+                          ),
+                          //more portion
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ' More',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                                textScaleFactor: 1.2,
+                              ),
+                              SizedBox(
+                                height: 24.0,
+                              ),
+                              ContainerHomeMore(
+                                title: 'Add new items',
+                                type: 0,
+                                action: AddItems(),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              ContainerHomeMore(
+                                title: 'Add new costumer',
+                                type: 1,
+                                action: AddCustomer(),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              ContainerHomeMore(
+                                title: 'Add new vendor',
+                                type: 1,
+                                action: AddVendor(),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              ContainerHomeMore(
+                                title: 'More',
+                                type: 2,
+                                action: MoreFromHomePage(),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ]),
-            ),
-            // if (isLoading) const LoadingOverlayHome()
-          ],
-        ),
-      );
+                ]),
+              ),
+              // if (isLoading) const LoadingOverlayHome()
+            ],
+          ),
+        );
+      });
     });
   }
 }

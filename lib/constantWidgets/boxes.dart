@@ -1467,12 +1467,7 @@ class SOPShippedItemsTile extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.black,
                 ),
-                child: Center(
-                  child: CustomPaint(
-                    size: const Size(5, 5),
-                    painter: TickPainter(),
-                  ),
-                ),
+                child: SvgPicture.asset('lib/icons/tick.svg')
               ),
               const SizedBox(
                 width: 10,
@@ -1537,29 +1532,29 @@ class SOPShippedItemsTile extends StatelessWidget {
   }
 }
 
-class TickPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.white
-      ..strokeWidth = 0.5
-      ..style = PaintingStyle.stroke;
+// class TickPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final Paint paint = Paint()
+//       ..color = Colors.white
+//       ..strokeWidth = 0.5
+//       ..style = PaintingStyle.stroke;
 
-    final double halfSize = size.width / 2;
+//     final double halfSize = size.width / 2;
 
-    final Path path = Path()
-      ..moveTo(halfSize - 5, halfSize)
-      ..lineTo(halfSize, halfSize + 5)
-      ..lineTo(halfSize + 7, halfSize - 7);
+//     final Path path = Path()
+//       ..moveTo(halfSize - 5, halfSize)
+//       ..lineTo(halfSize, halfSize + 5)
+//       ..lineTo(halfSize + 7, halfSize - 7);
 
-    canvas.drawPath(path, paint);
-  }
+//     canvas.drawPath(path, paint);
+//   }
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }
 
 class SOReturnsItemTile extends StatelessWidget {
   final String quantity;
@@ -1735,7 +1730,7 @@ class PORecievedItemTile extends StatelessWidget {
         height: 66,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: f7.withOpacity(0.7),
+          color: t,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -1744,6 +1739,14 @@ class PORecievedItemTile extends StatelessWidget {
           ),
           child: Row(
             children: [
+               Container(
+                  width: 15,
+                  height: 15,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                  child: SvgPicture.asset('lib/icons/tick.svg')),
               const SizedBox(
                 width: 10,
               ),
