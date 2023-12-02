@@ -1,6 +1,14 @@
 An inventory management application.
 That handles sales and purchases of orders and are almost editable .
 
+# Description
+
+•	Inventory Management: Efficiently manage inventory items and quantities.
+•	Sales and Purchase Tracking: Track sales and purchase orders seamlessly.
+•	Production Insights: Gain valuable insights for production capabilities.
+•	SME-Friendly: Tailored for small and medium-sized enterprises.
+•	No Barcode Tracking: Operate without the need for barcode scanning.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
