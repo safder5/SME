@@ -1,6 +1,5 @@
-# ashwani
-
-A new Flutter project.
+An inventory management application.
+That handles sales and purchases of orders and are almost editable .
 
 ## Getting Started
 
@@ -15,3 +14,17 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 # ashwani
+
+#Main features 
+
+- Inventory Management 
+- Sales 
+- Purchases 
+- BOM 
+
+
+
+#New Features-
+
+- Bill of Materials (BOM)
+- Production for SMEs 
