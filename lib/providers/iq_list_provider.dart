@@ -26,6 +26,7 @@ class ItemsProvider with ChangeNotifier {
     Item i = item;
     i.itemTracks = [track];
     _allItems.add(i);
+    notifyListeners();
   }
 
   Future<void> stockAdjustinFB(
@@ -409,6 +410,12 @@ class ItemsProvider with ChangeNotifier {
 
   List<String> getItemNames() {
     return _allItems.map((item) => item.itemName).toList();
+  }
+  List<String> getitemNamesofNOTBOMSYET(){
+    return _allItems
+        .where((element) => element.bom == false)
+        .map((e) => e.itemName)
+        .toList();
   }
 
   Future<void> addSalesDeliveredItemsToFirebase(

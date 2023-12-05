@@ -18,36 +18,59 @@ class BomScreen extends StatefulWidget {
 
 class _BomScreenState extends State<BomScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+//    final GlobalKey<_BomScreenState> _keyToReload =
+//       GlobalKey<_BomScreenState>();
+
+// void reload() {
+//     // Perform any actions needed to reload the widget state
+//     setState(() {
+//       // Update state variables or reset data
+//     });
+//   }
+
+  @override
   Widget build(BuildContext context) {
+    //    if (_keyToReload.currentState != null) {
+    //   _keyToReload.currentState!
+    //       .reload(); // Call a function that triggers the reload
+    // }
+    // final pvdr = Provider.of<ItemsProvider>(context, listen: false);
+
     // create list to load boms for this screen
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      floatingActionButton: FloatingActionButton(
-          shape: const CircleBorder(),
-          heroTag: '/newBOM',
-          // elevation: 0,
-          tooltip: 'New Bill Of Material',
-          backgroundColor: blue,
-          child: const Center(
-            child: Icon(
-              LineIcons.plus,
-              size: 30,
+    return Consumer<BOMProvider>(builder: (_, bom, __) {
+      final boms = bom.boms;
+      print(boms.length);
+      return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        floatingActionButton: FloatingActionButton(
+            shape: const CircleBorder(),
+            heroTag: '/newBOM',
+            // elevation: 0,
+            tooltip: 'New Bill Of Material',
+            backgroundColor: blue,
+            child: const Center(
+              child: Icon(
+                LineIcons.plus,
+                size: 30,
+              ),
             ),
-          ),
-          onPressed: () {
-            // show options dialog
-            // _showMaterialAlert(context);
-            _showListSelection(context);
-            // Navigator.of(context, rootNavigator: true)
-            //     .push(MaterialPageRoute(builder: (context) => const NewBOM()));
-          }),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Consumer<BOMProvider>(builder: (_, prov, __) {
-              final boms = prov.boms.reversed.toList();
-              return Expanded(
+            onPressed: () {
+              // show options dialog
+              // _showMaterialAlert(context);
+
+              // _showListSelection(context, items);
+              Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                  builder: (context) => const ItemSelection()));
+            }),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Expanded(
                 child: ((boms.isEmpty)
                     ? const Center(child: Text('No BOMS, Add below'))
                     : ListView.builder(
@@ -66,12 +89,12 @@ class _BomScreenState extends State<BomScreen> {
                               },
                               child: BOMContainer(bom: bom));
                         })),
-              );
-            }),
-          ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -143,7 +166,7 @@ class _BomScreenState extends State<BomScreen> {
 //       });
 // }
 
-Future<void> _showListSelection(BuildContext context) {
+Future<void> _showListSelection(BuildContext context, List<String> items) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -158,41 +181,34 @@ Future<void> _showListSelection(BuildContext context) {
                 icon: const Icon(Icons.close))
           ],
           title: const Text('Select Item'),
-          content: Consumer<ItemsProvider>(builder: (_, p, __) {
-            final items = p.allItems
-                .where((element) => element.bom == false)
-                .map((e) => e.itemName)
-                .toList();
-            return SizedBox(
-              width: double.maxFinite,
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(items[index]),
-                    onTap: () {
-                      final name = items[index];
-                      // Handle item tap
-                      Navigator.of(context).pop();
-                      Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                          builder: (context) => ConvertItemtoBOM(
-                            productName: name,
-                          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(items[index]),
+                  onTap: () {
+                    final name = items[index];
+                    // Handle item tap
+                    Navigator.of(context).pop();
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                        builder: (context) => ConvertItemtoBOM(
+                          productName: name,
                         ),
-                      ); // Close the dialog
-                      // You can perform any action based on the tapped item
-                      print('Tapped on: ${items[index]}');
-                    },
-                  );
-                },
-              ),
-            );
-          }),
+                      ),
+                    ); // Close the dialog
+                    // You can perform any action based on the tapped item
+                    print('Tapped on: ${items[index]}');
+                  },
+                );
+              },
+            ),
+          ),
         );
       });
 }
-
 
 // void _showPlatformSpecificAlert(BuildContext context) {
 //   if (Platform.isIOS) {
@@ -239,3 +255,72 @@ Future<void> _showListSelection(BuildContext context) {
 //         );
 //       });
 // }
+
+class ItemSelection extends StatefulWidget {
+  const ItemSelection({super.key});
+
+  @override
+  State<ItemSelection> createState() => _ItemSelectionState();
+}
+
+class _ItemSelectionState extends State<ItemSelection> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ItemsProvider>(builder: (_, itemspvdrr, __) {
+      final items = itemspvdrr.getitemNamesofNOTBOMSYET();
+         
+      print(items.length);
+      return Scaffold(
+        backgroundColor: w,
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(children: [
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(LineIcons.angleLeft)),
+                  const SizedBox(width: 10),
+                  const Text('Add Item'),
+                  const Spacer(),
+                ],
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.75,
+                child: ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(items[index]),
+                      onTap: () {
+                        final name = items[index];
+                        // Handle item tap
+                        // Navigator.of(context).pop();
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                            builder: (context) => ConvertItemtoBOM(
+                              productName: name,
+                            ),
+                          ),
+                        ); // Close the dialog
+                        // You can perform any action based on the tapped item
+                        print('Tapped on: ${items[index]}');
+                      },
+                    );
+                  },
+                ),
+              )
+            ]),
+          ),
+        )),
+      );
+    });
+  }
+}

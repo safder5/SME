@@ -233,6 +233,7 @@ class _AddItemsState extends State<AddItems> {
                     quantityPurchase: 0,
                     quantitySales: 0,
                     itemQuantity: 0,
+                    bom: false,
                     itemTracks: [itm]);
 
                 await itemProviderforAddingItem.addItemtoFB(item, collRef);
