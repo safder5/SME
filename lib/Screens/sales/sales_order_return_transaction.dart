@@ -660,9 +660,7 @@ class _SalesOrderReturnTransactionsState
                             child: Text(
                           'Add Item',
                           style: TextStyle(
-                            color: w,
-                          ),
-                          textScaleFactor: 1.2,
+                            color: w, fontSize: 14),
                         )),
                       ),
                     ),

@@ -19,7 +19,7 @@ class ReduceItemQty extends StatefulWidget {
 }
 
 class _ReduceItemQtyState extends State<ReduceItemQty> {
-  var _errorText;
+  var _errorText ='';
   TextEditingController quantityController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -59,14 +59,14 @@ class _ReduceItemQtyState extends State<ReduceItemQty> {
                   });
                 } else {
                   setState(() {
-                    _errorText = null;
+                    _errorText = '';
                   });
                 }
               },
             ),
             TextButton(
                 onPressed: () async {
-                  if (_errorText != null) return;
+                  if (_errorText != '') return;
                   int q = int.parse(quantityController.text);
                   final prov =
                       Provider.of<NPOrderProvider>(context, listen: false);

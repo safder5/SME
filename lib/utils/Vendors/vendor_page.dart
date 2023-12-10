@@ -38,7 +38,6 @@ class _VendorPageState extends State<VendorPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getVendorPurchases();
   }
@@ -76,8 +75,7 @@ class _VendorPageState extends State<VendorPage> {
                           const SizedBox(width: 10),
                           Text(
                             'Vendor Details',
-                            style: TextStyle(color: w),
-                            textScaleFactor: 1.2,
+                            style: TextStyle(color: w, fontSize: 14),
                           ),
                           const Spacer(),
                         ],
@@ -160,8 +158,8 @@ class _VendorPageState extends State<VendorPage> {
                               toggleButtons[i],
                               style: TextStyle(
                                   color: isSelected[i] ? w : b,
-                                  fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             )),
                           ),
                         )

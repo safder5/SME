@@ -73,6 +73,21 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
     });
   }
 
+  _showMyDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(title: Text('Dialog Title'), content: Text('hehe'));
+      },
+    );
+  }
+
+  static _showSnackBar(BuildContext context) {
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            'Required Fields are missing check for Items and Customer Name')));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -93,29 +108,35 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
           onTap: () async {
-            try {
-              final newSalesOrder = SalesOrderModel(
-                  orderID: int.parse(orderId),
-                  customerName: nameSearchController.text,
-                  orderDate: dateController.text,
-                  shipmentDate: dateShipmentController.text,
-                  paymentMethods: dropdownValue,
-                  notes: notesCtrl.text,
-                  tandC: tandcCtrl.text,
-                  status: status,
-                  items: soItemsProvider.soItems);
-              print(newSalesOrder.items?.length);
-              salesProvider.addSalesOrderInProvider(newSalesOrder);
-              await salesProvider.addSalesOrder(newSalesOrder);
-              await soItemsProvider.updateItemsSOandTrack(orderId);
-              await customerProvider.uploadOrderInCustomersProfile(
-                  newSalesOrder, nameSearchController.text);
+            if (soItemsProvider.soItems.isNotEmpty &&
+                nameSearchController.text.isNotEmpty) {
+              try {
+                final newSalesOrder = SalesOrderModel(
+                    orderID: int.parse(orderId),
+                    customerName: nameSearchController.text,
+                    orderDate: dateController.text,
+                    shipmentDate: dateShipmentController.text,
+                    paymentMethods: dropdownValue,
+                    notes: notesCtrl.text,
+                    tandC: tandcCtrl.text,
+                    status: status,
+                    items: soItemsProvider.soItems);
+                print(newSalesOrder.items?.length);
+                salesProvider.addSalesOrderInProvider(newSalesOrder);
+                await salesProvider.addSalesOrder(newSalesOrder);
+                await soItemsProvider.updateItemsSOandTrack(orderId);
+                await customerProvider.uploadOrderInCustomersProfile(
+                    newSalesOrder, nameSearchController.text);
 
-              // salesProvider.addSalesOrderInProvider(
-              //     newSalesOrder, soItemsProvider.soItems);
-            } catch (e) {
-              print('add sales order mein error $e');
+                // salesProvider.addSalesOrderInProvider(
+                //     newSalesOrder, soItemsProvider.soItems);
+              } catch (e) {
+                print('add sales order mein error $e');
+              }
+            } else {
+              // _showSnackBar(context);
             }
+
             // update it to firebase
             // soItemsProvider.clearsoItems();
             // await Future.delayed(Duration(seconds: 1));
@@ -136,10 +157,7 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
             child: Center(
                 child: Text(
               'Add Sales Order',
-              style: TextStyle(
-                color: w,
-              ),
-              textScaleFactor: 1.2,
+              style: TextStyle(color: w, fontSize: 14),
             )),
           ),
         ),
@@ -181,7 +199,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                           'Save Draft',
                           style: TextStyle(
                               color: blue, fontWeight: FontWeight.w300),
-                          textScaleFactor: 1,
                         )),
                       ),
                     ),
@@ -310,7 +327,6 @@ class _NewSalesOrderState extends State<NewSalesOrder> {
                                       style: TextStyle(
                                           color: blue,
                                           fontWeight: FontWeight.w300),
-                                      textScaleFactor: 1,
                                     ),
                                   ],
                                 )),

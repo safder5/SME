@@ -25,7 +25,7 @@ class AddItems extends StatefulWidget {
 class _AddItemsState extends State<AddItems> {
   final _auth = FirebaseAuth.instance.currentUser;
   final _fs = FirebaseFirestore.instance;
-  final FirebaseStorage firebase_storage = FirebaseStorage.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final int qfs = 0; //quantity for sale orders
   final int qfp = 0; // quantity from purchase orders
   TextEditingController itemQuantityCtrl = TextEditingController();
@@ -144,7 +144,7 @@ class _AddItemsState extends State<AddItems> {
       String url = (imageFile!.path);
 
       try {
-        final Reference ref = firebase_storage.ref().child('images/$url.png');
+        final Reference ref = firebaseStorage.ref().child('images/$url.png');
 
         final UploadTask uploadTask = ref.putFile(imageFile!);
 
@@ -256,8 +256,8 @@ class _AddItemsState extends State<AddItems> {
                   'Add Item',
                   style: TextStyle(
                     color: w,
+                    fontSize: 14
                   ),
-                  textScaleFactor: 1.2,
                 )),
               ),
             ),

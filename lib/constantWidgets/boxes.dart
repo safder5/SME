@@ -48,16 +48,14 @@ class _ContainerHomeInventoryState extends State<ContainerHomeInventory> {
                 ),
                 Text(
                   widget.title,
-                  style: const TextStyle(fontWeight: FontWeight.w300),
-                  textScaleFactor: 0.8,
+                  style: const TextStyle(fontWeight: FontWeight.w300,fontSize: 10),
                 ),
               ],
             ),
             const Spacer(),
             Text(
               widget.amount,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-              textScaleFactor: 1.2,
+              style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 14),
             )
           ],
         ),
@@ -163,7 +161,6 @@ class _ContainerHomeActivityState extends State<ContainerHomeActivity> {
                   Text(
                     widget.title,
                     style: const TextStyle(fontWeight: FontWeight.w300),
-                    textScaleFactor: 1,
                   )
                 ],
               ),
@@ -247,8 +244,7 @@ class ContainerHomeMore extends StatelessWidget {
               ),
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.w300),
-                textScaleFactor: 1.2,
+                style: const TextStyle(fontWeight: FontWeight.w300,fontSize: 14),
               ),
               const Spacer(),
               CircleAvatar(
@@ -322,22 +318,19 @@ class ContainerSalesOrder extends StatelessWidget {
               Row(
                 children: [
                   Text('Name: $name',
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color: b.withOpacity(0.5))),
+                      style: TextStyle(color: b.withOpacity(0.5),fontSize: 10)),
                   const Spacer(),
                   Text(
                     status == 'open'
                         ? 'Order Placed'.toUpperCase()
                         : 'Order Shipped'.toUpperCase(),
-                    style: TextStyle(color: gn.withOpacity(0.8)),
-                    textScaleFactor: 0.9,
+                    style: TextStyle(color: gn.withOpacity(0.8),fontSize: 12),
                   )
                 ],
               ),
               Text(
                 'Date: $date',
-                textScaleFactor: 0.8,
-                style: TextStyle(color: b.withOpacity(0.5)),
+                style: TextStyle(color: b.withOpacity(0.5),fontSize: 10),
               ),
               // const SizedBox(
               //   height: 16,
@@ -390,8 +383,7 @@ class ContainerPurchaseReturn extends StatelessWidget {
                   ),
                   Text(
                     '#$orderId',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                    textScaleFactor: 0.9,
+                    style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 12),
                   ),
                   const Spacer(),
                 ],
@@ -405,8 +397,7 @@ class ContainerPurchaseReturn extends StatelessWidget {
                   Text(
                     itemname,
                     style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5),fontSize: 10),
                   ),
                   const SizedBox(
                     width: 5.0,
@@ -422,8 +413,7 @@ class ContainerPurchaseReturn extends StatelessWidget {
                   Text(
                     'Units: $quantity',
                     style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5),fontSize: 10),
                   ),
                   const Spacer(),
                   // Text(
@@ -484,8 +474,7 @@ class ContainerSalesReturn extends StatelessWidget {
                   ),
                   Text(
                     '#$orderId',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                    textScaleFactor: 0.9,
+                    style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 12),
                   ),
                   const Spacer(),
                 ],
@@ -499,8 +488,7 @@ class ContainerSalesReturn extends StatelessWidget {
                   Text(
                     itemname,
                     style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5),fontSize: 10),
                   ),
                   const SizedBox(
                     width: 5.0,
@@ -516,16 +504,14 @@ class ContainerSalesReturn extends StatelessWidget {
                   Text(
                     'Units: $quantity',
                     style: TextStyle(
-                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5)),
-                    textScaleFactor: 0.8,
+                        fontWeight: FontWeight.w400, color: b.withOpacity(0.5),fontSize: 10),
                   ),
                   const Spacer(),
                   Text(
                     toInventory ? 'In Inventory' : 'Wasted',
                     style: TextStyle(
                         fontWeight: FontWeight.w300,
-                        color: toInventory ? gn : r),
-                    textScaleFactor: 0.8,
+                        color: toInventory ? gn : r,fontSize: 10),
                   )
                 ],
               ),
@@ -584,20 +570,17 @@ class ContainerPurchaseOrder extends StatelessWidget {
               Row(
                 children: [
                   Text('Name: $name',
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color: b.withOpacity(0.5))),
+                      style: TextStyle(color: b.withOpacity(0.5),fontSize: 10)),
                   const Spacer(),
                   Text(
                     status.toUpperCase(),
-                    style: TextStyle(color: gn.withOpacity(0.8)),
-                    textScaleFactor: 0.9,
+                    style: TextStyle(color: gn.withOpacity(0.8),fontSize: 12),
                   )
                 ],
               ),
               Text(
                 'Date: $date',
-                textScaleFactor: 0.8,
-                style: TextStyle(color: b.withOpacity(0.5)),
+                style: TextStyle(color: b.withOpacity(0.5),fontSize: 10),
               ),
             ],
           ),
@@ -636,7 +619,6 @@ class PurchaseActivityTile extends StatelessWidget {
                         width: 10,
                       ),
                       Text(activity!.itemName,
-                          textScaleFactor: 01,
                           style: TextStyle(color: b.withOpacity(0.8))),
                     ],
                   ),
@@ -645,16 +627,14 @@ class PurchaseActivityTile extends StatelessWidget {
                   ),
                   Text(
                     activity!.date!,
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color: b.withOpacity(0.5)),
+                    style: TextStyle(color: b.withOpacity(0.5),fontSize: 10),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
                     activity!.vendor!,
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color: b.withOpacity(0.5)),
+                    style: TextStyle(color: b.withOpacity(0.5),fontSize: 10),
                   ),
                 ],
               ),
@@ -664,15 +644,13 @@ class PurchaseActivityTile extends StatelessWidget {
                       activity!.quantityReturned.toString(),
                       style: TextStyle(
                           color: r.withOpacity(0.8),
-                          fontWeight: FontWeight.w300),
-                      textScaleFactor: 1.4,
+                          fontWeight: FontWeight.w300,fontSize: 18),
                     )
                   : Text(
                       activity!.quantityRecieved.toString(),
                       style: TextStyle(
                           color: gn.withOpacity(0.8),
-                          fontWeight: FontWeight.w300),
-                      textScaleFactor: 1.4,
+                          fontWeight: FontWeight.w300,fontSize: 18),
                     )
             ],
           ),
@@ -712,7 +690,6 @@ class SalesActivityTile extends StatelessWidget {
                         width: 10,
                       ),
                       Text(activity!.itemName,
-                          textScaleFactor: 01,
                           style: TextStyle(color: b.withOpacity(0.8))),
                     ],
                   ),
@@ -721,16 +698,14 @@ class SalesActivityTile extends StatelessWidget {
                   ),
                   Text(
                     activity!.date!,
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color: b.withOpacity(0.5)),
+                    style: TextStyle(color: b.withOpacity(0.5),fontSize: 10),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
                     activity!.customer!,
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color: b.withOpacity(0.5)),
+                    style: TextStyle(color: b.withOpacity(0.5), fontSize: 10),
                   ),
                 ],
               ),
@@ -740,15 +715,15 @@ class SalesActivityTile extends StatelessWidget {
                       activity!.quantityShipped.toString(),
                       style: TextStyle(
                           color: r.withOpacity(0.8),
-                          fontWeight: FontWeight.w300),
-                      textScaleFactor: 1.4,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 18),
                     )
                   : Text(
                       activity!.quantityReturned.toString(),
                       style: TextStyle(
                           color: gn.withOpacity(0.8),
-                          fontWeight: FontWeight.w300),
-                      textScaleFactor: 1.4,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 18),
                     )
             ],
           ),
@@ -809,15 +784,13 @@ class ItemsPageContainer extends StatelessWidget {
                   children: [
                     Text(
                       'Item Name: $itemName',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      textScaleFactor: 1.2,
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     // const SizedBox(
                     //   height: 10,
                     // ),
                     Text(
-                      'Units Available: $sku $unitType',
-                      textScaleFactor: 0.8,
+                      'Units Available: $sku $unitType',style: const TextStyle(fontSize: 10),
                     )
                   ],
                 ),
@@ -878,8 +851,7 @@ class BOMContainer extends StatelessWidget {
                   const Spacer(),
                   Text(
                     'Total Items: ${bom.itemswithQuantities.length}',
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color: b.withOpacity(0.5)),
+                    style: TextStyle(color: b.withOpacity(0.5), fontSize: 10),
                   ),
                 ],
               ),
@@ -889,8 +861,7 @@ class BOMContainer extends StatelessWidget {
               Row(
                 children: [
                   Text('Product Name : ${bom.productName}',
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color: b.withOpacity(0.5))),
+                      style: TextStyle(color: b.withOpacity(0.5), fontSize: 10)),
                   const Spacer(),
                 ],
               ),
@@ -940,8 +911,7 @@ class ProductionContainer extends StatelessWidget {
                   const Spacer(),
                   Text(
                     ' Quantity Produced: ${prod.quantityofBOMProduced}',
-                    textScaleFactor: 0.8,
-                    style: TextStyle(color: b.withOpacity(0.5)),
+                    style: TextStyle(color: b.withOpacity(0.5), fontSize: 10),
                   ),
                 ],
               ),
@@ -951,8 +921,7 @@ class ProductionContainer extends StatelessWidget {
               Row(
                 children: [
                   Text('Product Name : ${prod.nameofBOM}',
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color: b.withOpacity(0.5))),
+                      style: TextStyle(color: b.withOpacity(0.5), fontSize: 10)),
                   const Spacer(),
                 ],
               ),
@@ -1018,8 +987,7 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
                       children: [
                         const Text(
                           'Items to be shipped:  ',
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                         ),
                         const SizedBox(
                           width: 10,
@@ -1034,8 +1002,7 @@ class _CustomersPageContainerState extends State<CustomersPageContainer> {
                         ),
                         const Text(
                           'Delivered Items:  ',
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                         ),
                       ],
                     )
@@ -1101,8 +1068,7 @@ class VendorsPageContainer extends StatelessWidget {
                       children: [
                         const Text(
                           'Items to be shipped:  ',
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                         ),
                         const SizedBox(
                           width: 10,
@@ -1117,8 +1083,7 @@ class VendorsPageContainer extends StatelessWidget {
                         ),
                         const Text(
                           'Delivered Items:  ',
-                          style: TextStyle(fontWeight: FontWeight.w300),
-                          textScaleFactor: 0.8,
+                          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                         ),
                       ],
                     )
@@ -1191,8 +1156,7 @@ class NewBomOrderItemTile extends StatelessWidget {
                   ),
                   Text(
                     'Units : ${quantity.toString()}',
-                    textScaleFactor: 0.8,
-                    style: TextStyle(
+                    style: TextStyle(fontSize: 10,
                         color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
                   ),
                 ],
@@ -1262,9 +1226,9 @@ class NewSalesOrderItemsTile extends StatelessWidget {
                   ),
                   Text(
                     'Units : ${quantity.toString()}',
-                    textScaleFactor: 0.8,
                     style: TextStyle(
-                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300,
+                        fontSize: 10),
                   ),
                 ],
               ),
@@ -1333,9 +1297,9 @@ class NewPurchaseOrderItemsTile extends StatelessWidget {
                   ),
                   Text(
                     'Units : ${quantity.toString()}',
-                    textScaleFactor: 0.8,
                     style: TextStyle(
-                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300,
+                        fontSize: 10),
                   ),
                 ],
               ),
@@ -1407,10 +1371,10 @@ class SOPDetailsItemTile extends StatelessWidget {
                     children: [
                       Text(
                         'Units : ${original.toString()}',
-                        textScaleFactor: 0.8,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 10),
                       ),
                       const SizedBox(
                         width: 5,
@@ -1426,10 +1390,10 @@ class SOPDetailsItemTile extends StatelessWidget {
                       ),
                       Text(
                         'To Ship : ${quantity.toString()}',
-                        textScaleFactor: 0.8,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 10),
                       ),
                     ],
                   ),
@@ -1492,16 +1456,15 @@ class SOPShippedItemsTile extends StatelessWidget {
                   Text(
                     itemName,
                     style: const TextStyle(fontWeight: FontWeight.w300),
-                    textScaleFactor: 1,
                   ),
                   Row(
                     children: [
                       Text(
                         'Units : ${quantity.toString()}',
-                        textScaleFactor: 0.7,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9),
                       ),
                       const SizedBox(
                         width: 5,
@@ -1519,10 +1482,10 @@ class SOPShippedItemsTile extends StatelessWidget {
                         quantityReturned == 0
                             ? ''
                             : 'Returned: ${quantityReturned.toString()}',
-                        textScaleFactor: 0.7,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9),
                       ),
                       const SizedBox(
                         width: 5,
@@ -1534,8 +1497,7 @@ class SOPShippedItemsTile extends StatelessWidget {
               const Spacer(),
               Text(
                 'Delivered',
-                style: TextStyle(color: gn, fontWeight: FontWeight.w300),
-                textScaleFactor: 0.8,
+                style: TextStyle(color: gn, fontWeight: FontWeight.w300, fontSize: 10),
               )
             ],
           ),
@@ -1606,16 +1568,15 @@ class SOReturnsItemTile extends StatelessWidget {
                   Text(
                     itemName,
                     style: const TextStyle(fontWeight: FontWeight.w300),
-                    textScaleFactor: 1,
                   ),
                   Row(
                     children: [
                       Text(
                         'Units : ${quantity.toString()}',
-                        textScaleFactor: 0.7,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9),
                       ),
                     ],
                   ),
@@ -1624,8 +1585,7 @@ class SOReturnsItemTile extends StatelessWidget {
               const Spacer(),
               Text(
                 'Returned',
-                style: TextStyle(color: blue, fontWeight: FontWeight.w300),
-                textScaleFactor: 0.8,
+                style: TextStyle(color: blue, fontWeight: FontWeight.w300, fontSize: 10),
               )
             ],
           ),
@@ -1686,10 +1646,10 @@ class PoDetailsItemTile extends StatelessWidget {
                     children: [
                       Text(
                         'Units : ${original.toString()}',
-                        textScaleFactor: 0.8,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300 ,
+                            fontSize: 10),
                       ),
                       const SizedBox(
                         width: 5,
@@ -1705,10 +1665,10 @@ class PoDetailsItemTile extends StatelessWidget {
                       ),
                       Text(
                         'To Recieve : ${quantity.toString()}',
-                        textScaleFactor: 0.8,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 10),
                       ),
                     ],
                   ),
@@ -1770,16 +1730,15 @@ class PORecievedItemTile extends StatelessWidget {
                   Text(
                     itemName,
                     style: const TextStyle(fontWeight: FontWeight.w300),
-                    textScaleFactor: 1,
                   ),
                   Row(
                     children: [
                       Text(
                         'Units : $quantity',
-                        textScaleFactor: 0.7,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9),
                       ),
                       const SizedBox(
                         width: 5,
@@ -1797,10 +1756,10 @@ class PORecievedItemTile extends StatelessWidget {
                         quantityReturned == 0
                             ? ''
                             : 'Returned: ${quantityReturned.toString()}',
-                        textScaleFactor: 0.7,
                         style: TextStyle(
                             color: b.withOpacity(0.5),
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9),
                       ),
                       const SizedBox(
                         width: 5,
@@ -1812,8 +1771,7 @@ class PORecievedItemTile extends StatelessWidget {
               const Spacer(),
               Text(
                 'Recieved',
-                style: TextStyle(color: gn, fontWeight: FontWeight.w300),
-                textScaleFactor: 0.8,
+                style: TextStyle(color: gn, fontWeight: FontWeight.w300, fontSize: 10),
               )
             ],
           ),
@@ -1860,15 +1818,14 @@ class POReturnsTile extends StatelessWidget {
                   Text(
                     itemName,
                     style: const TextStyle(fontWeight: FontWeight.w300),
-                    textScaleFactor: 1,
                   ),
                   Text(
                     quantityReturned == 0
                         ? ''
                         : 'Returned: ${quantityReturned.toString()}',
-                    textScaleFactor: 0.7,
                     style: TextStyle(
-                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300),
+                        color: b.withOpacity(0.5), fontWeight: FontWeight.w300,
+                        fontSize: 9),
                   ),
                   const SizedBox(
                     width: 5,
@@ -1878,8 +1835,7 @@ class POReturnsTile extends StatelessWidget {
               const Spacer(),
               Text(
                 'Returned',
-                style: TextStyle(color: r, fontWeight: FontWeight.w300),
-                textScaleFactor: 0.8,
+                style: TextStyle(color: r, fontWeight: FontWeight.w300, fontSize: 10),
               )
             ],
           ),

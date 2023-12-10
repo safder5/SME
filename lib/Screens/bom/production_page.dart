@@ -50,8 +50,7 @@ class _ProductionPageState extends State<ProductionPage> {
                       const SizedBox(width: 10),
                       Text(
                         'Production',
-                        style: TextStyle(color: w),
-                        textScaleFactor: 1.2,
+                        style: TextStyle(color: w, fontSize: 14),
                       ),
                       const Spacer(),
                     ],
@@ -77,8 +76,8 @@ class _ProductionPageState extends State<ProductionPage> {
                                 Text(
                                   widget.prod.productionID,
                                   style: TextStyle(
-                                      color: w, fontWeight: FontWeight.w500),
-                                  textScaleFactor: 1.4,
+                                      color: w, fontWeight: FontWeight.w500,
+                                      fontSize: 18),
                                 ),
                               ],
                             ),
@@ -89,7 +88,6 @@ class _ProductionPageState extends State<ProductionPage> {
                               'Product Name: ${bom.productName}',
                               style: TextStyle(
                                   color: w, fontWeight: FontWeight.w300),
-                              textScaleFactor: 1,
                             ),
                             const SizedBox(
                               height: 5,
@@ -98,7 +96,6 @@ class _ProductionPageState extends State<ProductionPage> {
                               'Creation Date: $formattedDate',
                               style: TextStyle(
                                   color: w, fontWeight: FontWeight.w300),
-                              textScaleFactor: 1,
                             ),
                           ],
                         ),

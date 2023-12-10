@@ -37,8 +37,7 @@ class _PurchasePageState extends State<PurchasePage> {
                             child: Center(
                                 child: Text(
                           "Purchase Orders",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -46,8 +45,7 @@ class _PurchasePageState extends State<PurchasePage> {
                             child: Center(
                                 child: Text(
                           "Purchase Activity",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -55,8 +53,7 @@ class _PurchasePageState extends State<PurchasePage> {
                             child: Center(
                                 child: Text(
                           "Purchase Returns",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       // Tab(

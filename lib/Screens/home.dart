@@ -135,14 +135,15 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       Text(
                                         user.companyName,
-                                        textScaleFactor: 1.2,
+                                        style: const TextStyle(
+                    fontSize: 14),
                                       ),
                                       Text(
                                         user.name,
-                                        textScaleFactor: 0.8,
                                         style: const TextStyle(
                                             color: Colors.black54,
-                                            fontWeight: FontWeight.w300),
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 10),
                                       ),
                                     ],
                                   ),
@@ -168,8 +169,8 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     'Inventory Summary',
                                     style:
-                                        TextStyle(fontWeight: FontWeight.w500),
-                                    textScaleFactor: 1.2,
+                                        TextStyle(fontWeight: FontWeight.w500,
+                                        fontSize: 14),
                                   ),
                                 ],
                               ),
@@ -218,8 +219,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 'Trading Activity',
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                                textScaleFactor: 1.2,
+                                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                               ),
                               SizedBox(
                                 height: 18.0,
@@ -252,8 +252,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 ' More',
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                                textScaleFactor: 1.2,
+                                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                               ),
                               SizedBox(
                                 height: 24.0,

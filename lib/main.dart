@@ -22,13 +22,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'Services/NetworkService/network_service.dart';
 import 'constants.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
   'email,https://www.googleapis.com/auth/contacts.readonly'
 ]);
-NetworkService _networkService = NetworkService();
+// NetworkService _networkService = NetworkService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +55,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       setState(() {
         _initialise = true;
         // _dataLoaded = _dataLoaded;
+        
         print(FirebaseAuth.instance.currentUser);
         // print('data loaded = $_dataLoaded');
       });

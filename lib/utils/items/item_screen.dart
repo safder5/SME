@@ -26,7 +26,7 @@ class _ItemScreenState extends State<ItemScreen> {
     ('Transactions'),
   ];
   late String imgUrl;
-  final FirebaseStorage firebase_storage = FirebaseStorage.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   //  late ImageProvider imageProvider;
   Future<void> _checkPermission(ImageSource source) async {
     PermissionStatus status = await Permission.photos.status;
@@ -92,7 +92,7 @@ class _ItemScreenState extends State<ItemScreen> {
       String url = (imageFile!.path);
 
       try {
-        final Reference ref = firebase_storage.ref().child('images/$url.png');
+        final Reference ref = firebaseStorage.ref().child('images/$url.png');
 
         final UploadTask uploadTask = ref.putFile(imageFile!);
 
@@ -147,8 +147,7 @@ class _ItemScreenState extends State<ItemScreen> {
                           const SizedBox(width: 10),
                           Text(
                             'Item Details',
-                            style: TextStyle(color: w),
-                            textScaleFactor: 1.2,
+                            style: TextStyle(color: w, fontSize: 14),
                           ),
                           const Spacer(),
                         ],
@@ -163,8 +162,8 @@ class _ItemScreenState extends State<ItemScreen> {
                                 Text(
                                   item.itemName,
                                   style: TextStyle(
-                                      color: w, fontWeight: FontWeight.w600),
-                                  textScaleFactor: 1.6,
+                                      color: w, fontWeight: FontWeight.w600,
+                                      fontSize: 22),
                                 ),
                                 const SizedBox(
                                   height: 5,
@@ -173,7 +172,6 @@ class _ItemScreenState extends State<ItemScreen> {
                                   'SIH: ${item.itemQuantity} ${item.unitType}',
                                   style: TextStyle(
                                       color: w, fontWeight: FontWeight.w300),
-                                  textScaleFactor: 1,
                                 ),
                               ],
                             ),
@@ -284,8 +282,8 @@ class _ItemScreenState extends State<ItemScreen> {
                               toggleButtons[i],
                               style: TextStyle(
                                   color: isSelected[i] ? w : b,
-                                  fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             )),
                           ),
                         )
@@ -408,8 +406,7 @@ class ItemDetails extends StatelessWidget {
                             height: 8,
                           ),
                           const Text('Total stock',
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                              textScaleFactor: 0.8)
+                              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),)
                         ],
                       ),
                       const Spacer(),
@@ -426,8 +423,7 @@ class ItemDetails extends StatelessWidget {
                           ),
                           const Text(
                             'Already Sold',
-                            style: TextStyle(fontWeight: FontWeight.w300),
-                            textScaleFactor: 0.8,
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                           )
                         ],
                       ),
@@ -446,8 +442,7 @@ class ItemDetails extends StatelessWidget {
                           ),
                           const Text(
                             'Available for sale',
-                            style: TextStyle(fontWeight: FontWeight.w300),
-                            textScaleFactor: 0.8,
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                           )
                         ],
                       ),
@@ -517,20 +512,19 @@ class ItemTransactionHistory extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            itemTrack.orderID.toString(),
-                            textScaleFactor: 0.9,
+                            itemTrack.orderID.toString(),style: const TextStyle(fontSize: 12),
                           ),
                           Text(
                             text,
-                            textScaleFactor: 0.8,
+                            style: const TextStyle(fontSize: 10),
                           ),
                         ],
                       ),
                       const Spacer(),
                       Text(
                         itemTrack.quantity.toString(),
-                        textScaleFactor: 1.2,
-                        style: TextStyle(color: c, fontWeight: FontWeight.w300),
+                        style: TextStyle(color: c, fontWeight: FontWeight.w300,
+                            fontSize: 14),
                       ),
                     ],
                   ),

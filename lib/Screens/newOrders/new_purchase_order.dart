@@ -81,23 +81,29 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
         padding: const EdgeInsets.only(bottom: 32.0, left: 16.0, right: 16.0),
         child: GestureDetector(
           onTap: () async {
-            final newPurchaseOrder = PurchaseOrderModel(
-                orderID: int.parse(orderId),
-                vendorName: _vendorName.text,
-                purchaseDate: _npodateController.text,
-                deliveryDate: _npoDelDateController.text,
-                paymentTerms: _paymentController.text,
-                deliveryMethod: _deliveryController.text,
-                notes: _notesController.text,
-                tandc: _termsController.text,
-                status: status,
-                items: poItemsProvider.poItems);
-            await purchaseProvider.addPurchaseOrder(newPurchaseOrder);
-            await poItemsProvider.updateItemsPOandTrack(orderId);
-            await vendorProvider.uploadOrderInVendorsProfile(
-                newPurchaseOrder, _vendorName.text);
-            purchaseProvider.addPurchaseOrdertoProvider(newPurchaseOrder);
-            
+            if (poItemsProvider.poItems.isNotEmpty &&
+                _vendorName.text.isNotEmpty) {
+              try {
+                final newPurchaseOrder = PurchaseOrderModel(
+                    orderID: int.parse(orderId),
+                    vendorName: _vendorName.text,
+                    purchaseDate: _npodateController.text,
+                    deliveryDate: _npoDelDateController.text,
+                    paymentTerms: _paymentController.text,
+                    deliveryMethod: _deliveryController.text,
+                    notes: _notesController.text,
+                    tandc: _termsController.text,
+                    status: status,
+                    items: poItemsProvider.poItems);
+                await purchaseProvider.addPurchaseOrder(newPurchaseOrder);
+                await poItemsProvider.updateItemsPOandTrack(orderId);
+                await vendorProvider.uploadOrderInVendorsProfile(
+                    newPurchaseOrder, _vendorName.text);
+                purchaseProvider.addPurchaseOrdertoProvider(newPurchaseOrder);
+              } catch (e) {
+                print('some error uploading purchase order');
+              }
+            }
             // submit final purchase order
             if (!context.mounted) return;
             Navigator.pop(context);
@@ -113,9 +119,8 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                 child: Text(
               'Create Purchase Order',
               style: TextStyle(
-                color: w,
+                color: w, fontSize: 14
               ),
-              textScaleFactor: 1.2,
             )),
           ),
         ),
@@ -267,7 +272,6 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
                                     style: TextStyle(
                                         color: blue,
                                         fontWeight: FontWeight.w300),
-                                    textScaleFactor: 1,
                                   ),
                                 ],
                               )),

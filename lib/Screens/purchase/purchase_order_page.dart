@@ -111,8 +111,8 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                             Text(
                               'Purchase Order',
                               style: TextStyle(
-                                  color: w, fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  color: w, fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             ),
                             const Spacer(),
                             Icon(
@@ -161,15 +161,14 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                                   purchaseOrder.vendorName!,
                                   style: TextStyle(
                                       color: w,
-                                      decoration: TextDecoration.underline),
-                                  textScaleFactor: 0.8,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 10),
                                 ),
                                 const Spacer(),
                                 Text(
                                   purchaseOrder.status!,
                                   style: TextStyle(
                                       color: w, fontWeight: FontWeight.w500),
-                                  textScaleFactor: 1,
                                 ),
                               ],
                             ),
@@ -180,8 +179,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                         ),
                         Text(
                           'Purchase date : ${purchaseOrder.purchaseDate!}',
-                          style: TextStyle(color: w),
-                          textScaleFactor: 0.8,
+                          style: TextStyle(color: w, fontSize: 10),
                         ),
                         const SizedBox(
                           height: 24,
@@ -210,8 +208,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                             // ),
                             Text(
                               'Delivery date : ${purchaseOrder.deliveryDate!}',
-                              style: TextStyle(color: w),
-                              textScaleFactor: 0.8,
+                              style: TextStyle(color: w, fontSize: 10),
                             ),
                           ],
                         )
@@ -259,8 +256,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                               toggleButtons[i],
                               style: TextStyle(
                                   color: isSelected[i] ? w : b,
-                                  fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  fontWeight: FontWeight.w300 , fontSize: 14),
                             )),
                           ),
                         )

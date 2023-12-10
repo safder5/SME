@@ -113,9 +113,8 @@ class _AddCustomerState extends State<AddCustomer> {
                 child: Text(
               'Add as Customer',
               style: TextStyle(
-                color: w,
+                color: w, fontSize: 14
               ),
-              textScaleFactor: 1.2,
             )),
           ),
         ),
@@ -145,7 +144,6 @@ class _AddCustomerState extends State<AddCustomer> {
               const Text(
                 'Customer Name',
                 style: TextStyle(fontWeight: FontWeight.w300),
-                textScaleFactor: 1,
               ),
               const SizedBox(
                 height: 28,
@@ -183,8 +181,8 @@ class _AddCustomerState extends State<AddCustomer> {
                           Text(
                             'Business',
                             style: TextStyle(
-                                fontWeight: FontWeight.w300, color: b),
-                            textScaleFactor: 1.2,
+                                fontWeight: FontWeight.w300, color: b,
+                                fontSize: 14),
                           ),
                         ],
                       ),
@@ -221,8 +219,8 @@ class _AddCustomerState extends State<AddCustomer> {
                           Text(
                             'Individual',
                             style: TextStyle(
-                                fontWeight: FontWeight.w300, color: b),
-                            textScaleFactor: 1.2,
+                                fontWeight: FontWeight.w300, color: b,
+                                fontSize: 14),
                           ),
                         ],
                       ),
@@ -370,7 +368,6 @@ class _AddCustomerState extends State<AddCustomer> {
                                 : 'Add Billing & Shipping Address',
                             style: TextStyle(
                                 color: blue, fontWeight: FontWeight.w300),
-                            textScaleFactor: 1,
                           ),
                         ],
                       )),

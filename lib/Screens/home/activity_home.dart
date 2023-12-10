@@ -69,8 +69,7 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
                                 child: Center(
                                     child: Text(
                               "To Be Shipped",
-                              textScaleFactor: 0.8,
-                              style: TextStyle(fontWeight: FontWeight.w400),
+                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                             ))),
                           ),
                           Tab(
@@ -78,8 +77,7 @@ class _AllHomeActivityState extends State<AllHomeActivity> {
                                 child: Center(
                                     child: Text(
                               "To Be Recieved",
-                              textScaleFactor: 0.8,
-                              style: TextStyle(fontWeight: FontWeight.w400),
+                              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                             ))),
                           ),
                           // Tab(

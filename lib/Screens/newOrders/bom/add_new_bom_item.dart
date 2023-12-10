@@ -188,9 +188,8 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
                       child: Text(
                     'Add Item',
                     style: TextStyle(
-                      color: w,
+                      color: w, fontSize: 14
                     ),
-                    textScaleFactor: 1.2,
                   )),
                 ),
               ),

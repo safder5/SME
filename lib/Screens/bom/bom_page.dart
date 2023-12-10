@@ -42,8 +42,7 @@ class _BOMPageState extends State<BOMPage> {
                       const SizedBox(width: 10),
                       Text(
                         'BOM',
-                        style: TextStyle(color: w),
-                        textScaleFactor: 1.2,
+                        style: TextStyle(color: w, fontSize: 14),
                       ),
                       const Spacer(),
                     ],
@@ -69,8 +68,8 @@ class _BOMPageState extends State<BOMPage> {
                                 Text(
                                   widget.bom.productCode ?? 'Error',
                                   style: TextStyle(
-                                      color: w, fontWeight: FontWeight.w500),
-                                  textScaleFactor: 1.4,
+                                      color: w, fontWeight: FontWeight.w500,
+                                      fontSize: 18),
                                 ),
                               ],
                             ),
@@ -81,7 +80,6 @@ class _BOMPageState extends State<BOMPage> {
                               'Product Name: ${widget.bom.productName}',
                               style: TextStyle(
                                   color: w, fontWeight: FontWeight.w300),
-                              textScaleFactor: 1,
                             ),
                             //  const SizedBox(
                             //   height: 5,

@@ -114,13 +114,11 @@ class _SOPDetailsState extends State<SOPDetails> {
                   children: [
                     Text(
                       'Status:',
-                      textScaleFactor: 1,
                       style: TextStyle(color: b.withOpacity(0.6)),
                     ),
                     const Spacer(),
                     Text(
                       allDelivered ? 'All Items Shipped' : 'To be shipped',
-                      textScaleFactor: 1,
                       style: TextStyle(color: dg),
                     ),
                     const Spacer(),
@@ -134,13 +132,11 @@ class _SOPDetailsState extends State<SOPDetails> {
                   children: [
                     Text(
                       'Left Quantity:',
-                      textScaleFactor: 1,
                       style: TextStyle(color: b.withOpacity(0.6)),
                     ),
                     const Spacer(),
                     Text(
                       '$leftquantities box',
-                      textScaleFactor: 1,
                       style: TextStyle(color: dg),
                     ),
                     const Spacer(),
@@ -382,7 +378,6 @@ class _SOPShippedState extends State<SOPShipped> {
                   children: [
                     Text(
                       'Total Quantity:',
-                      textScaleFactor: 1,
                       style: TextStyle(
                           color: b.withOpacity(0.5),
                           fontWeight: FontWeight.w300),
@@ -392,7 +387,6 @@ class _SOPShippedState extends State<SOPShipped> {
                     ),
                     Text(
                       '$totalquantities box',
-                      textScaleFactor: 1,
                       style: TextStyle(
                           color: b.withOpacity(0.5),
                           fontWeight: FontWeight.w300),
@@ -400,7 +394,6 @@ class _SOPShippedState extends State<SOPShipped> {
                     const Spacer(),
                     Text(
                       '$leftquantities box left',
-                      textScaleFactor: 1,
                       style: TextStyle(color: b, fontWeight: FontWeight.w300),
                     ),
                   ],

@@ -97,13 +97,11 @@ class _POPDetailsState extends State<POPDetails> {
                   children: [
                     Text(
                       'Status',
-                      textScaleFactor: 1,
                       style: TextStyle(color: b.withOpacity(0.6)),
                     ),
                     const Spacer(),
                     Text(
                       allRecieved ? 'All Recieved' : 'Order Placed',
-                      textScaleFactor: 1,
                       style: TextStyle(color: dg),
                     ),
                     const Spacer(),
@@ -330,7 +328,6 @@ class _POPRecievedState extends State<POPRecieved> {
                   children: [
                     Text(
                       'Total recieved:',
-                      textScaleFactor: 1,
                       style: TextStyle(
                           color: b.withOpacity(0.5),
                           fontWeight: FontWeight.w300),
@@ -340,7 +337,6 @@ class _POPRecievedState extends State<POPRecieved> {
                     ),
                     Text(
                       '$qrecieved box ',
-                      textScaleFactor: 1,
                       style: TextStyle(
                           color: b.withOpacity(0.5),
                           fontWeight: FontWeight.w300),

@@ -194,8 +194,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                               height: 8,
                             ),
                             const Text('Total stock',
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                                textScaleFactor: 0.8)
+                                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),)
                           ],
                         ),
                         const Spacer(),
@@ -212,8 +211,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                             ),
                             const Text(
                               'Already Purchased',
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                              textScaleFactor: 0.8,
+                              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                             )
                           ],
                         ),
@@ -270,9 +268,8 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                     child: Text(
                   'Add Item',
                   style: TextStyle(
-                    color: w,
+                    color: w, fontSize: 14
                   ),
-                  textScaleFactor: 1.2,
                 )),
               ),
             ),

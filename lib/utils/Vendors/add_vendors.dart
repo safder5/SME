@@ -84,9 +84,8 @@ class _AddVendorState extends State<AddVendor> {
                 child: Text(
               'Add Vendor',
               style: TextStyle(
-                color: w,
+                color: w, fontSize: 14
               ),
-              textScaleFactor: 1.2,
             )),
           ),
         ),
@@ -209,7 +208,6 @@ class _AddVendorState extends State<AddVendor> {
                                       : 'Add Billing & Shipping Address',
                                   style: TextStyle(
                                       color: blue, fontWeight: FontWeight.w300),
-                                  textScaleFactor: 1,
                                 ),
                               ],
                             )),

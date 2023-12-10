@@ -36,8 +36,7 @@ class _BOMState extends State<BOM> {
                             child: Center(
                                 child: Text(
                           "Your BOMs",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -45,8 +44,7 @@ class _BOMState extends State<BOM> {
                             child: Center(
                                 child: Text(
                           "Production",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       // Tab(

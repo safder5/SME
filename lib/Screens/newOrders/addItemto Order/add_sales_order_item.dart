@@ -210,8 +210,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                                 height: 8,
                               ),
                               const Text('Total stock',
-                                  style: TextStyle(fontWeight: FontWeight.w300),
-                                  textScaleFactor: 0.8)
+                                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),)
                             ],
                           ),
                           const Spacer(),
@@ -228,8 +227,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                               ),
                               const Text(
                                 'Already Sold',
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                                textScaleFactor: 0.8,
+                                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                               )
                             ],
                           ),
@@ -249,8 +247,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                               ),
                               const Text(
                                 'Available for sale',
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                                textScaleFactor: 0.8,
+                                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
                               )
                             ],
                           ),
@@ -291,9 +288,8 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                       child: Text(
                     'Add Item',
                     style: TextStyle(
-                      color: w,
+                      color: w, fontSize: 14
                     ),
-                    textScaleFactor: 1.2,
                   )),
                 ),
               ),

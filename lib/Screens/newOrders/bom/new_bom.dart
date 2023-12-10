@@ -204,7 +204,6 @@ class _NewBOMState extends State<NewBOM> {
                                   '  Add Items & Quantity',
                                   style: TextStyle(
                                       color: blue, fontWeight: FontWeight.w300),
-                                  textScaleFactor: 1,
                                 ),
                               ],
                             )),
@@ -297,9 +296,8 @@ class _NewBOMState extends State<NewBOM> {
                             child: Text(
                           'Add BOM',
                           style: TextStyle(
-                            color: w,
+                            color: w, fontSize: 14
                           ),
-                          textScaleFactor: 1.2,
                         )),
                       ),
                     ),

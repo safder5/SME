@@ -36,8 +36,7 @@ class _SalesPageState extends State<SalesPage> {
                             child: Center(
                                 child: Text(
                           "Sales Orders",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -45,8 +44,7 @@ class _SalesPageState extends State<SalesPage> {
                             child: Center(
                                 child: Text(
                           "Sales Activity",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -54,8 +52,7 @@ class _SalesPageState extends State<SalesPage> {
                             child: Center(
                                 child: Text(
                           "Sales Returns",
-                          textScaleFactor: 0.8,
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       // Tab(

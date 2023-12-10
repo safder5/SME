@@ -188,8 +188,7 @@ class _AddBillingShippingAddressState extends State<AddBillingShippingAddress> {
                       },
                       child: Text(
                         'Same as Above',
-                        textScaleFactor: 0.8,
-                        style: TextStyle(color: b.withOpacity(0.6)),
+                        style: TextStyle(color: b.withOpacity(0.6), fontSize: 10),
                       ))
                 ],
               ),
@@ -310,9 +309,8 @@ class _AddBillingShippingAddressState extends State<AddBillingShippingAddress> {
                       child: Text(
                     'Add Addresses',
                     style: TextStyle(
-                      color: w,
+                      color: w, fontSize: 14
                     ),
-                    textScaleFactor: 1.2,
                   )),
                 ),
               ),

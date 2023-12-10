@@ -76,8 +76,7 @@ class _CustomerPageState extends State<CustomerPage> {
                           const SizedBox(width: 10),
                           Text(
                             'Customer Details',
-                            style: TextStyle(color: w),
-                            textScaleFactor: 1.2,
+                            style: TextStyle(color: w, fontSize: 14),
                           ),
                           const Spacer(),
                         ],
@@ -160,8 +159,8 @@ class _CustomerPageState extends State<CustomerPage> {
                               toggleButtons[i],
                               style: TextStyle(
                                   color: isSelected[i] ? w : b,
-                                  fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             )),
                           ),
                         )

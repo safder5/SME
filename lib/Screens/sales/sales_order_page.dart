@@ -105,8 +105,8 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                             Text(
                               'Sales Order',
                               style: TextStyle(
-                                  color: w, fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  color: w, fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             ),
                             const Spacer(),
                             Icon(
@@ -155,8 +155,8 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                                   salesorder.customerName!,
                                   style: TextStyle(
                                       color: w,
-                                      decoration: TextDecoration.underline),
-                                  textScaleFactor: 0.8,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 10),
                                 ),
                               ],
                             ),
@@ -172,13 +172,11 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                           children: [
                             Text(
                               'Order date : ${salesorder.orderDate}',
-                              style: TextStyle(color: w),
-                              textScaleFactor: 0.8,
+                              style: TextStyle(color: w, fontSize: 10),
                             ),
                             Text(
                               'Delivery date : ${salesorder.shipmentDate}',
-                              style: TextStyle(color: w),
-                              textScaleFactor: 0.8,
+                              style: TextStyle(color: w, fontSize: 10),
                             ),
                           ],
                         ),
@@ -247,8 +245,8 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                               toggleButtons[i],
                               style: TextStyle(
                                   color: isSelected[i] ? w : b,
-                                  fontWeight: FontWeight.w300),
-                              textScaleFactor: 1.2,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             )),
                           ),
                         )

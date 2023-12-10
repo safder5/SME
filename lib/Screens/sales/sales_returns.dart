@@ -84,8 +84,7 @@ class _SalesReturnsState extends State<SalesReturns> {
                         children: [
                           Text(
                             'Search Name or Order No.',
-                            style: TextStyle(color: b.withOpacity(0.2)),
-                            textScaleFactor: 0.8,
+                            style: TextStyle(color: b.withOpacity(0.2), fontSize: 10),
                           ),
                           const Spacer(),
                           Transform(
