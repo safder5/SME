@@ -1,11 +1,10 @@
 import 'package:ashwani/src/Providers/providers_reset_manager.dart';
-import 'package:ashwani/src/Screens/settings/customer_support.dart';
-import 'package:ashwani/src/Screens/settings/rate_app.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/customer_support.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/rate_app.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/about.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/feedback.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/org_profile.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/privacy_security.dart';
-import 'package:ashwani/src/Screens/settings/setting_screens/user.dart';
 import 'package:ashwani/src/Services/authorizeUser/signupauth.dart';
 import 'package:ashwani/src/constantWidgets/boxes.dart';
 import 'package:ashwani/src/constants.dart';
@@ -23,7 +22,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: w,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
           child: Center(
         child: Padding(
@@ -61,13 +60,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  ContainerSettings(
-                    title: 'Users',
-                    widget: UserScreen(),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  // ContainerSettings(
+                  //   title: 'Users',
+                  //   widget: UserScreen(),
+                  // ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   ContainerSettings(
                     title: 'Privacy & security',
                     widget: PrivacySecurity(),
@@ -104,52 +103,59 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               const Spacer(),
               GestureDetector(
-                  onTap: () async {
-                    try {
-                      ProviderManager().resetAll();
-                      await Future.delayed(const Duration(seconds: 1));
-                      await FirebaseAuth.instance.signOut();
-                      // if (FirebaseAuth.instance.currentUser == null) {
-                      //   try {
-                      //     // Provider.of<NSOrderProvider>(context, listen: false)
-                      //     //     .clearAll();
-                      //     // print('1');
-                      //     // Provider.of<NPOrderProvider>(context, listen: false)
-                      //     //     .clearAll(); print('1');
-                      //     // Provider.of<InventorySummaryProvider>(context,
-                      //     //         listen: false)
-                      //     //     .clearAll();
-                      //     print('1');
-                      //     // Provider.of<PurchaseReturnsProvider>(context,
-                      //     //         listen: false)
-                      //     //     .clearPurchaseReturns(); print('1');
-                      //     // Provider.of<SalesReturnsProvider>(context,
-                      //     //         listen: false)
-                      //     //     .clearSalesReturns(); print('1');
-                      //   } catch (e) {
-                      //     print('error clearing providers $e');
-                      //   }
-                      // }
-                    } catch (e) {
-                      print('error');
-                    }
-                    if (!context.mounted) return;
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const SignUpAuthPage()));
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/signupPage', (route) => false);
-                  },
-                  child: Container(
-                      width: double.infinity,
-                      height: 53,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(width: 0.5, color: b)),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: Center(child: Text('Logout')),
-                      ))),
+                onTap: () async {
+                  try {
+                    await Future.delayed(const Duration(seconds: 1));
+                    await FirebaseAuth.instance.signOut();
+                    ProviderManager().resetAll();
+                  } catch (e) {
+                    print('error');
+                  }
+                  if (!context.mounted) return;
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const SignUpAuthPage()));
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/signupPage', (route) => false);
+                },
+                child: Container(
+                  height: 71.0,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                      color: w, borderRadius: BorderRadius.circular(10.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        // CircleAvatar(
+                        //   // maxRadius: 32,
+                        //   radius: 16,
+                        //   backgroundColor: b.withOpacity(0.06),
+                        //   child: SvgPicture.asset(
+                        //     'lib/icons/person.svg',
+                        //     width: 14,
+                        //     height: 14,
+                        //   ),
+                        // ),
+                        //
+                        const Spacer(),
+                        Text(
+                          'Sign Out',
+                          style: TextStyle(
+                              fontSize: 14, color: b.withOpacity(0.6)),
+                        ),
+                        const Spacer(),
+                        // Center(
+                        //   child: Icon(
+                        //     LineIcons.angleRight,
+                        //     color: b32,
+                        //     size: 14,
+                        //   ),
+                        // )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 32,
               )

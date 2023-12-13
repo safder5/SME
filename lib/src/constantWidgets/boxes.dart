@@ -78,29 +78,32 @@ class ContainerSettings extends StatelessWidget {
             context, MaterialPageRoute(builder: (context) => widget));
       },
       child: Container(
-        height: 53.0,
+        height: 71.0,
         width: double.maxFinite,
         decoration: BoxDecoration(
-            color: const Color(0xFFF7F7F7),
+            color: w,
             borderRadius: BorderRadius.circular(10.0)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
+              CircleAvatar(
+                // maxRadius: 32,
+                radius: 16,
+                backgroundColor: b.withOpacity(0.06),
+                child: SvgPicture.asset('lib/icons/person.svg',width: 14,height: 14,),
+              ),
+              SizedBox(width: 10,),
               Text(
                 title,
                 style: TextStyle(fontSize: 12, color: b.withOpacity(0.6)),
               ),
               const Spacer(),
-              CircleAvatar(
-                maxRadius: 10,
-                backgroundColor: w,
-                child: Center(
-                  child: Icon(
-                    LineIcons.angleRight,
-                    color: b32,
-                    size: 14,
-                  ),
+              Center(
+                child: Icon(
+                  LineIcons.angleRight,
+                  color: b32,
+                  size: 14,
                 ),
               )
             ],

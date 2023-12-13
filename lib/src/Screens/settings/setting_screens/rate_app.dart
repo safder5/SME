@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-class FeedbackScreen extends StatelessWidget {
-  const FeedbackScreen({super.key});
+class RateApp extends StatelessWidget {
+  const RateApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class FeedbackScreen extends StatelessWidget {
                   },
                   icon: const Icon(LineIcons.angleLeft)),
               const Text(
-                'Feedback',
+                'Rate App',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ],

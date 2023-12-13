@@ -105,7 +105,7 @@ Future<void> _showBOMSelection(BuildContext context) {
                         ),
                       ); // Close the dialog
                       // You can perform any action based on the tapped item
-                      print('Tapped on: ${items[index]}');
+                      // print('Tapped on: ${items[index]}');
                     },
                   );
                 },

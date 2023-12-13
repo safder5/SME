@@ -168,12 +168,12 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
                           itemname: _itemnameController.text.trim(),
                           quantity: int.parse(_quantityCtrl.text)));
                       Navigator.pop(context);
-                    } else {
-                      print('error');
                     }
                   } catch (e) {
                     //snackbar to show item not added
-                    print(e);
+                    // print(e);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Item couldn\t be added')));
                   }
                   // add items and pass the item and quantity to the list in sales order
                 },
@@ -187,9 +187,7 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
                   child: Center(
                       child: Text(
                     'Add Item',
-                    style: TextStyle(
-                      color: w, fontSize: 14
-                    ),
+                    style: TextStyle(color: w, fontSize: 14),
                   )),
                 ),
               ),

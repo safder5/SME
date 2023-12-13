@@ -43,14 +43,14 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
           if (i.itemName == item) {
             setState(() {
               selectedItem = i;
-              itemLimit = (i.itemQuantity! ).toString();
-              print(itemLimit);
+              itemLimit = (i.itemQuantity!).toString();
             });
             break;
           }
         }
       } catch (e) {
-        print(e);
+        // print(e);
+        //dont need ,if error logic is flawed!
       }
     }
   }
@@ -209,8 +209,11 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                               const SizedBox(
                                 height: 8,
                               ),
-                              const Text('Total stock',
-                                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),)
+                              const Text(
+                                'Total stock',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 10),
+                              )
                             ],
                           ),
                           const Spacer(),
@@ -227,7 +230,8 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                               ),
                               const Text(
                                 'Already Sold',
-                                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 10),
                               )
                             ],
                           ),
@@ -236,9 +240,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                (selectedItem.itemQuantity! 
-                                        )
-                                    .toString(),
+                                (selectedItem.itemQuantity!).toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w300, color: blue),
                               ),
@@ -247,7 +249,8 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                               ),
                               const Text(
                                 'Available for sale',
-                                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 10),
                               )
                             ],
                           ),
@@ -268,12 +271,12 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                           quantitySales: quantitySales,
                           originalQuantity: quantitySales));
                       Navigator.pop(context);
-                    } else {
-                      print('error');
                     }
                   } catch (e) {
                     //snackbar to show item not added
-                    print(e);
+                    // print(e);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Item couldn\t be added')));
                   }
                   // add items and pass the item and quantity to the list in sales order
                 },
@@ -287,9 +290,7 @@ class _AddSalesOrderItemState extends State<AddSalesOrderItem> {
                   child: Center(
                       child: Text(
                     'Add Item',
-                    style: TextStyle(
-                      color: w, fontSize: 14
-                    ),
+                    style: TextStyle(color: w, fontSize: 14),
                   )),
                 ),
               ),

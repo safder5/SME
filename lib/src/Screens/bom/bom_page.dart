@@ -1,4 +1,7 @@
+
+
 import 'package:ashwani/src/Models/bom_model.dart';
+import 'package:ashwani/src/Providers/bom_providers.dart';
 import 'package:ashwani/src/Providers/iq_list_provider.dart';
 import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
@@ -17,116 +20,121 @@ class BOMPage extends StatefulWidget {
 class _BOMPageState extends State<BOMPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: w,
-      body: Column(
-        children: [
-          Container(
-            color: blue,
-            child: SafeArea(
-                child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+    return Consumer<BOMProvider>(builder: (_, boms, __) {
+      final allbom = boms.boms;
+      final index = allbom.indexWhere(
+          (element) => element.productName == widget.bom.productName);
+      final bom = allbom[index];
+        return Scaffold(
+          backgroundColor: w,
+          body: Column(
+            children: [
+              Container(
+                color: blue,
+                child: SafeArea(
+                    child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            LineIcons.angleLeft,
-                            color: w,
-                          )),
-                      const SizedBox(width: 10),
-                      Text(
-                        'BOM',
-                        style: TextStyle(color: w, fontSize: 14),
+                      Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                LineIcons.angleLeft,
+                                color: w,
+                              )),
+                          const SizedBox(width: 10),
+                          Text(
+                            'BOM',
+                            style: TextStyle(color: w, fontSize: 14),
+                          ),
+                          const Spacer(),
+                        ],
                       ),
-                      const Spacer(),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
                           children: [
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  height: 11,
-                                  width: 11,
-                                  color: w,
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 11,
+                                      width: 11,
+                                      color: w,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      widget.bom.productCode ?? 'Error',
+                                      style: TextStyle(
+                                          color: w,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 5),
+                                const SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
-                                  widget.bom.productCode ?? 'Error',
+                                  'Product Name: ${widget.bom.productName}',
                                   style: TextStyle(
-                                      color: w, fontWeight: FontWeight.w500,
-                                      fontSize: 18),
+                                      color: w, fontWeight: FontWeight.w300),
                                 ),
+                                //  const SizedBox(
+                                //   height: 5,
+                                // ),
+                                // Text(
+                                //   'Creation Date: ${widget.bom.date}',
+                                //   style: TextStyle(
+                                //       color: w, fontWeight: FontWeight.w300),
+                                //   textScaleFactor: 1,
+                                // ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Product Name: ${widget.bom.productName}',
-                              style: TextStyle(
-                                  color: w, fontWeight: FontWeight.w300),
-                            ),
-                            //  const SizedBox(
-                            //   height: 5,
-                            // ),
-                            // Text(
-                            //   'Creation Date: ${widget.bom.date}',
-                            //   style: TextStyle(
-                            //       color: w, fontWeight: FontWeight.w300),
-                            //   textScaleFactor: 1,
-                            // ),
+                            const Spacer(),
+                            SvgPicture.asset('lib/icons/attatchment.svg')
                           ],
                         ),
-                        const Spacer(),
-                        SvgPicture.asset('lib/icons/attatchment.svg')
-                      ],
-                    ),
+                      ),
+                      // SizedBox(
+                      //   height: 30,
+                      // ),
+                      // Spacer(),
+                    ],
                   ),
-                  // SizedBox(
-                  //   height: 30,
-                  // ),
-                  // Spacer(),
-                ],
+                )),
               ),
-            )),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const Text(
-            'BOM Items with Quantities',
-            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height / 2,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: w,
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: widget.bom.itemswithQuantities.length,
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'BOM Items with Quantities',
+                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height / 2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: w,
+                ),
+                child: Column(
+                  children: [
+                    Expanded(child: ListView.builder(
+                        itemCount: bom.itemswithQuantities.length,
                         itemBuilder: ((context, index) {
-                          final item = widget.bom.itemswithQuantities[index];
-                          final ip = Provider.of<ItemsProvider>(context,
-                              listen: false);
+                          final item = bom.itemswithQuantities[index];
+                          final ip =
+                              Provider.of<ItemsProvider>(context, listen: false);
                           final p = ip.allItems.firstWhere(
                               (element) => element.itemName == item.itemname);
                           Color c = item.quantity < p.itemQuantity! ? gn : r;
@@ -145,13 +153,12 @@ class _BOMPageState extends State<BOMPage> {
                                       width: 42,
                                       height: 42,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: w,
-                                          // border:
-                                          //     Border.all(width: 1, color: b32)),
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: w,
+                                        // border:
+                                        //     Border.all(width: 1, color: b32)),
                                       ),
-                                              child: const Icon(LineIcons.box),
+                                      child: const Icon(LineIcons.box),
                                     ),
                                     const SizedBox(
                                       width: 10,
@@ -190,11 +197,13 @@ class _BOMPageState extends State<BOMPage> {
                             ),
                           );
                         }))),
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 }

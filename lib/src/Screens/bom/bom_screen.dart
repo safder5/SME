@@ -19,7 +19,6 @@ class BomScreen extends StatefulWidget {
 class _BomScreenState extends State<BomScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 //    final GlobalKey<_BomScreenState> _keyToReload =
@@ -43,7 +42,6 @@ class _BomScreenState extends State<BomScreen> {
     // create list to load boms for this screen
     return Consumer<BOMProvider>(builder: (_, bom, __) {
       final boms = bom.boms;
-      print(boms.length);
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButton: FloatingActionButton(
@@ -166,49 +164,49 @@ class _BomScreenState extends State<BomScreen> {
 //       });
 // }
 
-Future<void> _showListSelection(BuildContext context, List<String> items) {
-  return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: w,
-          surfaceTintColor: w,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.close))
-          ],
-          title: const Text('Select Item'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(items[index]),
-                  onTap: () {
-                    final name = items[index];
-                    // Handle item tap
-                    Navigator.of(context).pop();
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                        builder: (context) => ConvertItemtoBOM(
-                          productName: name,
-                        ),
-                      ),
-                    ); // Close the dialog
-                    // You can perform any action based on the tapped item
-                    print('Tapped on: ${items[index]}');
-                  },
-                );
-              },
-            ),
-          ),
-        );
-      });
-}
+// Future<void> _showListSelection(BuildContext context, List<String> items) {
+//   return showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           backgroundColor: w,
+//           surfaceTintColor: w,
+//           actions: [
+//             IconButton(
+//                 onPressed: () {
+//                   Navigator.of(context).pop();
+//                 },
+//                 icon: const Icon(Icons.close))
+//           ],
+//           title: const Text('Select Item'),
+//           content: SizedBox(
+//             width: double.maxFinite,
+//             child: ListView.builder(
+//               itemCount: items.length,
+//               itemBuilder: (context, index) {
+//                 return ListTile(
+//                   title: Text(items[index]),
+//                   onTap: () {
+//                     final name = items[index];
+//                     // Handle item tap
+//                     Navigator.of(context).pop();
+//                     Navigator.of(context, rootNavigator: true).push(
+//                       MaterialPageRoute(
+//                         builder: (context) => ConvertItemtoBOM(
+//                           productName: name,
+//                         ),
+//                       ),
+//                     ); // Close the dialog
+//                     // You can perform any action based on the tapped item
+//                     print('Tapped on: ${items[index]}');
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//         );
+//       });
+// }
 
 // void _showPlatformSpecificAlert(BuildContext context) {
 //   if (Platform.isIOS) {
@@ -268,8 +266,6 @@ class _ItemSelectionState extends State<ItemSelection> {
   Widget build(BuildContext context) {
     return Consumer<ItemsProvider>(builder: (_, itemspvdrr, __) {
       final items = itemspvdrr.getitemNamesofNOTBOMSYET();
-         
-      print(items.length);
       return Scaffold(
         backgroundColor: w,
         body: SafeArea(
@@ -310,8 +306,6 @@ class _ItemSelectionState extends State<ItemSelection> {
                             ),
                           ),
                         ); // Close the dialog
-                        // You can perform any action based on the tapped item
-                        print('Tapped on: ${items[index]}');
                       },
                     );
                   },

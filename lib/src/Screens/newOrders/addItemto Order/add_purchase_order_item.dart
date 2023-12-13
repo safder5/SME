@@ -11,7 +11,7 @@ import '../../../Models/iq_list.dart';
 import '../../../constants.dart';
 
 class AddPurchaseOrderItem extends StatefulWidget {
-  const AddPurchaseOrderItem({super.key,required this.items});
+  const AddPurchaseOrderItem({super.key, required this.items});
   final List<Item> items;
 
   @override
@@ -36,13 +36,13 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
             setState(() {
               selectedItem = i;
               itemLimit = (i.itemQuantity! - i.quantitySales!).toString();
-              print('item limit $itemLimit');
             });
             break;
           }
         }
       } catch (e) {
-        print(e);
+        // print(e);
+        // dont need to handle here cuz its logical any error here will indicate logical error
       }
     }
   }
@@ -130,22 +130,22 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
               textInputAction: TextInputAction.next,
               decoration: getInputDecoration(hint: '12', errorColor: Colors.red)
                   .copyWith(
-                // suffix: GestureDetector(
-                //   onTap: () {
-                //     // change type of unit
-                //     // Navigator.of(context,
-                //     //         rootNavigator: true)
-                //     //     .push(MaterialPageRoute(
-                //     //         builder: (context) =>
-                //     //             AddItems()));
-                //   },
-                //   child: Icon(
-                //     LineIcons.box,
-                //     size: 18,
-                //     color: blue,
-                //   ),
-                // ),
-              ),
+                      // suffix: GestureDetector(
+                      //   onTap: () {
+                      //     // change type of unit
+                      //     // Navigator.of(context,
+                      //     //         rootNavigator: true)
+                      //     //     .push(MaterialPageRoute(
+                      //     //         builder: (context) =>
+                      //     //             AddItems()));
+                      //   },
+                      //   child: Icon(
+                      //     LineIcons.box,
+                      //     size: 18,
+                      //     color: blue,
+                      //   ),
+                      // ),
+                      ),
               onChanged: (value) {
                 try {
                   itemQuantity = int.parse(value);
@@ -193,8 +193,11 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                             const SizedBox(
                               height: 8,
                             ),
-                            const Text('Total stock',
-                                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),)
+                            const Text(
+                              'Total stock',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 10),
+                            )
                           ],
                         ),
                         const Spacer(),
@@ -211,7 +214,8 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                             ),
                             const Text(
                               'Already Purchased',
-                              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 10),
                             )
                           ],
                         ),
@@ -252,7 +256,8 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                   ));
                 } catch (e) {
                   //snackbar to show item not added
-                  print(e);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text('Item couldn\t be added')));
                 }
                 // add items and pass the item and quantity to the list in sales order
                 Navigator.pop(context);
@@ -267,9 +272,7 @@ class _AddPurchaseOrderItemState extends State<AddPurchaseOrderItem> {
                 child: Center(
                     child: Text(
                   'Add Item',
-                  style: TextStyle(
-                    color: w, fontSize: 14
-                  ),
+                  style: TextStyle(color: w, fontSize: 14),
                 )),
               ),
             ),

@@ -25,11 +25,11 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
     await provider.uploadBOMtoDB(bom);
     provider.addBOMtoProv(bom);
     // add item to database and provider
-    uploadtoInventory();
+    await uploadtoInventory();
     provider.clearItems();
   }
 
-  void uploadtoInventory() async {
+  Future<void> uploadtoInventory() async {
     try {
       final itemProviderforAddingItem =
           Provider.of<ItemsProvider>(context, listen: false);
@@ -37,7 +37,8 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
           .updateItemAsBOMtoFirebase(widget.productName);
       itemProviderforAddingItem.updateItemAsBOMinProvider(widget.productName);
     } catch (e) {
-      print('error uploading existing item as bom to inv $e');
+      // print('error uploading existing item as bom to inv $e');
+      //not handling cuz its a provider data it will be corrected on reloading
     }
   }
 
@@ -58,6 +59,33 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
     {
       Navigator.pop(context);
     }
+  }
+
+  void _showErrordialogforaddbom() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: w,
+          surfaceTintColor: w,
+          title: const Text('Error'),
+          content:
+              const Text('There was an error Adding BOM. Check connection and try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+              },
+              child: Text(
+                'OK',
+                style: TextStyle(color: blue),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool _isLoading = false;
@@ -206,15 +234,16 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
                       onTap: () {
                         if (bomProvider.items.isNotEmpty) {
                           BOMmodel bom = BOMmodel(
-                           
                               productName: widget.productName,
                               itemswithQuantities: bomProvider.items,
                               notes: _notes.text,
                               productCode: _productCode.text);
+
                           try {
                             _handleSubmit(bom);
                           } catch (e) {
-                            print('error in submit $e');
+                            // print('error in submit $e');
+                            _showErrordialogforaddbom();
                           }
                         }
                         // check form sate is valid or fields are not empty
@@ -231,9 +260,7 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
                         child: Center(
                             child: Text(
                           'Add BOM',
-                          style: TextStyle(
-                            color: w, fontSize: 14
-                          ),
+                          style: TextStyle(color: w, fontSize: 14),
                         )),
                       ),
                     ),
@@ -243,7 +270,20 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
             ),
           ),
         ),
-        if (_isLoading) const LoadingOverlay()
+        if (_isLoading)
+          ModalBarrier(
+            semanticsOnTapHint: 'Processing',
+            dismissible: false,
+            color: b.withOpacity(0.12),
+          ),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(
+              color: blue,
+              strokeWidth: 2,
+            ),
+          )
+        // if (_isLoading) const LoadingOverlay()
       ],
     );
   }

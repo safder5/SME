@@ -28,7 +28,6 @@ class _AddProductionState extends State<AddProduction> {
   late List<CombinedItem> combinedData;
   // @override
   // void initState() {
-  //   // TODO: implement initState
   //   super.initState();
   // }
 
@@ -50,6 +49,33 @@ class _AddProductionState extends State<AddProduction> {
           surfaceTintColor: w,
           title: const Text('Success'),
           content: const Text('Data submitted successfully.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+              },
+              child: Text(
+                'OK',
+                style: TextStyle(color: blue),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: w,
+          surfaceTintColor: w,
+          title: const Text('Error'),
+          content:
+              const Text('There was an error. Check connection and try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -174,7 +200,8 @@ class _AddProductionState extends State<AddProduction> {
                       });
                     }
                     // Handle error
-                    print('Error: $e');
+                    _showErrorDialog();
+                    // print('Error: $e');
                   }
 
                   // show an animation
@@ -389,7 +416,7 @@ class StockDetails extends StatelessWidget {
                                             color: w,
                                             border: Border.all(
                                                 width: 1, color: b32)),
-                                                child: const Icon(LineIcons.box),
+                                        child: const Icon(LineIcons.box),
                                       ),
                                       const SizedBox(
                                         width: 10,
