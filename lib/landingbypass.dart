@@ -1,11 +1,11 @@
-import 'package:ashwani/Screens/home.dart';
-import 'package:ashwani/constants.dart';
+import 'package:ashwani/src/Screens/home.dart';
+import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'Screens/bom.dart';
-import 'Screens/purchase.dart';
-import 'Screens/sales.dart';
+import 'src/Screens/bom.dart';
+import 'src/Screens/purchase.dart';
+import 'src/Screens/sales.dart';
 // import 'Services/NetworkService/network_service.dart';
 
 class LandingBypass extends StatefulWidget {

@@ -1,20 +1,20 @@
-import 'package:ashwani/Providers/bom_providers.dart';
-import 'package:ashwani/Providers/bs_address_provider.dart';
-import 'package:ashwani/Providers/customer_provider.dart';
-import 'package:ashwani/Providers/new_purchase_order_provider.dart';
-import 'package:ashwani/Providers/production.dart';
-import 'package:ashwani/Providers/purchase_returns_provider.dart';
-import 'package:ashwani/Providers/sales_returns_provider.dart';
-import 'package:ashwani/Providers/user_provider.dart';
-import 'package:ashwani/Providers/vendor_provider.dart';
-import 'package:ashwani/Screens/settings/setting_page.dart';
-import 'package:ashwani/Services/authorizeUser/loginauth.dart';
-import 'package:ashwani/Services/authorizeUser/more_user_details.dart';
-import 'package:ashwani/Services/authorizeUser/signupauth.dart';
+import 'package:ashwani/src/Providers/bom_providers.dart';
+import 'package:ashwani/src/Providers/bs_address_provider.dart';
+import 'package:ashwani/src/Providers/customer_provider.dart';
+import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/src/Providers/production.dart';
+import 'package:ashwani/src/Providers/purchase_returns_provider.dart';
+import 'package:ashwani/src/Providers/sales_returns_provider.dart';
+import 'package:ashwani/src/Providers/user_provider.dart';
+import 'package:ashwani/src/Providers/vendor_provider.dart';
+import 'package:ashwani/src/Screens/settings/setting_page.dart';
+import 'package:ashwani/src/Services/authorizeUser/loginauth.dart';
+import 'package:ashwani/src/Services/authorizeUser/more_user_details.dart';
+import 'package:ashwani/src/Services/authorizeUser/signupauth.dart';
 import 'package:ashwani/landingbypass.dart';
-import 'package:ashwani/Providers/inventory_summary_provider.dart';
-import 'package:ashwani/Providers/iq_list_provider.dart';
-import 'package:ashwani/Providers/new_sales_order_provider.dart';
+import 'package:ashwani/src/Providers/inventory_summary_provider.dart';
+import 'package:ashwani/src/Providers/iq_list_provider.dart';
+import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +22,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'constants.dart';
+import 'src/constants.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
   'email,https://www.googleapis.com/auth/contacts.readonly'
@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       setState(() {
         _initialise = true;
         // _dataLoaded = _dataLoaded;
-        
+
         print(FirebaseAuth.instance.currentUser);
         // print('data loaded = $_dataLoaded');
       });
