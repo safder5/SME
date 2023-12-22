@@ -491,7 +491,7 @@ class ItemTransactionHistory extends StatelessWidget {
               text = "Stock Adjustment";
               c = blue;
             } else {
-              text = 'Waste';
+              text = 'By User';
               c = r;
             }
 

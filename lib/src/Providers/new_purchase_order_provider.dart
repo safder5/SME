@@ -1,11 +1,9 @@
 import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:ashwani/src/Models/purchase_order.dart';
+import 'package:ashwani/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-final _auth = FirebaseAuth.instance.currentUser;
-String? uid = _auth!.email;
 
 class NPOrderProvider with ChangeNotifier {
   int _toRecieve = 0;
@@ -18,13 +16,13 @@ class NPOrderProvider with ChangeNotifier {
   final CollectionReference _purchaseOrderCollection = FirebaseFirestore
       .instance
       .collection('UserData')
-      .doc(uid)
+      .doc(UserData().userEmail)
       .collection('orders')
       .doc('purchases')
       .collection('purchase_orders');
   final _cref = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(uid)
+      .doc(UserData().userEmail)
       .collection('purchase_activities');
 
   void clearAll() {
@@ -370,9 +368,13 @@ class NPOrderProvider with ChangeNotifier {
   }
 
   void reset() {
-    _pa.clear();
-    _po.clear();
-    notifyListeners();
+    try {
+      _po.clear();
+      _pa.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error npo reset');
+    }
   }
 
   void totalToBeRecieved() {
@@ -384,7 +386,7 @@ class NPOrderProvider with ChangeNotifier {
         for (final order in po) {
           final i = order.items ?? [];
           final ir = order.itemsRecieved ?? [];
-          if ( i.isNotEmpty || ir.isNotEmpty) {
+          if (i.isNotEmpty || ir.isNotEmpty) {
             for (final item in i) {
               qit += item.originalQuantity ?? 0;
             }
@@ -404,10 +406,10 @@ class NPOrderProvider with ChangeNotifier {
         print(_toRecieve);
         // notifyListeners();
       } else {
-        print('khali hai');
+        print('khali hai to be recieved ');
       }
     } catch (e) {
-      print(' yahan hai galti $e');
+      print(' yahan hai galti to be recived me $e');
       _toRecieve = 0;
       // notifyListeners();
     }

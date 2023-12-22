@@ -1,6 +1,6 @@
 import 'package:ashwani/src/Models/iq_list.dart';
+import 'package:ashwani/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class InventorySummaryProvider with ChangeNotifier {
@@ -16,13 +16,13 @@ class InventorySummaryProvider with ChangeNotifier {
 
   final inHandRef = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(FirebaseAuth.instance.currentUser?.email)
+      .doc(UserData().userEmail)
       .collection('Items');
 
   // another reference for to be recieved items
   final tobeRecieved = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(FirebaseAuth.instance.currentUser?.email)
+      .doc(UserData().userEmail)
       .collection('orders')
       .doc('purchases')
       .collection('purchase_orders');
@@ -61,11 +61,15 @@ class InventorySummaryProvider with ChangeNotifier {
   }
 
   void reset() {
-    _toRecieve = 0;
-    _inHand = 0;
-    _inventoryItems.clear();
-    _purchaseOrderItems.clear();
-    notifyListeners();
+     try {
+     _toRecieve = 0;
+      _inHand = 0;
+      _inventoryItems.clear();
+      _purchaseOrderItems.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error invsumm reset');
+    }
   }
 
   // do it using providers data
@@ -93,6 +97,4 @@ class InventorySummaryProvider with ChangeNotifier {
   //     print('Error fetching : $e');
   //   }
   // }
-
-  
 }

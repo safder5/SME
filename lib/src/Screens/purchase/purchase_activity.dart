@@ -3,14 +3,9 @@ import 'package:ashwani/src/constantWidgets/boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PurchaseActivity extends StatefulWidget {
+class PurchaseActivity extends StatelessWidget {
   const PurchaseActivity({super.key});
 
-  @override
-  State<PurchaseActivity> createState() => _PurchaseActivityState();
-}
-
-class _PurchaseActivityState extends State<PurchaseActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

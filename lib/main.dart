@@ -1,3 +1,4 @@
+import 'package:ashwani/load_inventory.dart';
 import 'package:ashwani/src/Providers/bom_providers.dart';
 import 'package:ashwani/src/Providers/bs_address_provider.dart';
 import 'package:ashwani/src/Providers/customer_provider.dart';
@@ -15,6 +16,7 @@ import 'package:ashwani/landingbypass.dart';
 import 'package:ashwani/src/Providers/inventory_summary_provider.dart';
 import 'package:ashwani/src/Providers/iq_list_provider.dart';
 import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
+import 'package:ashwani/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -45,18 +47,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   // This widget is the root of your application.
   bool _initialise = false;
   bool _error = false;
+  var auth;
   // bool _dataLoaded = false;
 
   Future<void> initialiseFlutterFireandLoadData() async {
     try {
       await Firebase.initializeApp();
       // _dataLoaded = await loadInitialData();
+      UserData().loadUserEmail();
 
       setState(() {
         _initialise = true;
         // _dataLoaded = _dataLoaded;
+        auth = FirebaseAuth.instance.currentUser;
+        print(auth);
 
-        print(FirebaseAuth.instance.currentUser);
         // print('data loaded = $_dataLoaded');
       });
     } catch (e) {
@@ -169,9 +174,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //         brightness: Brightness.dark)),
         debugShowCheckedModeBanner: false,
         color: const Color(bluePrimary),
-        initialRoute: FirebaseAuth.instance.currentUser == null
-            ? '/signupPage'
-            : '/loadInventory',
+        initialRoute: '/openingLogo',
         routes: {
           '/myApp': (context) => const MyApp(),
           '/landingBypass': (context) => const LandingBypass(),
@@ -179,7 +182,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           '/signupPage': (context) => const SignUpAuthPage(),
           '/moreDetails': (context) => const MoreUserDetails(),
           '/loadInventory': (context) => const LoadInventory(),
-          '/settings': (context) => const SettingsPage()
+          '/settings': (context) => const SettingsPage(),
+          '/openingLogo': (context) => const OpeningScreen(),
         },
       ),
     );
@@ -192,6 +196,40 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 }
 
+class OpeningScreen extends StatefulWidget {
+  const OpeningScreen({super.key});
+
+  @override
+  State<OpeningScreen> createState() => _OpeningScreenState();
+}
+
+class _OpeningScreenState extends State<OpeningScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      UserData().userEmail == ''
+          ? Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const SignUpAuthPage()))
+          : Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoadInventory()));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: blue,
+      body: const Center(
+        child: Image(
+          image: AssetImage('lib/images/logo_white.png'),
+          width: 150,
+        ),
+      ),
+    );
+  }
+}
+
 class LoadInventory extends StatefulWidget {
   const LoadInventory({super.key});
 
@@ -200,57 +238,38 @@ class LoadInventory extends StatefulWidget {
 }
 
 class _LoadInventoryState extends State<LoadInventory> {
-  bool _loadData = false;
+  bool _isLoading = true;
   bool _err = false;
-  Future<void> loadData() async {
-    final customerP = Provider.of<CustomerProvider>(context, listen: false);
-    final vendorP = Provider.of<VendorProvider>(context, listen: false);
-    final itemsP = Provider.of<ItemsProvider>(context, listen: false);
-    final invSummP =
-        Provider.of<InventorySummaryProvider>(context, listen: false);
-    final salesOP = Provider.of<NSOrderProvider>(context, listen: false);
-    final salesRP = Provider.of<SalesReturnsProvider>(context, listen: false);
-    final purchaseOP = Provider.of<NPOrderProvider>(context, listen: false);
-    final purchaseRP =
-        Provider.of<PurchaseReturnsProvider>(context, listen: false);
-    final bomP = Provider.of<BOMProvider>(context, listen: false);
-    final prodP = Provider.of<ProductionProvider>(context, listen: false);
-    final userP = Provider.of<UserProvider>(context, listen: false);
-    try {
-      await userP.getUserDetails();
-      await customerP.fetchAllCustomers();
-      await vendorP.fetchAllVendors();
-      await itemsP.getItems();
-      await invSummP.totalInHand();
-
-      await salesOP.fetchSalesOrders();
-      await salesOP.fetchActivity();
-      await salesRP.fetchSalesReturns();
-      await purchaseOP.fetchPurchaseOrders();
-      await purchaseOP.fetchPurchaseActivity();
-      await purchaseRP.fetchPurchaseReturns();
-      await bomP.fetchBOMS();
-      await prodP.fetchProductions();
-      // await invSummP.totalTobeRecieved();
-      setState(() {
-        _loadData = true;
-      });
-    } catch (e) {
+  Future<void> getAll() async {
+    LoadData loader = LoadData();
+    bool loaded = await loader.loadData(context);
+    if (loaded) {
+      if (!context.mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LandingBypass()),
+      );
+    } else {
+      // handle error
       setState(() {
         _err = true;
       });
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    getAll();
+    // loadData();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_loadData) {
+    if (_isLoading) {
       return Container(
           color: w,
           child: Lottie.asset('lib/animation/ani6.json', fit: BoxFit.contain));
@@ -276,42 +295,14 @@ class _LoadInventoryState extends State<LoadInventory> {
         ),
       );
     }
-    return const LandingBypass();
+    return Scaffold(
+      backgroundColor: w,
+      body: const Center(
+          // child: Text('Fetching',style: TextStyle(color: b32),),
+          ),
+    );
   }
 }
-
-// Future<bool> loadInitialData() async {
-//   // Load your data into providers
-//   // Example: orderProvider.loadDataFromFirebase()
-//   final customerP = CustomerProvider();
-//   final vendorP = VendorProvider();
-//   final itemsP = ItemsProvider();
-//   final invSummP = InventorySummaryProvider();
-//   final salesOP = NSOrderProvider();
-//   final salesRP = SalesReturnsProvider();
-//   final purchaseOP = NPOrderProvider();
-//   final purchaseRP = PurchaseReturnsProvider();
-
-//   try {
-//     await customerP.fetchAllCustomers();
-//     await vendorP.fetchAllVendors();
-//     await itemsP.getItems();
-//     await invSummP.totalInHand();
-//     await invSummP.totalTobeRecieved();
-//     await salesOP.fetchSalesOrders();
-//     await salesOP.fetchActivity();
-//     await salesRP.fetchSalesReturns();
-//     await purchaseOP.fetchPurchaseOrders();
-//     await purchaseOP.fetchPurchaseActivity();
-//     await purchaseRP.fetchPurchaseReturns();
-//     print(customerP.customers.length);
-//     print(salesOP.som.length);
-//     return true;
-//   } catch (e) {
-//     return false;
-//   }
-// }
-
 // animations links
 // https://lottiefiles.com/animations/loading-iew43eMiJN.
 // https://lottiefiles.com/animations/factory-industry-house-home-building-maison-mocca-animation-97rg4awLxc.

@@ -1,10 +1,8 @@
 import 'package:ashwani/src/Models/iq_list.dart';
+import 'package:ashwani/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
-final _auth = FirebaseAuth.instance.currentUser;
-String? uid = _auth!.email;
+import 'package:flutter/material.dart';
 
 class SalesReturnsProvider with ChangeNotifier {
   final List<SalesReturnItemTracking> _sr = [];
@@ -14,7 +12,7 @@ class SalesReturnsProvider with ChangeNotifier {
     try {
       final querySS = await FirebaseFirestore.instance
           .collection('UserData')
-          .doc(uid)
+          .doc(UserData().userEmail)
           .collection('sales_returns')
           .get();
       _sr.clear();
@@ -46,8 +44,13 @@ class SalesReturnsProvider with ChangeNotifier {
     _sr.add(ret);
     notifyListeners();
   }
+
   void reset() {
-    _sr.clear();
-    notifyListeners();
+    try {
+      _sr.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error sr reset');
+    }
   }
 }

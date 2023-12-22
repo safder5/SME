@@ -1,10 +1,10 @@
 import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-final _auth = FirebaseAuth.instance.currentUser;
-String? uid = _auth!.email;
+import '../../user_data.dart';
+
+
 
 class PurchaseReturnsProvider with ChangeNotifier {
   final List<PurchaseReturnItemTracking> _pr = [];
@@ -14,7 +14,7 @@ class PurchaseReturnsProvider with ChangeNotifier {
     try {
       final querySS = await FirebaseFirestore.instance
           .collection('UserData')
-          .doc(uid)
+          .doc(UserData().userEmail)
           .collection('purchase_returns')
           .get();
       _pr.clear();
@@ -41,8 +41,13 @@ class PurchaseReturnsProvider with ChangeNotifier {
     _pr.add(prit);
     notifyListeners();
   }
+
   void reset() {
-    _pr.clear();
-    notifyListeners();
+    try {
+      _pr.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error pr reset');
+    }
   }
 }

@@ -1,12 +1,13 @@
 import 'package:ashwani/src/Models/sales_order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
+import '../../user_data.dart';
 import '../Models/iq_list.dart';
 
-final _auth = FirebaseAuth.instance.currentUser;
-String? uid = _auth!.email;
+
+
 
 class NSOrderProvider with ChangeNotifier {
   final List<SalesOrderModel> _so = [];
@@ -17,14 +18,14 @@ class NSOrderProvider with ChangeNotifier {
 
   final CollectionReference _salesOrderCollection = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(uid)
+      .doc(UserData().userEmail)
       .collection('orders')
       .doc('sales')
       .collection('sales_orders');
 
   final activityRef = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(uid)
+      .doc(UserData().userEmail)
       .collection('sales_activities');
 
   // void clearAll() {
@@ -469,9 +470,14 @@ class NSOrderProvider with ChangeNotifier {
     _so[index] = foundOrder;
     notifyListeners();
   }
+
   void reset() {
-    _sa.clear();
-    _so.clear();
-    notifyListeners();
+    try {
+      _so.clear();
+      _sa.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error nsop reset');
+    }
   }
 }

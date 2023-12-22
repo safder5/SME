@@ -1,10 +1,9 @@
 import 'package:ashwani/src/Models/production_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-final _auth = FirebaseAuth.instance.currentUser;
-String? uid = _auth!.email;
+import '../../user_data.dart';
+
 
 class ProductionProvider with ChangeNotifier {
   final List<ProductionModel> _prod = [];
@@ -12,7 +11,7 @@ class ProductionProvider with ChangeNotifier {
 
   final CollectionReference _prodCn = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(uid)
+      .doc(UserData().userEmail)
       .collection('production');
 
   //c
@@ -69,8 +68,11 @@ class ProductionProvider with ChangeNotifier {
   }
 
   void reset() {
-    _prod.clear();
-
-    notifyListeners();
+    try {
+      _prod.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error prodp reset');
+    }
   }
 }

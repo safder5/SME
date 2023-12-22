@@ -1,23 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../user_data.dart';
 import '../Models/bom_model.dart';
 
 // class BOMProviders extends ChangeNotifier {}
-final _auth = FirebaseAuth.instance.currentUser;
-String? uid = _auth!.email;
 
 class BOMProvider extends ChangeNotifier {
-  final List<BOMmodel> _boms = [];
-  final List<BOMItem> _items = [];
+  List<BOMmodel> _boms = [];
+  List<BOMItem> _items = [];
 
   List<BOMItem> get items => _items;
   List<BOMmodel> get boms => _boms;
 
   final CollectionReference _bomCollection = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(uid)
+      .doc(UserData().userEmail)
       .collection('boms');
 
   void addItem(BOMItem item) {
@@ -125,9 +123,13 @@ class BOMProvider extends ChangeNotifier {
     }
   }
 
-   void reset() {
-    _boms.clear();
-    _items.clear();
-    notifyListeners();
+  void reset() {
+    try {
+      _boms = [];
+      _items = [];
+      notifyListeners();
+    } catch (e) {
+      print('error bomp reset');
+    }
   }
 }

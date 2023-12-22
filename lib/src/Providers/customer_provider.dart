@@ -1,8 +1,8 @@
 import 'package:ashwani/src/Models/address_model.dart';
 import 'package:ashwani/src/Models/customer_model.dart';
 import 'package:ashwani/src/Models/sales_order.dart';
+import 'package:ashwani/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CustomerProvider with ChangeNotifier {
@@ -13,7 +13,7 @@ class CustomerProvider with ChangeNotifier {
 
   final CollectionReference cR = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(FirebaseAuth.instance.currentUser!.email)
+      .doc(UserData().userEmail)
       .collection('Customers');
 
   void addCustomerinProvider(
@@ -88,7 +88,7 @@ class CustomerProvider with ChangeNotifier {
           business: data['business'] ?? '',
         );
       }).toList();
-      print('fetchedcustomers ');
+      print('fetchedcustomers ${_customers.length}');
       notifyListeners();
     } catch (e) {
       print('error getting fetch all customers $e');
@@ -129,8 +129,12 @@ class CustomerProvider with ChangeNotifier {
   }
 
   void reset() {
-    _customerNames.clear();
-    _customers.clear();
-    notifyListeners();
+    try {
+      _customerNames.clear();
+      _customers.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error customer reset');
+    }
   }
 }

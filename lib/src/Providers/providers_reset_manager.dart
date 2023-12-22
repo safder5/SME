@@ -32,17 +32,21 @@ class ProviderManager {
   SalesReturnsProvider salesReturnsProvider = SalesReturnsProvider();
 
   void resetAll() {
-    bomProvider.reset();
-    bsAddressProvider.reset();
-    customerProvider.reset();
-    vendorProvider.reset();
-    inventorySummaryProvider.reset();
-    itemsProvider.reset();
-    npOrderProvider.reset();
-    nsOrderProvider.reset();
-    productionProvider.reset();
-    purchaseReturnsProvider.reset();
-    salesReturnsProvider.reset();
+    try {
+      bomProvider.reset();
+      bsAddressProvider.reset();
+      customerProvider.reset();
+      vendorProvider.reset();
+      inventorySummaryProvider.reset();
+      itemsProvider.reset();
+      npOrderProvider.reset();
+      nsOrderProvider.reset();
+      productionProvider.reset();
+      purchaseReturnsProvider.reset();
+      salesReturnsProvider.reset();
+    } catch (e) {
+      print('err $e');
+    }
     print('RESET');
   }
 }

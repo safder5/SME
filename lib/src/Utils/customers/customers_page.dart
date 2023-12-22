@@ -18,50 +18,57 @@ class CustomersPage extends StatefulWidget {
 class _CustomersPageState extends State<CustomersPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddCustomer()));
-        },
-        backgroundColor: blue,
-        child: const Center(
-          child: Icon(
-            LineIcons.plus,
+    return Consumer<CustomerProvider>(builder: (context, customerP, child) {
+      final customers = customerP.customers;
+      // if (customers.length == 0) {
+      //   customerP.fetchAllCustomers();
+      // }
+      if (customers.isEmpty) {
+        return Scaffold(
+          body: const Center(
+            child: Text('No Customers yet, Add Below '),
+          ),
+        );
+      }
+      return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddCustomer()));
+          },
+          backgroundColor: blue,
+          child: const Center(
+            child: Icon(
+              LineIcons.plus,
+            ),
           ),
         ),
-      ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(LineIcons.angleLeft)),
-                  const SizedBox(width: 10),
-                  const Text('Customers'),
-                  const Spacer(),
-                ],
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              Consumer<CustomerProvider>(builder: (context, customerP, child) {
-                final customers = customerP.customers;
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(LineIcons.angleLeft)),
+                    const SizedBox(width: 10),
+                    const Text('Customers'),
+                    const Spacer(),
+                  ],
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+
                 // print(customers.length);
-                if (customers.isEmpty) {
-                  return const Center(
-                    child: Text('No Customers yet, Add Below '),
-                  );
-                }
-                return SizedBox(
+
+                SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: ListView.builder(
                       itemCount: customers.length,
@@ -71,20 +78,22 @@ class _CustomersPageState extends State<CustomersPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => CustomerPage(customerName: customers[index].name?? ''))));
+                                    builder: ((context) => CustomerPage(
+                                        customerName:
+                                            customers[index].name ?? ''))));
                           },
                           child: CustomersPageContainer(
                               fullname: customers[index].name!,
                               companyname: customers[index].companyName!),
                         );
                       }),
-                );
-              })
-            ],
+                )
+              ],
+            ),
           ),
-        ),
-      )),
-    );
+        )),
+      );
+    });
   }
 }
 

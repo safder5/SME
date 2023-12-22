@@ -2,8 +2,9 @@ import 'package:ashwani/src/Models/address_model.dart';
 import 'package:ashwani/src/Models/purchase_order.dart';
 import 'package:ashwani/src/Models/vendor_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../user_data.dart';
 
 class VendorProvider with ChangeNotifier {
   List<VendorModel> _vendors = [];
@@ -11,7 +12,7 @@ class VendorProvider with ChangeNotifier {
 
   final CollectionReference cR = FirebaseFirestore.instance
       .collection('UserData')
-      .doc(FirebaseAuth.instance.currentUser!.email)
+      .doc(UserData().userEmail)
       .collection('Vendors');
 
   Future<void> addVendor(VendorModel vendorData, DocumentReference docRef,
@@ -107,8 +108,13 @@ class VendorProvider with ChangeNotifier {
       print('error uploadOrderinCustomerProfile $e');
     }
   }
+
   void reset() {
-    _vendors.clear();
-    notifyListeners();
+     try {
+     _vendors.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error venfor reset');
+    }
   }
 }

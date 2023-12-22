@@ -2,8 +2,8 @@ import 'package:ashwani/src/Models/bom_model.dart';
 import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:ashwani/src/Models/item_tracking_model.dart';
 import 'package:ashwani/src/Models/production_model.dart';
+import 'package:ashwani/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ItemsProvider with ChangeNotifier {
@@ -19,7 +19,7 @@ class ItemsProvider with ChangeNotifier {
   List<Item> get poItems => _poItems;
   List<Item> get salesDelivered => _salesDelivered;
 
-  final _auth = FirebaseAuth.instance.currentUser;
+  
   final _fs = FirebaseFirestore.instance;
 
   void addInvItemtoProvider(Item item, ItemTrackingModel track) {
@@ -34,7 +34,7 @@ class ItemsProvider with ChangeNotifier {
     try {
       DocumentReference dRef = _fs
           .collection('UserData')
-          .doc('${_auth!.email}')
+          .doc(UserData().userEmail)
           .collection('Items')
           .doc(itemName);
       dRef.update({'itemQuantity': newQuantity});
@@ -145,7 +145,7 @@ class ItemsProvider with ChangeNotifier {
   Future<void> updateItemAsBOMtoFirebase(String itemName) async {
     DocumentReference collRef = _fs
         .collection('UserData')
-        .doc('${_auth!.email}')
+        .doc(UserData().userEmail)
         .collection('Items')
         .doc(itemName);
 
@@ -164,10 +164,10 @@ class ItemsProvider with ChangeNotifier {
 
   Future<void> getItems() async {
     try {
-      final auth = FirebaseAuth.instance.currentUser;
+      
       final querySnapshot = await FirebaseFirestore.instance
           .collection('UserData')
-          .doc(auth!.email)
+          .doc(UserData().userEmail)
           .collection('Items') // Replace with your Firestore collection name
           .get();
 
@@ -267,10 +267,10 @@ class ItemsProvider with ChangeNotifier {
           reason: 'po');
 
       try {
-        final auth = FirebaseAuth.instance.currentUser;
+       
         await FirebaseFirestore.instance
             .collection('UserData')
-            .doc(auth!.email)
+            .doc(UserData().userEmail)
             .collection('Items')
             .doc(updatedItem.itemName)
             .update({
@@ -278,7 +278,7 @@ class ItemsProvider with ChangeNotifier {
         });
         await FirebaseFirestore.instance
             .collection('UserData')
-            .doc(auth.email)
+            .doc(UserData().userEmail)
             .collection('Items')
             .doc(updatedItem.itemName)
             .collection('tracks')
@@ -305,10 +305,10 @@ class ItemsProvider with ChangeNotifier {
           orderID: orderId, quantity: updatedItem.quantitySales, reason: 'so');
 
       try {
-        final auth = FirebaseAuth.instance.currentUser;
+        
         await FirebaseFirestore.instance
             .collection('UserData')
-            .doc(auth!.email)
+            .doc(UserData().userEmail)
             .collection('Items')
             .doc(updatedItem.itemName)
             .update({
@@ -316,7 +316,7 @@ class ItemsProvider with ChangeNotifier {
         });
         await FirebaseFirestore.instance
             .collection('UserData')
-            .doc(auth.email)
+            .doc(UserData().userEmail)
             .collection('Items')
             .doc(updatedItem.itemName)
             .collection('tracks')
@@ -334,10 +334,10 @@ class ItemsProvider with ChangeNotifier {
 
   Future<void> makeProductionReductions(
       List<CombinedItem> cd, int qop, String productionID) async {
-    final auth = FirebaseAuth.instance.currentUser;
+    
     CollectionReference cr = FirebaseFirestore.instance
         .collection('UserData')
-        .doc(auth!.email)
+        .doc(UserData().userEmail)
         .collection('Items');
     for (final item in cd) {
       try {
@@ -385,7 +385,7 @@ class ItemsProvider with ChangeNotifier {
     try {
       await _fs
           .collection('UserData')
-          .doc('${_auth!.email}')
+          .doc(UserData().userEmail)
           .collection('Items')
           .doc(itemname)
           .update({'itemQuantity': finalquantity});
@@ -411,7 +411,8 @@ class ItemsProvider with ChangeNotifier {
   List<String> getItemNames() {
     return _allItems.map((item) => item.itemName).toList();
   }
-  List<String> getitemNamesofNOTBOMSYET(){
+
+  List<String> getitemNamesofNOTBOMSYET() {
     return _allItems
         .where((element) => element.bom == false)
         .map((e) => e.itemName)
@@ -482,11 +483,15 @@ class ItemsProvider with ChangeNotifier {
   }
 
   void reset() {
-    _allItems.clear();
-    _poItems.clear();
-    _soItems.clear();
-    _salesDelivered.clear();
-    notifyListeners();
+    try {
+      _allItems.clear();
+      _soItems.clear();
+      _salesDelivered.clear();
+      notifyListeners();
+    } catch (e) {
+      print('error items reset');
+    }
+   
   }
 
   void calculateStockInHand() {

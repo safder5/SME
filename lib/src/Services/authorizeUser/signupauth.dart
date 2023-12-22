@@ -59,10 +59,13 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                 //   size: 32,
                 // ),
                 const Spacer(),
-                 const Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(image: AssetImage('lib/images/applogo.png'),width: 150,),
+                    Image(
+                      image: AssetImage('lib/images/applogo.png'),
+                      width: 150,
+                    ),
                   ],
                 ),
                 // SvgPicture.asset('lib/icons/sme.svg',width: 100,height: 100,),
@@ -73,7 +76,7 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                 //       fontSize: 32,
                 //       fontWeight: FontWeight.w800),
                 // ),
-                
+
                 // Row(
                 //   children: [
                 //     const Text('Got an account ?'),
@@ -121,15 +124,16 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                             // Handle successful sign-in
                             print('Signed in user: ${user.displayName}');
                             if (!context.mounted) return;
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => emailExists
-                                        ? const MyApp()
-                                        : SetupAccount(
-                                            photoURL: user.photoURL ?? 'na',
-                                          )));
+                            emailExists
+                                ? Navigator.of(context, rootNavigator: true)
+                                    .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => const MyApp()))
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SetupAccount(
+                                              photoURL: user.photoURL ?? 'na',
+                                            )));
                           } else {
                             if (!context.mounted) return;
                             // Handle sign-in failure or cancellation
@@ -158,8 +162,8 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                             //         0, 3), // changes the shadow position
                             //   ),
                             // ],
-                            border: Border.all(width: 1,color: b.withOpacity(0.07)),
-
+                            border: Border.all(
+                                width: 1, color: b.withOpacity(0.07)),
                             borderRadius: BorderRadius.circular(20)),
                         child: const Padding(
                           padding: EdgeInsets.all(24.0),
@@ -209,8 +213,8 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                             //         0, 3), // changes the shadow position
                             //   ),
                             // ],
-                            border: Border.all(width: 1,color: b.withOpacity(0.07
-                            )),
+                            border: Border.all(
+                                width: 1, color: b.withOpacity(0.07)),
                             borderRadius: BorderRadius.circular(20)),
                         child: const Padding(
                           padding: EdgeInsets.all(24.0),

@@ -62,7 +62,8 @@ dependencies:
   connectivity: 
   cached_network_image:
   flutter_image_compress:
-  
+  excel: 
+  flutter_riverpod: 
 
 
 dev_dependencies:
@@ -93,6 +94,7 @@ flutter:
     - lib/images/gicon.png
     - lib/images/aicon.png
     - lib/images/applogo.png
+    - lib/images/logo_white.png
 
 
     - lib/animation/

@@ -39,8 +39,8 @@ class _ItemsPageState extends State<ItemsPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: blue,
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const AddItems()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddItems()));
         },
         child: const Icon(LineIcons.plus),
       ),
@@ -67,6 +67,9 @@ class _ItemsPageState extends State<ItemsPage> {
             Consumer<ItemsProvider>(
               builder: (_, ip, __) {
                 final items = ip.allItems.reversed.toList();
+                // if (items.length == 0) {
+                //   ip.getItems();
+                // }
                 return Expanded(
                   child: ((items.isEmpty)
                       ? const Text('No Items, Add below')
@@ -86,10 +89,11 @@ class _ItemsPageState extends State<ItemsPage> {
                                             )));
                               },
                               child: ItemsPageContainer(
-                                  itemName: items[index].itemName,
-                                  sku: items[index].itemQuantity.toString(),
-                                  imgUrl: items[index].imageURL?? '',
-                                  unitType: items[index].unitType?? 'None',),
+                                itemName: items[index].itemName,
+                                sku: items[index].itemQuantity.toString(),
+                                imgUrl: items[index].imageURL ?? '',
+                                unitType: items[index].unitType ?? 'None',
+                              ),
                             );
                           })),
                 );
