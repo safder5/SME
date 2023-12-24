@@ -1,7 +1,4 @@
 import 'dart:io';
-import 'package:ashwani/src/Providers/iq_list_provider.dart';
-import 'package:ashwani/src/Services/helper.dart';
-import 'package:ashwani/src/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/iq_list.dart';
+import '../../Providers/iq_list_provider.dart';
+import '../../Services/helper.dart';
+import '../../constants.dart';
 
 class ItemScreen extends StatefulWidget {
   const ItemScreen({super.key, required this.item});

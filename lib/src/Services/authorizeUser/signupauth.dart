@@ -1,12 +1,12 @@
-import 'package:ashwani/src/Services/authorizeUser/authentication.dart';
-import 'package:ashwani/src/Services/authorizeUser/setup_account.dart';
-import 'package:ashwani/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../../main.dart';
 import '../../constants.dart';
+import 'authentication.dart';
+import 'setup_account.dart';
 
 class SignUpAuthPage extends StatefulWidget {
   const SignUpAuthPage({super.key});

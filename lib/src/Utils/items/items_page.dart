@@ -1,12 +1,13 @@
-import 'package:ashwani/src/Models/iq_list.dart';
-import 'package:ashwani/src/Providers/iq_list_provider.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/src/Utils/items/add_items.dart';
-import 'package:ashwani/src/Utils/items/item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+
+import '../../Models/iq_list.dart';
+import '../../Providers/iq_list_provider.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import 'add_items.dart';
+import 'item_screen.dart';
 
 class ItemsPage extends StatefulWidget {
   const ItemsPage({super.key});

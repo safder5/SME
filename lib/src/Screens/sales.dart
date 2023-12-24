@@ -1,8 +1,9 @@
-import 'package:ashwani/src/Screens/sales/sales_activity.dart';
-import 'package:ashwani/src/Screens/sales/sales_orders.dart';
-import 'package:ashwani/src/Screens/sales/sales_returns.dart';
-import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../constants.dart';
+import 'sales/sales_activity.dart';
+import 'sales/sales_orders.dart';
+import 'sales/sales_returns.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({super.key});

@@ -1,14 +1,15 @@
-import 'package:ashwani/src/Models/purchase_order.dart';
-import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
-import 'package:ashwani/src/Screens/purchase/purchase_order_recieved_items.dart';
-import 'package:ashwani/src/Screens/purchase/purchase_order_return_items.dart';
-import 'package:ashwani/src/Screens/purchase/purchase_order_sub_tabs.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/purchase_order.dart';
+import '../../Providers/new_purchase_order_provider.dart';
 import '../../constants.dart';
+import 'purchase_order_recieved_items.dart';
+import 'purchase_order_return_items.dart';
+import 'purchase_order_sub_tabs.dart';
 
 class PurchaseOrderPage extends StatefulWidget {
   const PurchaseOrderPage({super.key, required this.orderId});

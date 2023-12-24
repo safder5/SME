@@ -1,22 +1,7 @@
-import 'package:ashwani/load_inventory.dart';
-import 'package:ashwani/src/Providers/bom_providers.dart';
-import 'package:ashwani/src/Providers/bs_address_provider.dart';
-import 'package:ashwani/src/Providers/customer_provider.dart';
-import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
-import 'package:ashwani/src/Providers/production.dart';
-import 'package:ashwani/src/Providers/purchase_returns_provider.dart';
-import 'package:ashwani/src/Providers/sales_returns_provider.dart';
-import 'package:ashwani/src/Providers/user_provider.dart';
-import 'package:ashwani/src/Providers/vendor_provider.dart';
-import 'package:ashwani/src/Screens/settings/setting_page.dart';
-import 'package:ashwani/src/Services/authorizeUser/loginauth.dart';
-import 'package:ashwani/src/Services/authorizeUser/more_user_details.dart';
-import 'package:ashwani/src/Services/authorizeUser/signupauth.dart';
-import 'package:ashwani/landingbypass.dart';
-import 'package:ashwani/src/Providers/inventory_summary_provider.dart';
-import 'package:ashwani/src/Providers/iq_list_provider.dart';
-import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
-import 'package:ashwani/user_data.dart';
+import 'package:SMEflow/landingbypass.dart';
+import 'package:SMEflow/load_inventory.dart';
+import 'package:SMEflow/src/Services/authorizeUser/loginauth.dart';
+import 'package:SMEflow/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +9,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'src/Providers/bom_providers.dart';
+import 'src/Providers/bs_address_provider.dart';
+import 'src/Providers/customer_provider.dart';
+import 'src/Providers/inventory_summary_provider.dart';
+import 'src/Providers/iq_list_provider.dart';
+import 'src/Providers/new_purchase_order_provider.dart';
+import 'src/Providers/new_sales_order_provider.dart';
+import 'src/Providers/production.dart';
+import 'src/Providers/purchase_returns_provider.dart';
+import 'src/Providers/sales_returns_provider.dart';
+import 'src/Providers/user_provider.dart';
+import 'src/Providers/vendor_provider.dart';
+import 'src/Screens/settings/setting_page.dart';
+import 'src/Services/authorizeUser/more_user_details.dart';
+import 'src/Services/authorizeUser/signupauth.dart';
 import 'src/constants.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
@@ -223,7 +223,7 @@ class _OpeningScreenState extends State<OpeningScreen> {
       body: const Center(
         child: Image(
           image: AssetImage('lib/images/logo_white.png'),
-          width: 150,
+          width: 250,
         ),
       ),
     );

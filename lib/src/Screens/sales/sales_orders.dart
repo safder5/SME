@@ -1,17 +1,18 @@
-import 'package:ashwani/src/Models/sales_order.dart';
-import 'package:ashwani/src/Providers/customer_provider.dart';
-import 'package:ashwani/src/Screens/newOrders/new_sales_order.dart';
-import 'package:ashwani/src/Screens/sales/sales_order_page.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
+import '../../Models/sales_order.dart';
+import '../../Providers/customer_provider.dart';
 import '../../Providers/iq_list_provider.dart';
+import '../../Providers/new_sales_order_provider.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import '../newOrders/new_sales_order.dart';
+import 'sales_order_page.dart';
 
 class SalesOrders extends StatefulWidget {
   const SalesOrders({super.key});

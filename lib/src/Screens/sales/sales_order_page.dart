@@ -1,14 +1,15 @@
-import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
-import 'package:ashwani/src/Screens/sales/sales_order_return_transaction.dart';
-import 'package:ashwani/src/Screens/sales/sales_order_transaction.dart';
-import 'package:ashwani/src/Screens/sales/sales_page_sub_tabs.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/src/Models/sales_order.dart';
+import 'package:SMEflow/src/Screens/sales/sales_order_return_transaction.dart';
+import 'package:SMEflow/src/Screens/sales/sales_order_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+
+import '../../Models/sales_order.dart';
+import '../../Providers/new_sales_order_provider.dart';
+import '../../constants.dart';
+import 'sales_page_sub_tabs.dart';
 
 class SalesOrderPage extends StatefulWidget {
   const SalesOrderPage({super.key, required this.orderId});

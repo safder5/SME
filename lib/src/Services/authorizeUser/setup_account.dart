@@ -1,11 +1,12 @@
-import 'package:ashwani/src/Services/helper.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/main.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../main.dart';
+import '../../constants.dart';
+import '../helper.dart';
 import 'signupauth.dart';
 
 class SetupAccount extends StatefulWidget {

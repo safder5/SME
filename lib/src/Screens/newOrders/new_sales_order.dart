@@ -1,16 +1,18 @@
-import 'package:ashwani/src/Models/iq_list.dart';
-import 'package:ashwani/src/Providers/customer_provider.dart';
-import 'package:ashwani/src/Screens/newOrders/addItemto%20Order/add_sales_order_item.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/src/Models/sales_order.dart';
-import 'package:ashwani/src/Providers/iq_list_provider.dart';
-import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
-import 'package:ashwani/src/Services/helper.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+
+import '../../Models/iq_list.dart';
+import '../../Models/sales_order.dart';
+import '../../Providers/customer_provider.dart';
+import '../../Providers/iq_list_provider.dart';
+import '../../Providers/new_sales_order_provider.dart';
+import '../../Services/helper.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import 'addItemto Order/add_sales_order_item.dart';
 
 const List<String> paymentMethods = <String>[
   'Payment Methods',

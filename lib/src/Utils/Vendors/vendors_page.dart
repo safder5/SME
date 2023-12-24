@@ -1,12 +1,12 @@
-import 'package:ashwani/src/Providers/vendor_provider.dart';
-import 'package:ashwani/src/Utils/Vendors/add_vendors.dart';
-import 'package:ashwani/src/Utils/Vendors/vendor_page.dart';
-import 'package:ashwani/src/constants.dart';
+import 'package:SMEflow/src/Utils/Vendors/vendor_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../Providers/vendor_provider.dart';
 import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import 'add_vendors.dart';
 
 class VendorsPage extends StatelessWidget {
   const VendorsPage({super.key});

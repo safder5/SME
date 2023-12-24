@@ -1,5 +1,7 @@
-import 'package:ashwani/src/constants.dart';
+
 import 'package:flutter/material.dart';
+
+import '../../constants.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({super.key});

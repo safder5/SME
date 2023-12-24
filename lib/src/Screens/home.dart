@@ -1,21 +1,19 @@
-import 'package:ashwani/src/Models/user_model.dart';
-import 'package:ashwani/src/Providers/iq_list_provider.dart';
-import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
-import 'package:ashwani/src/Providers/providers_reset_manager.dart';
-import 'package:ashwani/src/Providers/user_provider.dart';
-import 'package:ashwani/src/Screens/home/activity_home.dart';
-import 'package:ashwani/src/Screens/more.dart';
-import 'package:ashwani/src/Screens/settings/setting_page.dart';
-import 'package:ashwani/src/Utils/Vendors/add_vendors.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
-import 'package:ashwani/src/Utils/customers/add_customer.dart';
-import 'package:ashwani/src/Utils/items/add_items.dart';
-import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+
+import '../Models/user_model.dart';
+import '../Providers/iq_list_provider.dart';
+import '../Providers/new_purchase_order_provider.dart';
+import '../Providers/user_provider.dart';
+import '../Utils/Vendors/add_vendors.dart';
+import '../Utils/customers/add_customer.dart';
+import '../Utils/items/add_items.dart';
+import '../constantWidgets/boxes.dart';
+import '../constants.dart';
+import 'home/activity_home.dart';
+import 'more.dart';
+import 'settings/setting_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

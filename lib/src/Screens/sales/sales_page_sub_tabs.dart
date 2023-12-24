@@ -1,12 +1,13 @@
-import 'package:ashwani/src/Models/sales_order.dart';
-import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
-import 'package:ashwani/src/Screens/sales/edit_sales_order/increase_details_item_quantity.dart';
-import 'package:ashwani/src/Screens/sales/edit_sales_order/reduce_item_quantity.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../Models/iq_list.dart';
+import '../../Models/sales_order.dart';
+import '../../Providers/new_sales_order_provider.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import 'edit_sales_order/increase_details_item_quantity.dart';
+import 'edit_sales_order/reduce_item_quantity.dart';
 
 
 class SOPDetails extends StatefulWidget {

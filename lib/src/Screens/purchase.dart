@@ -1,9 +1,9 @@
-import 'package:ashwani/src/Screens/purchase/purchase_activity.dart';
-import 'package:ashwani/src/Screens/purchase/purchase_orders.dart';
-import 'package:ashwani/src/Screens/purchase/purchase_returns.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
+import 'purchase/purchase_activity.dart';
+import 'purchase/purchase_orders.dart';
+import 'purchase/purchase_returns.dart';
 
 class PurchasePage extends StatefulWidget {
   const PurchasePage({super.key});

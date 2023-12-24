@@ -1,11 +1,11 @@
-import 'package:ashwani/src/Providers/customer_provider.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
-import 'package:ashwani/src/constants.dart';
-import 'package:ashwani/src/Utils/customers/add_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../Providers/customer_provider.dart';
+import '../../constantWidgets/boxes.dart';
+import '../../constants.dart';
+import 'add_customer.dart';
 import 'customer_page.dart';
 
 class CustomersPage extends StatefulWidget {

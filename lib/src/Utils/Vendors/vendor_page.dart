@@ -1,13 +1,13 @@
-import 'package:ashwani/src/Models/purchase_order.dart';
-import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
-import 'package:ashwani/src/Providers/vendor_provider.dart';
-import 'package:ashwani/src/Screens/purchase/purchase_order_page.dart';
-import 'package:ashwani/src/constantWidgets/boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/purchase_order.dart';
+import '../../Providers/new_purchase_order_provider.dart';
+import '../../Providers/vendor_provider.dart';
+import '../../Screens/purchase/purchase_order_page.dart';
+import '../../constantWidgets/boxes.dart';
 import '../../constants.dart';
 
 class VendorPage extends StatefulWidget {
