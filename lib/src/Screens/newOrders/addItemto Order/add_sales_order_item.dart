@@ -1,6 +1,6 @@
-import 'package:SMEflow/src/Models/iq_list.dart';
-import 'package:SMEflow/src/Providers/iq_list_provider.dart';
-import 'package:SMEflow/src/Services/helper.dart';
+import 'package:ashwani/src/Models/iq_list.dart';
+import 'package:ashwani/src/Providers/iq_list_provider.dart';
+import 'package:ashwani/src/Services/helper.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

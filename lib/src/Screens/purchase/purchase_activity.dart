@@ -1,9 +1,7 @@
-
+import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/src/constantWidgets/boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../Providers/new_purchase_order_provider.dart';
-import '../../constantWidgets/boxes.dart';
 
 class PurchaseActivity extends StatelessWidget {
   const PurchaseActivity({super.key});

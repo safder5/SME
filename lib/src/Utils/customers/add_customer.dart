@@ -1,16 +1,16 @@
+import 'package:ashwani/src/Models/address_model.dart';
+import 'package:ashwani/src/Models/customer_model.dart';
+import 'package:ashwani/src/Providers/bs_address_provider.dart';
+import 'package:ashwani/src/Providers/customer_provider.dart';
+import 'package:ashwani/src/Utils/addAddressBillingShipping.dart/add_address.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/address_model.dart';
-import '../../Models/customer_model.dart';
-import '../../Providers/bs_address_provider.dart';
-import '../../Providers/customer_provider.dart';
 import '../../constants.dart';
 import '../../Services/helper.dart';
-import '../addAddressBillingShipping.dart/add_address.dart';
 
 class AddCustomer extends StatefulWidget {
   const AddCustomer({super.key});

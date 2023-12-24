@@ -1,9 +1,8 @@
 import 'dart:io';
+import 'package:ashwani/src/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../constants.dart';
 
 pickImage(ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();

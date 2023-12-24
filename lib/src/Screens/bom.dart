@@ -1,9 +1,8 @@
-
+import 'package:ashwani/src/Screens/bom/bom_screen.dart';
+import 'package:ashwani/src/Screens/bom/productions.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import 'bom/bom_screen.dart';
-import 'bom/productions.dart';
 
 class BOM extends StatefulWidget {
   const BOM({super.key});

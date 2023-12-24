@@ -1,3 +1,7 @@
+import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/src/Screens/newOrders/new_purchase_order.dart';
+import 'package:ashwani/src/constantWidgets/boxes.dart';
+import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'dart:math' as math;
@@ -5,10 +9,6 @@ import 'dart:math' as math;
 import 'package:provider/provider.dart';
 
 import '../../Providers/iq_list_provider.dart';
-import '../../Providers/new_purchase_order_provider.dart';
-import '../../constantWidgets/boxes.dart';
-import '../../constants.dart';
-import '../newOrders/new_purchase_order.dart';
 import 'purchase_order_page.dart';
 
 class PurchaseOrders extends StatefulWidget {

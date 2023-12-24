@@ -1,9 +1,8 @@
+import 'package:ashwani/src/Models/iq_list.dart';
+import 'package:ashwani/src/Providers/purchase_returns_provider.dart';
+import 'package:ashwani/src/constantWidgets/boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../Models/iq_list.dart';
-import '../../Providers/purchase_returns_provider.dart';
-import '../../constantWidgets/boxes.dart';
 
 class PurchaseReturns extends StatelessWidget {
   const PurchaseReturns({super.key});

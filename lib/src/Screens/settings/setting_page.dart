@@ -1,29 +1,30 @@
+import 'dart:io';
+
+import 'package:ashwani/src/Providers/providers_reset_manager.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/customer_support.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/rate_app.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/about.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/feedback.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/org_profile.dart';
+import 'package:ashwani/src/Screens/settings/setting_screens/privacy_security.dart';
+import 'package:ashwani/src/Services/authorizeUser/signupauth.dart';
+import 'package:ashwani/src/constantWidgets/boxes.dart';
+import 'package:ashwani/src/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:ashwani/src/Providers/bom_providers.dart';
+import 'package:ashwani/src/Providers/customer_provider.dart';
+import 'package:ashwani/src/Providers/inventory_summary_provider.dart';
+import 'package:ashwani/src/Providers/iq_list_provider.dart';
+import 'package:ashwani/src/Providers/new_sales_order_provider.dart';
+import 'package:ashwani/src/Providers/production.dart';
+import 'package:ashwani/src/Providers/sales_returns_provider.dart';
+import 'package:ashwani/src/Providers/user_provider.dart';
+import 'package:ashwani/src/Providers/vendor_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../Providers/bom_providers.dart';
-import '../../Providers/customer_provider.dart';
-import '../../Providers/inventory_summary_provider.dart';
-import '../../Providers/iq_list_provider.dart';
 import '../../Providers/new_purchase_order_provider.dart';
-import '../../Providers/new_sales_order_provider.dart';
-import '../../Providers/production.dart';
-import '../../Providers/providers_reset_manager.dart';
 import '../../Providers/purchase_returns_provider.dart';
-import '../../Providers/sales_returns_provider.dart';
-import '../../Providers/user_provider.dart';
-import '../../Providers/vendor_provider.dart';
-import '../../Services/authorizeUser/signupauth.dart';
-import '../../constantWidgets/boxes.dart';
-import '../../constants.dart';
-import 'setting_screens/about.dart';
-import 'setting_screens/customer_support.dart';
-import 'setting_screens/feedback.dart';
-import 'setting_screens/org_profile.dart';
-import 'setting_screens/privacy_security.dart';
-import 'setting_screens/rate_app.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

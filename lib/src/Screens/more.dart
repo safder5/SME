@@ -1,9 +1,10 @@
+
+import 'package:ashwani/src/Utils/customers/customers_page.dart';
+import 'package:ashwani/src/Utils/items/items_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../Utils/Vendors/vendors_page.dart';
-import '../Utils/customers/customers_page.dart';
-import '../Utils/items/items_page.dart';
 import '../constantWidgets/boxes.dart';
 
 class MoreFromHomePage extends StatelessWidget {

@@ -1,12 +1,11 @@
+import 'package:ashwani/src/Providers/sales_returns_provider.dart';
+import 'package:ashwani/src/constantWidgets/boxes.dart';
+import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
-
-import '../../Providers/sales_returns_provider.dart';
-import '../../constantWidgets/boxes.dart';
-import '../../constants.dart';
 
 class SalesReturns extends StatefulWidget {
   const SalesReturns({super.key});

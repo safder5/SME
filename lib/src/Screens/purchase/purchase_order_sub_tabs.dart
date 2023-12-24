@@ -1,11 +1,11 @@
-import 'package:SMEflow/src/Screens/purchase/edit_purchase_order.dart/increase_details_item_qty.dart';
-import 'package:SMEflow/src/Screens/purchase/edit_purchase_order.dart/reduce_item_qty.dart';
+import 'package:ashwani/src/Models/purchase_order.dart';
+import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/src/Screens/purchase/edit_purchase_order.dart/increase_details_item_qty.dart';
+import 'package:ashwani/src/Screens/purchase/edit_purchase_order.dart/reduce_item_qty.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/iq_list.dart';
-import '../../Models/purchase_order.dart';
-import '../../Providers/new_purchase_order_provider.dart';
 import '../../constantWidgets/boxes.dart';
 import '../../constants.dart';
 

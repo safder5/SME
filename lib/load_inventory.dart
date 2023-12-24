@@ -1,17 +1,17 @@
+import 'package:ashwani/src/Providers/bom_providers.dart';
+import 'package:ashwani/src/Providers/inventory_summary_provider.dart';
+import 'package:ashwani/src/Providers/iq_list_provider.dart';
+import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
+import 'package:ashwani/src/Providers/production.dart';
+import 'package:ashwani/src/Providers/purchase_returns_provider.dart';
+import 'package:ashwani/src/Providers/sales_returns_provider.dart';
+import 'package:ashwani/src/Providers/user_provider.dart';
+import 'package:ashwani/src/Providers/vendor_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'src/Providers/bom_providers.dart';
 import 'src/Providers/customer_provider.dart';
-import 'src/Providers/inventory_summary_provider.dart';
-import 'src/Providers/iq_list_provider.dart';
-import 'src/Providers/new_purchase_order_provider.dart';
 import 'src/Providers/new_sales_order_provider.dart';
-import 'src/Providers/production.dart';
-import 'src/Providers/purchase_returns_provider.dart';
-import 'src/Providers/sales_returns_provider.dart';
-import 'src/Providers/user_provider.dart';
-import 'src/Providers/vendor_provider.dart';
 
 class LoadData {
   Future<bool> loadData(BuildContext context) async {

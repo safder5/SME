@@ -1,5 +1,5 @@
-import 'package:SMEflow/src/Models/bom_model.dart';
-import 'package:SMEflow/src/Providers/bom_providers.dart';
+import 'package:ashwani/src/Models/bom_model.dart';
+import 'package:ashwani/src/Providers/bom_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

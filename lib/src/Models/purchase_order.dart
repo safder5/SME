@@ -1,4 +1,4 @@
-import 'package:SMEflow/src/Models/iq_list.dart';
+import 'package:ashwani/src/Models/iq_list.dart';
 
 class PurchaseOrderModel {
   final int orderID;
