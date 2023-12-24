@@ -1,4 +1,4 @@
-import 'package:ashwani/src/Models/address_model.dart';
+import 'package:SMEflow/src/Models/address_model.dart';
 
 class VendorModel {
   final String? name;

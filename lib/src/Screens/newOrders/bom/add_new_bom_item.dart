@@ -1,4 +1,5 @@
-
+import 'package:SMEflow/src/Models/bom_model.dart';
+import 'package:SMEflow/src/Providers/bom_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,8 +7,6 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
 
-import '../../../Models/bom_model.dart';
-import '../../../Providers/bom_providers.dart';
 import '../../../Services/helper.dart';
 import '../../../constantWidgets/boxes.dart';
 import '../../../constants.dart';
