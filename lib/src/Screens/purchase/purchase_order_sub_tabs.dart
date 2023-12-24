@@ -1,5 +1,5 @@
-import 'package:SMEflow/src/Screens/purchase/edit_purchase_order.dart/increase_details_item_qty.dart';
-import 'package:SMEflow/src/Screens/purchase/edit_purchase_order.dart/reduce_item_qty.dart';
+import 'package:ashwani/src/Screens/purchase/edit_purchase_order.dart/increase_details_item_qty.dart';
+import 'package:ashwani/src/Screens/purchase/edit_purchase_order.dart/reduce_item_qty.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

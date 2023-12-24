@@ -1,5 +1,5 @@
-import 'package:SMEflow/src/Models/bom_model.dart';
-import 'package:SMEflow/src/Models/iq_list.dart';
+import 'package:ashwani/src/Models/bom_model.dart';
+import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductionModel {

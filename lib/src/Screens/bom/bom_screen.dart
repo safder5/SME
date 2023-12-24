@@ -1,6 +1,6 @@
-import 'package:SMEflow/src/Providers/bom_providers.dart';
-import 'package:SMEflow/src/Providers/iq_list_provider.dart';
-import 'package:SMEflow/src/Screens/bom/bom_page.dart';
+import 'package:ashwani/src/Providers/bom_providers.dart';
+import 'package:ashwani/src/Providers/iq_list_provider.dart';
+import 'package:ashwani/src/Screens/bom/bom_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';

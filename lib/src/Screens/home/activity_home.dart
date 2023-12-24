@@ -1,9 +1,10 @@
-import 'package:SMEflow/src/Screens/home/to_be_delivered.dart';
-import 'package:SMEflow/src/Screens/home/to_be_shipped.dart';
+
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../../constants.dart';
+import 'to_be_delivered.dart';
+import 'to_be_shipped.dart';
 
 class AllHomeActivity extends StatefulWidget {
   const AllHomeActivity({super.key, required this.currentIndex});

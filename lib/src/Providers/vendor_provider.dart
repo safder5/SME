@@ -1,6 +1,6 @@
-import 'package:SMEflow/src/Models/address_model.dart';
-import 'package:SMEflow/src/Models/purchase_order.dart';
-import 'package:SMEflow/src/Models/vendor_model.dart';
+import 'package:ashwani/src/Models/address_model.dart';
+import 'package:ashwani/src/Models/purchase_order.dart';
+import 'package:ashwani/src/Models/vendor_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

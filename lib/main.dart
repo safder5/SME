@@ -1,7 +1,5 @@
-import 'package:SMEflow/landingbypass.dart';
-import 'package:SMEflow/load_inventory.dart';
-import 'package:SMEflow/src/Services/authorizeUser/loginauth.dart';
-import 'package:SMEflow/user_data.dart';
+
+import 'package:ashwani/landingbypass.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'load_inventory.dart';
 import 'src/Providers/bom_providers.dart';
 import 'src/Providers/bs_address_provider.dart';
 import 'src/Providers/customer_provider.dart';
@@ -22,9 +21,11 @@ import 'src/Providers/sales_returns_provider.dart';
 import 'src/Providers/user_provider.dart';
 import 'src/Providers/vendor_provider.dart';
 import 'src/Screens/settings/setting_page.dart';
+import 'src/Services/authorizeUser/loginauth.dart';
 import 'src/Services/authorizeUser/more_user_details.dart';
 import 'src/Services/authorizeUser/signupauth.dart';
 import 'src/constants.dart';
+import 'user_data.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
   'email,https://www.googleapis.com/auth/contacts.readonly'
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // print('data loaded = $_dataLoaded');
       });
     } catch (e) {
+      print(e);
       setState(() {
         _error = true;
       });
@@ -103,22 +105,25 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     if (_error) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: Container(
-            color: Colors.white,
-            child: const Center(
-              child: Column(children: [
-                Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                  size: 25,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Failed to initialise firebase!',
-                  style: TextStyle(color: Colors.red, fontSize: 25),
-                ),
-              ]),
+          body: Center(
+            child: Container(
+              color: Colors.white,
+              child: const Center(
+                child: Column(children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 25,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Failed to initialise firebase!',
+                    style: TextStyle(color: Colors.red, fontSize: 25),
+                  ),
+                ]),
+              ),
             ),
           ),
         ),
@@ -307,3 +312,5 @@ class _LoadInventoryState extends State<LoadInventory> {
 // https://lottiefiles.com/animations/loading-iew43eMiJN.
 // https://lottiefiles.com/animations/factory-industry-house-home-building-maison-mocca-animation-97rg4awLxc.
 // https://lottiefiles.com/animations/simple-loading-rXNTJsH6UW
+
+

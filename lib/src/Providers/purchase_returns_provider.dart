@@ -1,4 +1,4 @@
-import 'package:SMEflow/src/Models/iq_list.dart';
+import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
