@@ -6,7 +6,6 @@ import 'package:ashwani/src/constants.dart';
 import 'package:ashwani/src/Models/sales_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -115,7 +114,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                             ),
                             const SizedBox(width: 15),
                             Icon(
-                              FontAwesomeIcons.ellipsisVertical,
+                              Icons.more_vert,
                               color: w,
                               size: 18,
                             )

@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-	<dict>
-		<key>CLIENT_ID</key>
-		<string>415455766570-bi8rneujufnkem2f9k6h00fruojnfgi6.apps.googleusercontent.com</string>
-		<key>REVERSED_CLIENT_ID</key>
-		<string>com.googleusercontent.apps.415455766570-bi8rneujufnkem2f9k6h00fruojnfgi6</string>
-		<key>API_KEY</key>
-		<string>AIzaSyBCyu1i4yOWFnFnWnjObjad9i-geuR2ojI</string>
-		<key>GCM_SENDER_ID</key>
-		<string>415455766570</string>
-		<key>PLIST_VERSION</key>
-		<string>1</string>
-		<key>BUNDLE_ID</key>
-		<string>com.example.ashwani</string>
-		<key>PROJECT_ID</key>
-		<string>smeflow-8b2be</string>
-		<key>STORAGE_BUCKET</key>
-		<string>smeflow-8b2be.appspot.com</string>
-		<key>IS_ADS_ENABLED</key>
-		<false></false>
-		<key>IS_ANALYTICS_ENABLED</key>
-		<false></false>
-		<key>IS_APPINVITE_ENABLED</key>
-		<true></true>
-		<key>IS_GCM_ENABLED</key>
-		<true></true>
-		<key>IS_SIGNIN_ENABLED</key>
-		<true></true>
-		<key>GOOGLE_APP_ID</key>
-		<string>1:415455766570:ios:aca261de35196ea4b43b53</string>
-	</dict>
+<dict>
+	<key>CLIENT_ID</key>
+	<string>415455766570-bi8rneujufnkem2f9k6h00fruojnfgi6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.415455766570-bi8rneujufnkem2f9k6h00fruojnfgi6</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>415455766570-703ko051n7facso6m2o7sd9nvb4064km.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBCyu1i4yOWFnFnWnjObjad9i-geuR2ojI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>415455766570</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.ashwani</string>
+	<key>PROJECT_ID</key>
+	<string>smeflow-8b2be</string>
+	<key>STORAGE_BUCKET</key>
+	<string>smeflow-8b2be.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:415455766570:ios:aca261de35196ea4b43b53</string>
+</dict>
 </plist>

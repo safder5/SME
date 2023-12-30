@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ashwani/src/Providers/providers_reset_manager.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/customer_support.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/rate_app.dart';

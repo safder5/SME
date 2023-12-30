@@ -4,7 +4,6 @@ import 'package:ashwani/src/Screens/purchase/purchase_order_recieved_items.dart'
 import 'package:ashwani/src/Screens/purchase/purchase_order_return_items.dart';
 import 'package:ashwani/src/Screens/purchase/purchase_order_sub_tabs.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -121,7 +120,7 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                             ),
                             const SizedBox(width: 15),
                             Icon(
-                              FontAwesomeIcons.ellipsisVertical,
+                               Icons.more_vert,
                               color: w,
                               size: 18,
                             )

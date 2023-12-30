@@ -1,7 +1,6 @@
 import 'package:ashwani/src/Models/user_model.dart';
 import 'package:ashwani/src/Providers/iq_list_provider.dart';
 import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
-import 'package:ashwani/src/Providers/providers_reset_manager.dart';
 import 'package:ashwani/src/Providers/user_provider.dart';
 import 'package:ashwani/src/Screens/home/activity_home.dart';
 import 'package:ashwani/src/Screens/more.dart';
@@ -13,8 +12,6 @@ import 'package:ashwani/src/Utils/items/add_items.dart';
 import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

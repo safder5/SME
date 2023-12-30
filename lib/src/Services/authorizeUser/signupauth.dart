@@ -108,6 +108,7 @@ class _SignUpAuthPageState extends State<SignUpAuthPage> {
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        print('Clicked signin google');
                         // if (_nameCtrl.text.isEmpty) {
                         //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         //       content: Text(

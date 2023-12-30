@@ -1,3 +1,4 @@
+import 'package:ashwani/firebase_options.dart';
 import 'package:ashwani/load_inventory.dart';
 import 'package:ashwani/src/Providers/bom_providers.dart';
 import 'package:ashwani/src/Providers/bs_address_provider.dart';
@@ -26,9 +27,9 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'src/constants.dart';
 
-GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
-  'email,https://www.googleapis.com/auth/contacts.readonly'
-]);
+GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: <String>['email,https://www.googleapis.com/auth/contacts.readonly'],
+);
 // NetworkService _networkService = NetworkService();
 
 void main() async {
@@ -50,9 +51,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   var auth;
   // bool _dataLoaded = false;
 
-  Future<void> initialiseFlutterFireandLoadData() async {
+  Future<void> initialiseFlutterFire() async {
     try {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
       // _dataLoaded = await loadInitialData();
       UserData().loadUserEmail();
 
@@ -65,6 +68,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // print('data loaded = $_dataLoaded');
       });
     } catch (e) {
+      print(e);
       setState(() {
         _error = true;
       });
@@ -103,22 +107,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     if (_error) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: Container(
-            color: Colors.white,
-            child: const Center(
-              child: Column(children: [
-                Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                  size: 25,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Failed to initialise firebase!',
-                  style: TextStyle(color: Colors.red, fontSize: 25),
-                ),
-              ]),
+          body: Center(
+            child: Container(
+              color: Colors.white,
+              child: const Text(
+                'Failed to initialise firebase!',
+                style: TextStyle(color: Colors.red, fontSize: 25),
+              ),
             ),
           ),
         ),
@@ -192,7 +189,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    initialiseFlutterFireandLoadData();
+    initialiseFlutterFire();
   }
 }
 
@@ -207,7 +204,7 @@ class _OpeningScreenState extends State<OpeningScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       UserData().userEmail == ''
           ? Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const SignUpAuthPage()))

@@ -93,7 +93,7 @@ class ContainerSettings extends StatelessWidget {
                 backgroundColor: b.withOpacity(0.06),
                 child: SvgPicture.asset('lib/icons/person.svg',width: 14,height: 14,),
               ),
-              SizedBox(width: 10,),
+              const SizedBox(width: 10,),
               Text(
                 title,
                 style: TextStyle(fontSize: 12, color: b.withOpacity(0.6)),
