@@ -204,7 +204,7 @@ class _OpeningScreenState extends State<OpeningScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       UserData().userEmail == ''
           ? Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const SignUpAuthPage()))

@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:ashwani/src/Models/item_tracking_model.dart';
 import 'package:ashwani/src/Providers/iq_list_provider.dart';
@@ -7,12 +5,8 @@ import 'package:ashwani/src/constants.dart';
 import 'package:ashwani/src/Services/helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class AddItems extends StatefulWidget {
@@ -25,87 +19,94 @@ class AddItems extends StatefulWidget {
 class _AddItemsState extends State<AddItems> {
   final _auth = FirebaseAuth.instance.currentUser;
   final _fs = FirebaseFirestore.instance;
-  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  // final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final int qfs = 0; //quantity for sale orders
   final int qfp = 0; // quantity from purchase orders
   TextEditingController itemQuantityCtrl = TextEditingController();
   TextEditingController inCtrl = TextEditingController();
-  final ImagePicker _imagePicker = ImagePicker();
+  // final ImagePicker _imagePicker = ImagePicker();
   Item currentItem = Item(itemName: 'Example Item');
 
-  final List<String> unitTypes = [
-    'None',
-    'Box',
-    'cm',
-    'dz',
-    'ft',
-    'in',
-    'g',
-    'kg',
-    'm',
-    'km',
-    'lb',
-    'mg',
-    'ml',
-    'pcs',
-    'litre',
-    '12',
-    'b',
-  ]; // Your list of options
-  late String selectedOption = 'None';
+  // final List<String> unitTypes = [
+  //   'PCS',
+  //   'SET',
+  //   'NOS',
+  //   'UNIT',
+  //   'BAGS',
+  //   'BUNDLES',
+  //   'BOX',
+  //   'BOTTLES',
+  //   'M',
+  //   'MM',
+  //   'CMS',
+  //   'KG',
+  //   'GRAMS',
+  //   'TONNES',
+  //   'DOZENS',
+  //   'CARTON',
+  //   'DRUM',
+  //   'LITRE',
+  //   'KILOLITRE',
+  //   'QUINTAL',
+  //   'FT3',
+  //   'M3',
+  //   'FT2',
+  //   'M2',
+  // ]; // Your list of options
+  late String selectedOption = 'UNIT';
 
   // Uint8List? _image;
 
-  File? imageFile;
+  // File? imageFile;
 
-  Future<void> _getImage(ImageSource source) async {
-    try {
-      final pickedFile = await _imagePicker.pickImage(source: source);
+  // Future<void> _getImage(ImageSource source) async {
+  //   try {
+  //     final pickedFile = await _imagePicker.pickImage(source: source);
 
-      if (pickedFile != null) {
-        setState(() {
-          imageFile = File(pickedFile.path);
-        });
-      } else {
-        setState(() {
-          imageFile = null;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         imageFile = File(pickedFile.path);
+  //       });
+  //     } else {
+  //       setState(() {
+  //         imageFile = null;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-  Future<void> _compressImage(File file) async {
-    List<int> imageBytes = await file.readAsBytes();
-    Uint8List uint8List =
-        Uint8List.fromList(imageBytes); // Convert List<int> to Uint8List
-    Uint8List compressedBytes = await FlutterImageCompress.compressWithList(
-      uint8List,
-      minHeight: 1920, // adjust as needed
-      minWidth: 1080, // adjust as needed
-      quality: 90, // adjust quality level (0 - 100)
-    );
-    await imageFile?.writeAsBytes(compressedBytes);
+  // Future<void> _compressImage(File file) async {
+  //   List<int> imageBytes = await file.readAsBytes();
+  //   Uint8List uint8List =
+  //       Uint8List.fromList(imageBytes); // Convert List<int> to Uint8List
+  //   Uint8List compressedBytes = await FlutterImageCompress.compressWithList(
+  //     uint8List,
+  //     minHeight: 1920, // adjust as needed
+  //     minWidth: 1080, // adjust as needed
+  //     quality: 90, // adjust quality level (0 - 100)
+  //   );
+  //   await imageFile?.writeAsBytes(compressedBytes);
 
-    // Now upload 'compressedBytes' to your storage (e.g., Firebase Storage)
-    // Example:
-    // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('images/compressed.jpg');
-    // firebase_storage.UploadTask uploadTask = ref.putData(compressedBytes);
-  }
+  // Now upload 'compressedBytes' to your storage (e.g., Firebase Storage)
+  // Example:
+  // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('images/compressed.jpg');
+  // firebase_storage.UploadTask uploadTask = ref.putData(compressedBytes);
+  // }
 
-  Future<void> _checkPermission(ImageSource source) async {
-    PermissionStatus status = await Permission.photos.status;
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-      if (!status.isGranted) {
-        // Handle denied permissions
-        print('Permission denied');
-        return;
-      }
-    }
-    await _getImage(source);
-  }
+  // Future<void> _checkPermission(ImageSource source) async {
+  //   PermissionStatus status = await Permission.photos.status;
+  //   if (!status.isGranted) {
+  //     status = await Permission.storage.request();
+  //     if (!status.isGranted) {
+  //       // Handle denied permissions
+  //       print('Permission denied');
+  //       return;
+  //     }
+  //   }
+  //   await _getImage(source);
+  // }
 
   // Future<void> _handleSubmit() async {
   //   if (imageFile != null) {
@@ -139,53 +140,53 @@ class _AddItemsState extends State<AddItems> {
 
   //put on pause because of server response error which isnt resolved yet
 
-  Future<void> uploadImageAndUrl() async {
-    if (imageFile != null) {
-      String url = (imageFile!.path);
+  // Future<void> uploadImageAndUrl() async {
+  //   if (imageFile != null) {
+  //     String url = (imageFile!.path);
 
-      try {
-        final Reference ref = firebaseStorage.ref().child('images/$url.png');
+  //     try {
+  //       final Reference ref = firebaseStorage.ref().child('images/$url.png');
 
-        final UploadTask uploadTask = ref.putFile(imageFile!);
+  //       final UploadTask uploadTask = ref.putFile(imageFile!);
 
-        final TaskSnapshot snapshot = await uploadTask
-            .whenComplete(() async => {imgUrl = await ref.getDownloadURL()});
+  //       final TaskSnapshot snapshot = await uploadTask
+  //           .whenComplete(() async => {imgUrl = await ref.getDownloadURL()});
 
-        url = await snapshot.ref.getDownloadURL();
-      } catch (e) {
-        print('Error uploading image : $e');
-      }
-    }
-  }
+  //       url = await snapshot.ref.getDownloadURL();
+  //     } catch (e) {
+  //       print('Error uploading image : $e');
+  //     }
+  //   }
+  // }
 
   String itemName = '';
-  String imgUrl = '';
+  // String imgUrl = '';
   String? mu;
-  Image? image;
+  // Image? image;
   bool isLoading = false;
 
   // Future<PermissionStatus> requestPhotosPermission() async {
   //   return await Permission.photos.request();
   // }
-  void showOptions() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: w,
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            TextButton(
-                onPressed: () {
-                  _checkPermission(ImageSource.camera);
-                },
-                child: const Text('Camera')),
-            TextButton(
-                onPressed: () {
-                  _checkPermission(ImageSource.gallery);
-                },
-                child: const Text('Gallery'))
-          ],
-        )));
-  }
+  // void showOptions() {
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       backgroundColor: w,
+  //       content: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: [
+  //           TextButton(
+  //               onPressed: () {
+  //                 _checkPermission(ImageSource.camera);
+  //               },
+  //               child: const Text('Camera')),
+  //           TextButton(
+  //               onPressed: () {
+  //                 _checkPermission(ImageSource.gallery);
+  //               },
+  //               child: const Text('Gallery'))
+  //         ],
+  //       )));
+  // }
 
   @override
   void initState() {
@@ -208,7 +209,7 @@ class _AddItemsState extends State<AddItems> {
                 setState(() {
                   isLoading = true;
                 });
-                await uploadImageAndUrl();
+                // await uploadImageAndUrl();
                 CollectionReference collRef = _fs
                     .collection('UserData')
                     .doc('${_auth!.email}')
@@ -225,9 +226,11 @@ class _AddItemsState extends State<AddItems> {
 
                 // imgUrl = await uploadImageAndUrl();
                 ItemTrackingModel itm = ItemTrackingModel(
-                    orderID: _auth?.email, quantity: 0, reason: 'By User');
+                    orderID: _auth?.email,
+                    quantity: 0,
+                    reason: 'Item Created ${DateTime.now().day}');
                 Item item = Item(
-                    imageURL: imgUrl,
+                    // imageURL: imgUrl,
                     unitType: selectedOption,
                     itemName: inCtrl.text.trim().toString(),
                     quantityPurchase: 0,
@@ -254,10 +257,7 @@ class _AddItemsState extends State<AddItems> {
                 child: Center(
                     child: Text(
                   'Add Item',
-                  style: TextStyle(
-                    color: w,
-                    fontSize: 14
-                  ),
+                  style: TextStyle(color: w, fontSize: 14),
                 )),
               ),
             ),
@@ -284,68 +284,68 @@ class _AddItemsState extends State<AddItems> {
                   const SizedBox(
                     height: 24,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            showOptions();
-                            // selectedImage();
-                            // UploadImage(itemName);
-                            // setState(() {
-                            //   // imgUrl = imageUrl as String?;
-                            // });
-                            //upload image
-                          },
-                          child: imageFile != null
-                              ? Container(
-                                  height: 90,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: blue,
-                                      ),
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image.file(
-                                      imageFile!,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: 90,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                      color: t,
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(color: blue)),
-                                  child: const Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          LineIcons.plus,
-                                          size: 12,
-                                        ),
-                                        Text(
-                                          'Upload Image',
-                                          style: TextStyle(fontSize: 8),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      imageFile != null
-                          ? const Text('Tap image to change')
-                          : Container()
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       // showOptions();
+                  //       // selectedImage();
+                  //       // UploadImage(itemName);
+                  //       // setState(() {
+                  //       //   // imgUrl = imageUrl as String?;
+                  //       // });
+                  //       //upload image
+                  //     },
+                  //     child: imageFile != null
+                  //         ? Container(
+                  //             height: 90,
+                  //             width: 90,
+                  //             decoration: BoxDecoration(
+                  //                 border: Border.all(
+                  //                   color: blue,
+                  //                 ),
+                  //                 borderRadius: BorderRadius.circular(15)),
+                  //             child: ClipRRect(
+                  //               borderRadius: BorderRadius.circular(15),
+                  //               child: Image.file(
+                  //                 imageFile!,
+                  //                 fit: BoxFit.fill,
+                  //               ),
+                  //             ),
+                  //           )
+                  //         : Container(
+                  //             height: 90,
+                  //             width: 90,
+                  //             decoration: BoxDecoration(
+                  //                 color: t,
+                  //                 borderRadius: BorderRadius.circular(5),
+                  //                 border: Border.all(color: blue)),
+                  //             child: const Center(
+                  //               child: Row(
+                  //                 mainAxisAlignment:
+                  //                     MainAxisAlignment.center,
+                  //                 children: [
+                  //                   Icon(
+                  //                     LineIcons.plus,
+                  //                     size: 12,
+                  //                   ),
+                  //                   Text(
+                  //                     'Upload Image',
+                  //                     style: TextStyle(fontSize: 8),
+                  //                   )
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           )),
+                  //     const SizedBox(
+                  //       width: 10,
+                  //     ),
+                  //     imageFile != null
+                  //         ? const Text('Tap image to change')
+                  //         : Container()
+                  //   ],
+                  // ),
                   const SizedBox(
                     height: 24,
                   ),
@@ -376,7 +376,7 @@ class _AddItemsState extends State<AddItems> {
                             //   width: 14,
                             // ),
                             Text(
-                              'Unit Type:',
+                              'Unit :',
                               style: TextStyle(
                                   fontWeight: FontWeight.w300,
                                   fontSize: 12,
@@ -479,23 +479,30 @@ class _AddItemsState extends State<AddItems> {
                   const SizedBox(
                     height: 15,
                   ),
-                  _buildOptionTile('None', context),
-                  _buildOptionTile('Box', context),
-                  _buildOptionTile('cm', context),
-                  _buildOptionTile('dz', context),
-                  _buildOptionTile('ft', context),
-                  _buildOptionTile('in', context),
-                  _buildOptionTile('g', context),
-                  _buildOptionTile('kg', context),
-                  _buildOptionTile('m', context),
-                  _buildOptionTile('km', context),
-                  _buildOptionTile('lb', context),
-                  _buildOptionTile('mg', context),
-                  _buildOptionTile('ml', context),
-                  _buildOptionTile('pcs', context),
-                  _buildOptionTile('litre', context),
-                  _buildOptionTile('12', context),
-                  _buildOptionTile('b', context),
+                  _buildOptionTile('UNIT', context),
+                  _buildOptionTile('PCS', context),
+                  _buildOptionTile('SET', context),
+                  _buildOptionTile('NOS', context),
+                  _buildOptionTile('BAGS', context),
+                  _buildOptionTile('BUNDLES', context),
+                  _buildOptionTile('BOX', context),
+                  _buildOptionTile('BOTTLES', context),
+                  _buildOptionTile('M', context),
+                  _buildOptionTile('MM', context),
+                  _buildOptionTile('CMS', context),
+                  _buildOptionTile('KG', context),
+                  _buildOptionTile('GRAMS', context),
+                  _buildOptionTile('TONNES', context),
+                  _buildOptionTile('TONNES', context),
+                  _buildOptionTile('CARTON', context),
+                  _buildOptionTile('DRUM', context),
+                  _buildOptionTile('LITRE', context),
+                  _buildOptionTile('KILOLITRE', context),
+                  _buildOptionTile('QUINTAL', context),
+                  _buildOptionTile('FT3', context),
+                  _buildOptionTile('M3', context),
+                  _buildOptionTile('FT2', context),
+                  _buildOptionTile('M2', context),
                 ],
               ),
             ),

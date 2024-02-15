@@ -2,7 +2,6 @@ import 'package:ashwani/src/Models/bom_model.dart';
 import 'package:ashwani/src/Providers/bom_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:textfield_search/textfield_search.dart';
@@ -64,16 +63,16 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
               const SizedBox(
                 height: 24,
               ),
-              CircleAvatar(
-                backgroundColor: t,
-                maxRadius: 22,
-                child: const Image(
-                  width: 44,
-                  height: 44,
-                  image: AssetImage('lib/images/itemimage.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+              // CircleAvatar(
+              //   backgroundColor: t,
+              //   maxRadius: 22,
+              //   child: const Image(
+              //     width: 44,
+              //     height: 44,
+              //     image: AssetImage('lib/images/itemimage.png'),
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
               const SizedBox(
                 height: 24,
               ),
@@ -110,7 +109,7 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
                 cursorWidth: 1,
                 textInputAction: TextInputAction.next,
                 decoration: getInputDecoration(
-                        hint: 'Units per BOM', errorColor: Colors.red)
+                        hint: 'Quantity', errorColor: Colors.red)
                     .copyWith(),
                 // onChanged: (value) {
                 //   // try {
@@ -123,23 +122,23 @@ class _AddNewBOMItemsState extends State<AddNewBOMItems> {
               const SizedBox(
                 height: 12,
               ),
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'lib/icons/info.svg',
-                    width: 12,
-                    height: 12,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    'Units needed for production of one Product',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w300, fontSize: 12, color: b32),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     SvgPicture.asset(
+              //       'lib/icons/info.svg',
+              //       width: 12,
+              //       height: 12,
+              //     ),
+              //     const SizedBox(
+              //       width: 5,
+              //     ),
+              //     Text(
+              //       'Units needed for production of one Product',
+              //       style: TextStyle(
+              //           fontWeight: FontWeight.w300, fontSize: 12, color: b32),
+              //     ),
+              //   ],
+              // ),
 
               const SizedBox(
                 height: 24,

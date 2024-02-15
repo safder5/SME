@@ -70,9 +70,9 @@ class _SettingsPageState extends State<SettingsPage> {
           body: SafeArea(
               child: Center(
             child: Padding(
-              padding: const EdgeInsets.all(28.0),
+              padding: const EdgeInsets.fromLTRB(28, 14, 28, 2),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
                     children: [

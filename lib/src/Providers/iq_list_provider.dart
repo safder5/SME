@@ -180,7 +180,6 @@ class ItemsProvider with ChangeNotifier {
             quantityPurchase: data['quantityPurchase'],
             quantitySales: data['quantitySales'],
             itemTracks: [],
-            imageURL: data['imageURL'],
             bom: data['bom'],
             unitType: data['unitType']);
 
@@ -209,7 +208,6 @@ class ItemsProvider with ChangeNotifier {
         'quantityPurchase': item.quantityPurchase,
         'quantitySales': item.quantitySales,
         'bom': false,
-        'imageURL': item.imageURL,
         'unitType': item.unitType
       });
 

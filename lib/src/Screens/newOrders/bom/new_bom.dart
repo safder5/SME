@@ -61,7 +61,6 @@ class _NewBOMState extends State<NewBOM> {
       ItemTrackingModel itm = ItemTrackingModel(
           orderID: _auth?.email, quantity: 0, reason: 'Created BOM');
       Item item = Item(
-          imageURL: "",
           itemName: _productName.text,
           quantityPurchase: 0,
           quantitySales: 0,

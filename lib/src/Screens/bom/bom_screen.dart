@@ -64,31 +64,48 @@ class _BomScreenState extends State<BomScreen> {
               Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
                   builder: (context) => const ItemSelection()));
             }),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ((boms.isEmpty)
-                    ? const Center(child: Text('No BOMS, Add below'))
-                    : ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: boms.length,
-                        itemBuilder: (context, index) {
-                          final bom = boms[index];
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) => BOMPage(
-                                              bom: bom,
-                                            )));
-                              },
-                              child: BOMContainer(bom: bom));
-                        })),
-              ),
-            ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(LineIcons.angleLeft)),
+                    const SizedBox(width: 10),
+                    const Text('BOMs'),
+                    const Spacer(),
+                  ],
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Expanded(
+                  child: ((boms.isEmpty)
+                      ? const Center(child: Text('No BOMS, Add below'))
+                      : ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: boms.length,
+                          itemBuilder: (context, index) {
+                            final bom = boms[index];
+                            return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) => BOMPage(
+                                                bom: bom,
+                                              )));
+                                },
+                                child: BOMContainer(bom: bom));
+                          })),
+                ),
+              ],
+            ),
           ),
         ),
       );

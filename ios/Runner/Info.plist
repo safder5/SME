@@ -6,6 +6,8 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>GIDClientID</key>
+	<string>415455766570-bi8rneujufnkem2f9k6h00fruojnfgi6.apps.googleusercontent.com</string>
 	<key>CFBundleDisplayName</key>
 	<string>SMEflow</string>
 	<key>CFBundleExecutable</key>

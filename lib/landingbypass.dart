@@ -1,9 +1,10 @@
+import 'package:ashwani/src/Screens/bom/productions.dart';
 import 'package:ashwani/src/Screens/home.dart';
+import 'package:ashwani/src/Screens/masters.dart';
 import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'src/Screens/bom.dart';
 import 'src/Screens/purchase.dart';
 import 'src/Screens/sales.dart';
 // import 'Services/NetworkService/network_service.dart';
@@ -16,17 +17,17 @@ class LandingBypass extends StatefulWidget {
 }
 
 class _LandingBypassState extends State<LandingBypass> {
-
   @override
   Widget build(BuildContext context) {
     PersistentTabController controller;
     controller = PersistentTabController(initialIndex: 0);
     List<Widget> buildScreens() {
       return [
-        const HomePage(),
+        const Reports(),
+        const Masters(),
         const SalesPage(),
         const PurchasePage(),
-        const BOM(),
+        const Production(),
       ];
     } // const BOM()
 
@@ -35,7 +36,14 @@ class _LandingBypassState extends State<LandingBypass> {
         PersistentBottomNavBarItem(
             inactiveIcon: SvgPicture.asset('lib/icons/home.svg'),
             icon: SvgPicture.asset('lib/icons/home_active.svg'),
-            title: 'Home',
+            title: 'Reports',
+            textStyle: const TextStyle(fontWeight: FontWeight.w300),
+            activeColorPrimary: blue,
+            activeColorSecondary: blue),
+             PersistentBottomNavBarItem(
+            inactiveIcon: SvgPicture.asset('lib/icons/home.svg'),
+            icon: SvgPicture.asset('lib/icons/home_active.svg'),
+            title: 'Masters',
             textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
@@ -56,7 +64,7 @@ class _LandingBypassState extends State<LandingBypass> {
         PersistentBottomNavBarItem(
             inactiveIcon: SvgPicture.asset('lib/icons/bom.svg'),
             icon: SvgPicture.asset('lib/icons/bom_active.svg'),
-            title: 'BOM',
+            title: 'Production',
             textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue)

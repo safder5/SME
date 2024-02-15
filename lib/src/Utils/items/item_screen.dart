@@ -41,30 +41,30 @@ class _ItemScreenState extends State<ItemScreen> {
     await _getImage(source);
   }
 
-  void showOptions() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: w,
-        content: Column(
-          children: [
-             Text('Change Image ',style: TextStyle(color: b,),),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OutlinedButton(
-                    onPressed: () {
-                      _checkPermission(ImageSource.camera);
-                    },
-                    child: const Text('Camera')),
-                OutlinedButton(
-                    onPressed: () {
-                      _checkPermission(ImageSource.gallery);
-                    },
-                    child: const Text('Gallery'))
-              ],
-            ),
-          ],
-        )));
-  }
+  // void showOptions() {
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       backgroundColor: w,
+  //       content: Column(
+  //         children: [
+  //            Text('Change Image ',style: TextStyle(color: b,),),
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //             children: [
+  //               OutlinedButton(
+  //                   onPressed: () {
+  //                     _checkPermission(ImageSource.camera);
+  //                   },
+  //                   child: const Text('Camera')),
+  //               OutlinedButton(
+  //                   onPressed: () {
+  //                     _checkPermission(ImageSource.gallery);
+  //                   },
+  //                   child: const Text('Gallery'))
+  //             ],
+  //           ),
+  //         ],
+  //       )));
+  // }
 
   final ImagePicker _imagePicker = ImagePicker();
   File? imageFile;
@@ -176,51 +176,51 @@ class _ItemScreenState extends State<ItemScreen> {
                               ],
                             ),
                             const Spacer(),
-                            GestureDetector(
-                              onLongPress: () {
-                                // add image
-                                showOptions();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: w,
-                                    borderRadius: BorderRadius.circular(10)),
-                                height: 100,
-                                width: 100,
-                                child: widget.item.imageURL == ''
-                                    ? const Image(
-                                        image: AssetImage(
-                                            'lib/images/logoashapp.png'))
-                                    : Image.network(
-                                        widget.item.imageURL!,
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          } else {
-                                            return const Center(
-                                              child: SizedBox(
-                                                  height: 20,
-                                                  width: 20,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    strokeWidth: 1,
-                                                  )),
-                                            );
-                                          }
-                                        },
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace? stackTrace) {
-                                          return const Icon(Icons.error);
-                                        },
-                                      ),
-                              ),
-                            )
+                            // GestureDetector(
+                            //   onLongPress: () {
+                            //     // add image
+                            //     showOptions();
+                            //   },
+                            //   child: Container(
+                            //     decoration: BoxDecoration(
+                            //         color: w,
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     height: 100,
+                            //     width: 100,
+                            //     child: widget.item.imageURL == ''
+                            //         ? const Image(
+                            //             image: AssetImage(
+                            //                 'lib/images/logoashapp.png'))
+                            //         : Image.network(
+                            //             widget.item.imageURL!,
+                            //             width: 200,
+                            //             height: 200,
+                            //             fit: BoxFit.cover,
+                            //             loadingBuilder: (BuildContext context,
+                            //                 Widget child,
+                            //                 ImageChunkEvent? loadingProgress) {
+                            //               if (loadingProgress == null) {
+                            //                 return child;
+                            //               } else {
+                            //                 return const Center(
+                            //                   child: SizedBox(
+                            //                       height: 20,
+                            //                       width: 20,
+                            //                       child:
+                            //                           CircularProgressIndicator(
+                            //                         strokeWidth: 1,
+                            //                       )),
+                            //                 );
+                            //               }
+                            //             },
+                            //             errorBuilder: (BuildContext context,
+                            //                 Object exception,
+                            //                 StackTrace? stackTrace) {
+                            //               return const Icon(Icons.error);
+                            //             },
+                            //           ),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

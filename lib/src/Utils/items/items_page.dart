@@ -36,14 +36,14 @@ class _ItemsPageState extends State<ItemsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: blue,
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddItems()));
-        },
-        child: const Icon(LineIcons.plus),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: blue,
+      //   onPressed: () {
+      //     Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => const AddItems()));
+      //   },
+      //   child: const Icon(LineIcons.plus),
+      // ),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,9 +56,22 @@ class _ItemsPageState extends State<ItemsPage> {
                       Navigator.pop(context);
                     },
                     child: const Icon(LineIcons.angleLeft)),
-                const SizedBox(width: 10),
+                const Spacer(),
                 const Text('Items'),
                 const Spacer(),
+                GestureDetector(
+                  child: Icon(
+                    LineIcons.plus,
+                    color: blue,
+                    size: 22,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddItems()));
+                  },
+                ),
               ],
             ),
             const SizedBox(
@@ -70,6 +83,7 @@ class _ItemsPageState extends State<ItemsPage> {
                 // if (items.length == 0) {
                 //   ip.getItems();
                 // }
+
                 return Expanded(
                   child: ((items.isEmpty)
                       ? const Text('No Items, Add below')
@@ -78,6 +92,14 @@ class _ItemsPageState extends State<ItemsPage> {
                           shrinkWrap: true,
                           itemCount: items.length,
                           itemBuilder: (context, index) {
+                            bool del = true;
+                            try {
+                              if (items[index].itemTracks!.length > 1) {
+                                del = false;
+                              }
+                            } catch (e) {
+                              del = true;
+                            }
                             final item = items[index];
                             return GestureDetector(
                               onTap: () {
@@ -89,9 +111,9 @@ class _ItemsPageState extends State<ItemsPage> {
                                             )));
                               },
                               child: ItemsPageContainer(
+                                deletable: del,
                                 itemName: items[index].itemName,
                                 sku: items[index].itemQuantity.toString(),
-                                imgUrl: items[index].imageURL ?? '',
                                 unitType: items[index].unitType ?? 'None',
                               ),
                             );

@@ -3,7 +3,6 @@ import 'package:ashwani/src/Providers/iq_list_provider.dart';
 import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/src/Providers/user_provider.dart';
 import 'package:ashwani/src/Screens/home/activity_home.dart';
-import 'package:ashwani/src/Screens/more.dart';
 import 'package:ashwani/src/Screens/settings/setting_page.dart';
 import 'package:ashwani/src/Utils/Vendors/add_vendors.dart';
 import 'package:ashwani/src/constantWidgets/boxes.dart';
@@ -14,14 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Reports extends StatefulWidget {
+  const Reports({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Reports> createState() => _ReportsState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ReportsState extends State<Reports> {
   int totalInHand = 0;
   int totaltobeRecieved = 0;
   int currentIndex = 0;
@@ -84,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       // prov.totalToBeRecieved();
       // totaltobeRecieved = prov.toRecieve;
       return Scaffold(
-        backgroundColor: w,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -250,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 24,
                         ),
-                        //more portion
+                        // more portion
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -286,14 +285,14 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               height: 7,
                             ),
-                            ContainerHomeMore(
-                              title: 'More',
-                              type: 2,
-                              action: MoreFromHomePage(),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
+                        //     ContainerHomeMore(
+                        //       title: 'More',
+                        //       type: 2,
+                        //       action: MoreFromHomePage(),
+                        //     ),
+                        //     SizedBox(
+                        //       height: 7,
+                        //     ),
                           ],
                         ),
                       ],

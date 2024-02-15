@@ -9,7 +9,7 @@ class Item {
   int? quantitySalesDelivered;
   int? quantitySalesReturned;
   List<ItemTrackingModel>? itemTracks;
-  String? imageURL;
+  // String? imageURL;
   bool? bom;
   String? unitType;
 
@@ -20,7 +20,7 @@ class Item {
       this.quantityPurchase,
       this.quantitySales,
       this.itemTracks,
-      this.imageURL,
+      // this.imageURL,
       this.quantitySalesDelivered,
       this.quantitySalesReturned,
       this.bom,

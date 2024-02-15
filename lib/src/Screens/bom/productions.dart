@@ -40,26 +40,33 @@ class _ProductionState extends State<Production> {
             ),
           ),
         ),
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: prods.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
-                                  builder: (context) => ProductionPage(prod: prods[index])));
-                            },
-                            child: ProductionContainer(
-                              prod: prods[index],
-                            ),
-                          );
-                        }))
-              ],
-            )),
+        body: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(width: 10),
+                  const Text('Productions'),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: prods.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
+                                    builder: (context) => ProductionPage(prod: prods[index])));
+                              },
+                              child: ProductionContainer(
+                                prod: prods[index],
+                              ),
+                            );
+                          }))
+                ],
+              )),
+        ),
       );
     });
   }

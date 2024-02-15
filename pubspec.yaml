@@ -53,7 +53,7 @@ dependencies:
   country_picker: 
   lottie: 
   flutter_svg: 
-  google_sign_in: 
+  google_sign_in: ^6.2.1
   connectivity: 
   cached_network_image:
   flutter_image_compress:
