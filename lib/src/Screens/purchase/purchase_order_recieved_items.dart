@@ -104,6 +104,9 @@ class _PurchaseOrderRecievedItemsState
 
       await updateItemTrack();
       // updates item track/activity in main inventory. done
+
+      await updateOrderStatus();
+      //update order status on transaction to 'inprocess'.
     } catch (e) {
       print('Error executing futures $e');
     }
@@ -129,9 +132,28 @@ class _PurchaseOrderRecievedItemsState
           reason: 'Purchase Recieved');
       Provider.of<ItemsProvider>(context, listen: false)
           .addItemtrackinProvider(itemTracking, _itemnameController.text);
+      Provider.of<NPOrderProvider>(context,listen: false)
+          .updateStatustoProcessing(widget.orderId);
       print('D');
     } catch (e) {
       print("Error in updating all providers $e");
+    }
+  }
+
+  Future<void> updateOrderStatus() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('purchases')
+          .collection('purchase_orders')
+          .doc(widget.orderId.toString())
+          .update({
+        'status': "inprocess",
+      });
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -509,8 +531,7 @@ class _PurchaseOrderRecievedItemsState
                           child: Center(
                               child: Text(
                             'Add Item',
-                            style: TextStyle(
-                              color: w, fontSize: 14),
+                            style: TextStyle(color: w, fontSize: 14),
                           )),
                         ),
                       ),

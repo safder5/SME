@@ -60,6 +60,8 @@ class _SalesOrderTransactionsShippedState
     // upload ttracks in inventory items
     await addActivity();
     // update sales activity
+    await updateStatus();
+    // to update status of sales order
     updateAllProviders();
   }
 
@@ -122,33 +124,28 @@ class _SalesOrderTransactionsShippedState
               Item(
                   itemName: _itemnameController.text,
                   quantitySalesDelivered: int.parse(_quantityCtrl.text)));
+      Provider.of<NSOrderProvider>(context, listen: false)
+          .updateStatustoProcessing(widget.orderId);
     } catch (e) {
       print("Error in updating all providers $e");
     }
   }
 
-  void updateInProvider() {
-    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
-    sorProvider.updateSalesItemsDeliveredProviders(
-        widget.orderId,
-        _itemnameController.text,
-        int.parse(_quantityCtrl.text),
-        Item(
-            itemName: _itemnameController.text,
-            quantitySalesDelivered: int.parse(_quantityCtrl.text)));
-  }
-
-  void createShippedForProvider() {
-    print('create shipped activated');
-
-    final sorProvider = Provider.of<NSOrderProvider>(context, listen: false);
-    print(sorProvider.som.length);
-    // sorProvider.addSalesDeliveredInProvider(
-    //     widget.orderId,
-    //     _itemnameController.text,
-    //     Item(
-    //         itemName: _itemnameController.text,
-    //         quantitySalesDelivered: int.parse(_quantityCtrl.text)));
+  Future<void> updateStatus() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('UserData')
+          .doc(auth!.email)
+          .collection('orders')
+          .doc('sales')
+          .collection('sales_orders')
+          .doc(widget.orderId.toString())
+          .update({
+        'status': "inprocess",
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> addActivity() async {
@@ -248,7 +245,8 @@ class _SalesOrderTransactionsShippedState
             .doc(_itemnameController.text)
             .update({
           'itemQuantity': (itemQuantity! - int.parse(_quantityCtrl.text)),
-          'quantitySales': (selectedItem.quantitySales! + int.parse(_quantityCtrl.text)),
+          'quantitySales':
+              (selectedItem.quantitySales! + int.parse(_quantityCtrl.text)),
         });
       }
     } catch (e) {
@@ -510,9 +508,7 @@ class _SalesOrderTransactionsShippedState
                       child: Center(
                           child: Text(
                         'Add Item',
-                        style: TextStyle(
-                          color: w, fontSize: 14
-                        ),
+                        style: TextStyle(color: w, fontSize: 14),
                       )),
                     ),
                   ),

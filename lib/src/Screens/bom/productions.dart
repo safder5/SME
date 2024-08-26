@@ -16,11 +16,18 @@ class Production extends StatefulWidget {
 }
 
 class _ProductionState extends State<Production> {
+  TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
   bool isButtonVisible = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductionProvider>(builder: (_, pp, __) {
-      final prods = pp.prod;
+      final prods = pp.prod
+          .where((product) =>
+              product.nameofBOM.toLowerCase().contains(_searchQuery))
+          .toList()
+          .reversed
+          .toList();
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButton: FloatingActionButton(
@@ -50,14 +57,33 @@ class _ProductionState extends State<Production> {
                   const SizedBox(
                     height: 32,
                   ),
+                  TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search boms...',
+                      suffixIcon: Icon(LineIcons.search),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(width: 0.5),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value.toLowerCase();
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   Expanded(
                       child: ListView.builder(
                           itemCount: prods.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
-                                    builder: (context) => ProductionPage(prod: prods[index])));
+                                Navigator.of(context, rootNavigator: true).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductionPage(
+                                            prod: prods[index])));
                               },
                               child: ProductionContainer(
                                 prod: prods[index],

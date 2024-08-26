@@ -16,20 +16,22 @@ class CustomersPage extends StatefulWidget {
 }
 
 class _CustomersPageState extends State<CustomersPage> {
+  TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CustomerProvider>(builder: (context, customerP, child) {
-      final customers = customerP.customers;
+      final customers = customerP.customers
+          .where((customer) =>
+              customer.name.toLowerCase().contains(_searchQuery))
+          .toList()
+          .reversed
+          .toList();
       // if (customers.length == 0) {
       //   customerP.fetchAllCustomers();
       // }
-      if (customers.isEmpty) {
-        return Scaffold(
-          body: const Center(
-            child: Text('No Customers yet, Add Below '),
-          ),
-        );
-      }
+     
       return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -62,6 +64,24 @@ class _CustomersPageState extends State<CustomersPage> {
                     const Spacer(),
                   ],
                 ),
+                const SizedBox(height: 32),
+                // Add the search bar here
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search customers...',
+                    suffixIcon: Icon(LineIcons.search),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(width: 0.5),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.toLowerCase();
+                    });
+                  },
+                ),
                 const SizedBox(
                   height: 32,
                 ),
@@ -80,10 +100,10 @@ class _CustomersPageState extends State<CustomersPage> {
                                 MaterialPageRoute(
                                     builder: ((context) => CustomerPage(
                                         customerName:
-                                            customers[index].name ?? ''))));
+                                            customers[index].name))));
                           },
                           child: CustomersPageContainer(
-                              fullname: customers[index].name!,
+                              fullname: customers[index].name,
                               companyname: customers[index].companyName!),
                         );
                       }),

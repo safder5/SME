@@ -3,6 +3,7 @@ import 'package:ashwani/src/Providers/iq_list_provider.dart';
 import 'package:ashwani/src/Providers/new_purchase_order_provider.dart';
 import 'package:ashwani/src/Providers/user_provider.dart';
 import 'package:ashwani/src/Screens/home/activity_home.dart';
+import 'package:ashwani/src/Screens/masters.dart';
 import 'package:ashwani/src/Screens/settings/setting_page.dart';
 import 'package:ashwani/src/Utils/Vendors/add_vendors.dart';
 import 'package:ashwani/src/constantWidgets/boxes.dart';
@@ -213,39 +214,10 @@ class _ReportsState extends State<Reports> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 32,
+                          height: 16,
                         ),
                         //activity portion
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Trading Activity',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 18.0,
-                            ),
-                            ContainerHomeActivity(
-                              amt: '0',
-                              title: 'To Be Shipped',
-                              widget: AllHomeActivity(
-                                currentIndex: 0,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            ContainerHomeActivity(
-                              amt: '0',
-                              title: 'To Be Recieved',
-                              widget: AllHomeActivity(
-                                currentIndex: 1,
-                              ),
-                            )
-                          ],
-                        ),
+                        Masters(),
                         SizedBox(
                           height: 24,
                         ),
@@ -254,7 +226,7 @@ class _ReportsState extends State<Reports> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              ' More',
+                              ' Add ',
                               style: TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 14),
                             ),
@@ -285,18 +257,52 @@ class _ReportsState extends State<Reports> {
                             SizedBox(
                               height: 7,
                             ),
-                        //     ContainerHomeMore(
-                        //       title: 'More',
-                        //       type: 2,
-                        //       action: MoreFromHomePage(),
-                        //     ),
-                        //     SizedBox(
-                        //       height: 7,
-                        //     ),
+                            //     ContainerHomeMore(
+                            //       title: 'More',
+                            //       type: 2,
+                            //       action: MoreFromHomePage(),
+                            //     ),
+                            //     SizedBox(
+                            //       height: 7,
+                            //     ),
                           ],
                         ),
                       ],
                     ),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Trading Activity',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 14),
+                      ),
+                      SizedBox(
+                        height: 18.0,
+                      ),
+                      ContainerHomeActivity(
+                        amt: '0',
+                        title: 'To Be Shipped',
+                        widget: AllHomeActivity(
+                          currentIndex: 0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      ContainerHomeActivity(
+                        amt: '0',
+                        title: 'To Be Recieved',
+                        widget: AllHomeActivity(
+                          currentIndex: 1,
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ]),

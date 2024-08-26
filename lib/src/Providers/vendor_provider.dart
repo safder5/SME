@@ -90,7 +90,7 @@ class VendorProvider with ChangeNotifier {
   }
 
   List<String> getAllVendorNames() {
-    return _vendors.map((vendor) => vendor.name!).toList();
+    return _vendors.map((vendor) => vendor.name).toList();
   }
 
   Future<void> uploadOrderInVendorsProfile(

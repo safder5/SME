@@ -1,7 +1,7 @@
 import 'package:ashwani/src/Providers/providers_reset_manager.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/customer_support.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/rate_app.dart';
-import 'package:ashwani/src/Screens/settings/setting_screens/about.dart';
+
 import 'package:ashwani/src/Screens/settings/setting_screens/feedback.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/org_profile.dart';
 import 'package:ashwani/src/Screens/settings/setting_screens/privacy_security.dart';
@@ -119,13 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      ContainerSettings(
-                        title: 'About',
-                        widget: AboutScreen(),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
+
                       ContainerSettings(
                         title: 'Feedback',
                         widget: FeedbackScreen(),

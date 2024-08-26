@@ -1,6 +1,5 @@
 import 'package:ashwani/src/Screens/bom/productions.dart';
 import 'package:ashwani/src/Screens/home.dart';
-import 'package:ashwani/src/Screens/masters.dart';
 import 'package:ashwani/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +23,7 @@ class _LandingBypassState extends State<LandingBypass> {
     List<Widget> buildScreens() {
       return [
         const Reports(),
-        const Masters(),
+        // const Masters(),
         const SalesPage(),
         const PurchasePage(),
         const Production(),
@@ -36,17 +35,17 @@ class _LandingBypassState extends State<LandingBypass> {
         PersistentBottomNavBarItem(
             inactiveIcon: SvgPicture.asset('lib/icons/home.svg'),
             icon: SvgPicture.asset('lib/icons/home_active.svg'),
-            title: 'Reports',
-            textStyle: const TextStyle(fontWeight: FontWeight.w300),
-            activeColorPrimary: blue,
-            activeColorSecondary: blue),
-             PersistentBottomNavBarItem(
-            inactiveIcon: SvgPicture.asset('lib/icons/home.svg'),
-            icon: SvgPicture.asset('lib/icons/home_active.svg'),
             title: 'Masters',
             textStyle: const TextStyle(fontWeight: FontWeight.w300),
             activeColorPrimary: blue,
             activeColorSecondary: blue),
+        //  PersistentBottomNavBarItem(
+        // inactiveIcon: SvgPicture.asset('lib/icons/home.svg'),
+        // icon: SvgPicture.asset('lib/icons/home_active.svg'),
+        // title: 'Masters',
+        // textStyle: const TextStyle(fontWeight: FontWeight.w300),
+        // activeColorPrimary: blue,
+        // activeColorSecondary: blue),
         PersistentBottomNavBarItem(
             inactiveIcon: SvgPicture.asset('lib/icons/sales.svg'),
             icon: SvgPicture.asset('lib/icons/sales_active.svg'),
@@ -72,6 +71,12 @@ class _LandingBypassState extends State<LandingBypass> {
     }
 
     return PersistentTabView(
+      onItemSelected: (value) {
+        setState(() {
+          value;
+        });
+      },
+      stateManagement: true,
       context,
       screens: buildScreens(),
       controller: controller,

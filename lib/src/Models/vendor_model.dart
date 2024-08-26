@@ -1,9 +1,9 @@
 import 'package:ashwani/src/Models/address_model.dart';
 
 class VendorModel {
-  final String? name;
+  final String name;
   String? companyName;
-  final String? displayName;
+  final String displayName;
   String? email;
   String? phone;
   String? remarks;

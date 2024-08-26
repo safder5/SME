@@ -34,7 +34,7 @@ class _NewPurchaseOrderState extends State<NewPurchaseOrder> {
   final TextEditingController _npoDelDateController = TextEditingController();
   final TextEditingController _paymentController = TextEditingController();
   final TextEditingController _deliveryController = TextEditingController();
-  final String status = 'Order Placed';
+  final String status = 'open';
   final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
   // void fetchVendorNames(BuildContext context) {

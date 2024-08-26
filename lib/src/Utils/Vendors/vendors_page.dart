@@ -8,8 +8,16 @@ import 'package:provider/provider.dart';
 
 import '../../constantWidgets/boxes.dart';
 
-class VendorsPage extends StatelessWidget {
+class VendorsPage extends StatefulWidget {
   const VendorsPage({super.key});
+
+  @override
+  State<VendorsPage> createState() => _VendorsPageState();
+}
+
+class _VendorsPageState extends State<VendorsPage> {
+  TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -49,41 +57,35 @@ class VendorsPage extends StatelessWidget {
               const SizedBox(
                 height: 32,
               ),
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.height,
-              //   child: StreamBuilder<QuerySnapshot>(
-              //       stream: FirebaseFirestore.instance
-              //           .collection('UserData')
-              //           .doc('${_auth!.email}')
-              //           .collection('Vendors')
-              //           .snapshots(),
-              //       builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              //         if (snapshot.connectionState == ConnectionState.waiting) {
-              //           return CircularProgressIndicator(
-              //             color: blue,
-              //           );
-              //         }
-              //         final userCustomerSnapshot = snapshot.data?.docs;
-              //         if (userCustomerSnapshot!.isEmpty) {
-              //           return const Center(
-              //             child: Text('No Customers yet, Add Below '),
-              //           );
-              //         }
-              //         return ListView.builder(
-              //             itemCount: userCustomerSnapshot.length,
-              //             itemBuilder: (context, index) {
-              //               return CustomersPageContainer(
-              //                   fullname: userCustomerSnapshot[index]['name'],
-              //                   companyname: userCustomerSnapshot[index]
-              //                       ['companyName']);
-              //             });
-              //       })),
-              // ),
+
+              // Add the search bar here
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search vendors...',
+                  suffixIcon: Icon(LineIcons.search),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 0.5),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value.toLowerCase();
+                  });
+                },
+              ),
+              const SizedBox(height: 32),
               SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: Consumer<VendorProvider>(
                     builder: ((context, provider, child) {
-                  final vendors = provider.vendors;
+                  final vendors = provider.vendors
+                      .where((vendor) =>
+                          vendor.name.toLowerCase().contains(_searchQuery))
+                      .toList()
+                      .reversed
+                      .toList();
                   return ListView.builder(
                       itemCount: vendors.length,
                       itemBuilder: (context, index) {
@@ -92,10 +94,12 @@ class VendorsPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => VendorPage(vendorName: vendors[index].name??'',)));
+                                    builder: (context) => VendorPage(
+                                          vendorName: vendors[index].name,
+                                        )));
                           },
                           child: VendorsPageContainer(
-                            fullname: vendors[index].name ?? ' ',
+                            fullname: vendors[index].name,
                           ),
                         );
                       });

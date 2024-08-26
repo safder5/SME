@@ -26,57 +26,61 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
     return Consumer<NSOrderProvider>(builder: (_, sop, __) {
       SalesOrderModel salesorder =
           sop.som.firstWhere((element) => element.orderID == widget.orderId);
-      // print(' this is order page items length ${salesorder.items.isEmpty?? 0}');
+      bool closed = salesorder.status == 'closed'
+          ? true
+          : false; // print(' this is order page items length ${salesorder.items.isEmpty?? 0}');
       return Scaffold(
         backgroundColor: w,
-        floatingActionButton: Visibility(
-          visible: isSelected[0] ? false : true,
-          child: FloatingActionButton(
-            onPressed: () {
-              if (isSelected[1]) {
-                showModalBottomSheet<dynamic>(
-                    backgroundColor: t,
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SalesOrderTransactionsShipped(
-                        items: salesorder.items,
-                        orderId: salesorder.orderID!,
-                        customer: salesorder.customerName!,
-                      );
-                    });
-              }
-              if (isSelected[2]) {
-                final k = salesorder.itemsDelivered ?? [];
-                if (k.isEmpty) {
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: w,
-                      content: Text(
-                        'No Items Delivered Yet!',
-                        style: TextStyle(color: blue, fontSize: 16),
-                      )));
-                } else {
-                  showModalBottomSheet<dynamic>(
-                      backgroundColor: t,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SalesOrderReturnTransactions(
-                          itemsDelivered: salesorder.itemsDelivered ?? [],
-                          orderId: salesorder.orderID!,
-                          customer: salesorder.customerName!,
-                        );
-                      });
-                }
-              }
-            },
-            backgroundColor: blue,
-            child: Icon(
-              Icons.add,
-              color: w,
-            ),
-          ),
-        ),
+        floatingActionButton: closed
+            ? const SizedBox()
+            : Visibility(
+                visible: isSelected[0] ? false : true,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    if (isSelected[1]) {
+                      showModalBottomSheet<dynamic>(
+                          backgroundColor: t,
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SalesOrderTransactionsShipped(
+                              items: salesorder.items,
+                              orderId: salesorder.orderID,
+                              customer: salesorder.customerName,
+                            );
+                          });
+                    }
+                    if (isSelected[2]) {
+                      final k = salesorder.itemsDelivered ?? [];
+                      if (k.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: w,
+                            content: Text(
+                              'No Items Delivered Yet!',
+                              style: TextStyle(color: blue, fontSize: 16),
+                            )));
+                      } else {
+                        showModalBottomSheet<dynamic>(
+                            backgroundColor: t,
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SalesOrderReturnTransactions(
+                                itemsDelivered: salesorder.itemsDelivered ?? [],
+                                orderId: salesorder.orderID!,
+                                customer: salesorder.customerName!,
+                              );
+                            });
+                      }
+                    }
+                  },
+                  backgroundColor: blue,
+                  child: Icon(
+                    Icons.add,
+                    color: w,
+                  ),
+                ),
+              ),
         body: Column(
           children: [
             Container(
@@ -104,19 +108,14 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                             Text(
                               'Sales Order',
                               style: TextStyle(
-                                  color: w, fontWeight: FontWeight.w300,
+                                  color: w,
+                                  fontWeight: FontWeight.w300,
                                   fontSize: 14),
                             ),
                             const Spacer(),
-                            Icon(
-                              Icons.edit_note_outlined,
-                              color: w,
-                            ),
-                            const SizedBox(width: 15),
-                            Icon(
-                              Icons.more_vert,
-                              color: w,
-                              size: 18,
+                            IconButtonWithDropdown(
+                              orderID: widget.orderId,
+                              close: sop.checkIfAllDelivered(widget.orderId),
                             )
                           ],
                         ),
@@ -151,7 +150,7 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
                                   height: 10,
                                 ),
                                 Text(
-                                  salesorder.customerName!,
+                                  salesorder.customerName,
                                   style: TextStyle(
                                       color: w,
                                       decoration: TextDecoration.underline,
@@ -270,5 +269,104 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
         ),
       );
     });
+  }
+}
+
+class IconButtonWithDropdown extends StatefulWidget {
+  const IconButtonWithDropdown({
+    super.key,
+    required this.orderID,
+    required this.close,
+  });
+  final int orderID;
+  final bool close;
+
+  @override
+  State<IconButtonWithDropdown> createState() => _IconButtonWithDropdownState();
+}
+
+class _IconButtonWithDropdownState extends State<IconButtonWithDropdown> {
+  bool loading = false;
+  Future<void> closeOrder(int orderID) async {
+    final prov = Provider.of<NSOrderProvider>(context, listen: false);
+    prov.closeSalesOrderInProvider(orderID);
+    try {
+      await prov.closeSalesOrder(orderID);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onPressedclose() async {
+    setState(() {
+      loading = true;
+    });
+    await closeOrder(widget.orderID);
+    setState(() {
+      loading = false;
+    });
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      icon: Icon(
+        Icons.more_vert,
+        color: w,
+      ), // The icon on the top left
+      onSelected: (value) {
+        // Handle your selection logic here
+        if (value == 'Option 1') {
+          // Navigator.of(context).push();
+        } else if (value == 'Option 2') {
+          loading
+              ? CircularProgressIndicator(
+                  color: blue,
+                  strokeWidth: 0.5,
+                )
+              : showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      surfaceTintColor: w,
+                      backgroundColor: w,
+                      title: const Text('Close Order'),
+                      content: Text(widget.close
+                          ? 'You want to close this order?'
+                          : 'Order can\'t be closed due to incomplete transactions.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            widget.close
+                                ? onPressedclose()
+                                : Navigator.of(context)
+                                    .pop(); // Close the dialog
+                          },
+                          child: Text(
+                            'Close',
+                            style: TextStyle(color: widget.close ? r : grey),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+        }
+      },
+      itemBuilder: (BuildContext context) {
+        return [
+          const PopupMenuItem<String>(
+            value: 'Option 1',
+            child: Text('Edit Details'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'Option 2',
+            child: Text('Close Order'),
+          ),
+        ];
+      },
+    );
   }
 }

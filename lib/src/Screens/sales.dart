@@ -11,7 +11,8 @@ class SalesPage extends StatefulWidget {
   State<SalesPage> createState() => _SalesPageState();
 }
 
-class _SalesPageState extends State<SalesPage> {
+class _SalesPageState extends State<SalesPage>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // double widthofTabBarPadding = MediaQuery.of(context).size.width/8;
@@ -36,7 +37,8 @@ class _SalesPageState extends State<SalesPage> {
                             child: Center(
                                 child: Text(
                           "Sales Orders",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -44,7 +46,8 @@ class _SalesPageState extends State<SalesPage> {
                             child: Center(
                                 child: Text(
                           "Sales Activity",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -52,7 +55,8 @@ class _SalesPageState extends State<SalesPage> {
                             child: Center(
                                 child: Text(
                           "Sales Returns",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       // Tab(
@@ -61,8 +65,9 @@ class _SalesPageState extends State<SalesPage> {
                     ])),
           ),
           body: const TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              SalesOrders(), 
+              SalesOrders(),
               SalesActivity(),
               SalesReturns(),
               // ItemsPage()

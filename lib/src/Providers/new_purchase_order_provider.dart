@@ -4,7 +4,6 @@ import 'package:ashwani/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-
 class NPOrderProvider with ChangeNotifier {
   int _toRecieve = 0;
   int get toRecieve => _toRecieve;
@@ -39,6 +38,60 @@ class NPOrderProvider with ChangeNotifier {
   void updatePurchaseActivityinProvider(ItemTrackingPurchaseOrder activity) {
     _pa.add(activity);
     notifyListeners();
+  }
+
+  bool checkifAllRecieved(int orderId) {
+    int leftquantities = 0;
+    int totalquantity = 0;
+    int recievedQuantity = 0;
+    PurchaseOrderModel pom =
+        _po.firstWhere((element) => element.orderID == orderId);
+    List<Item> items = pom.items ?? [];
+    List<ItemTrackingPurchaseOrder> itemsRecievedList = pom.itemsRecieved ?? [];
+    if (items.isNotEmpty) {
+      for (int i = 0; i < items.length; i++) {
+        Item it = items[i];
+        totalquantity += it.originalQuantity!;
+      }
+    }
+    if (itemsRecievedList.isNotEmpty) {
+      for (int i = 0; i < itemsRecievedList.length; i++) {
+        ItemTrackingPurchaseOrder it = itemsRecievedList[i];
+        recievedQuantity += it.quantityRecieved;
+      }
+    }
+    leftquantities = totalquantity - recievedQuantity;
+    if (leftquantities == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void closePurchaseOrderInProvider(int orderID) {
+    for (var order in _po) {
+      if (order.orderID == orderID) {
+        order.status = 'closed';
+      }
+    }
+  }
+
+  Future<void> closePurchaseOrder(int orderID) async {
+    try {
+      await _purchaseOrderCollection
+          .doc(orderID.toString())
+          .update({'status': 'closed'});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void updateStatustoProcessing(int orderId) {
+    for (var order in _po) {
+      if (order.orderID == orderId) {
+        order.status = 'inprocess';
+      }
+    }
   }
 
   void updateitemDetailsquantityinProvider(

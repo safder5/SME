@@ -54,13 +54,13 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                   // show modal sheet to add items for returned order
                   // #DONOT
                   //forget the reason why it was returned
-                  final k = purchaseOrder.itemsRecieved??[];
+                  final k = purchaseOrder.itemsRecieved ?? [];
                   if (k.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: w,
                         content: Text(
                           'No Items Recieved Yet!',
-                          style: TextStyle(color: blue,fontSize: 16),
+                          style: TextStyle(color: blue, fontSize: 16),
                         )));
                   } else {
                     showModalBottomSheet<dynamic>(
@@ -110,19 +110,14 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                             Text(
                               'Purchase Order',
                               style: TextStyle(
-                                  color: w, fontWeight: FontWeight.w300,
+                                  color: w,
+                                  fontWeight: FontWeight.w300,
                                   fontSize: 14),
                             ),
                             const Spacer(),
-                            Icon(
-                              Icons.edit_note_outlined,
-                              color: w,
-                            ),
-                            const SizedBox(width: 15),
-                            Icon(
-                               Icons.more_vert,
-                              color: w,
-                              size: 18,
+                            IconButtonWithDropdownPO(
+                              orderID: widget.orderId,
+                              close: pop.checkifAllRecieved(widget.orderId),
                             )
                           ],
                         ),
@@ -255,7 +250,8 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
                               toggleButtons[i],
                               style: TextStyle(
                                   color: isSelected[i] ? w : b,
-                                  fontWeight: FontWeight.w300 , fontSize: 14),
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14),
                             )),
                           ),
                         )
@@ -281,5 +277,105 @@ class _PurchaseOrderPageState extends State<PurchaseOrderPage> {
         ),
       );
     });
+  }
+}
+
+class IconButtonWithDropdownPO extends StatefulWidget {
+  const IconButtonWithDropdownPO({
+    super.key,
+    required this.orderID,
+    required this.close,
+  });
+  final int orderID;
+  final bool close;
+
+  @override
+  State<IconButtonWithDropdownPO> createState() =>
+      _IconButtonWithDropdownState();
+}
+
+class _IconButtonWithDropdownState extends State<IconButtonWithDropdownPO> {
+  bool loading = false;
+  Future<void> closeOrder(int orderID) async {
+    final prov = Provider.of<NPOrderProvider>(context, listen: false);
+    prov.closePurchaseOrderInProvider(orderID);
+    try {
+      await prov.closePurchaseOrder(orderID);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onPressedclose() async {
+    setState(() {
+      loading = true;
+    });
+    await closeOrder(widget.orderID);
+    setState(() {
+      loading = false;
+    });
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      icon: Icon(
+        Icons.more_vert,
+        color: w,
+      ), // The icon on the top left
+      onSelected: (value) {
+        // Handle your selection logic here
+        if (value == 'Option 1') {
+          // Navigator.of(context).push();
+        } else if (value == 'Option 2') {
+          loading
+              ? CircularProgressIndicator(
+                  color: blue,
+                  strokeWidth: 0.5,
+                )
+              : showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      surfaceTintColor: w,
+                      backgroundColor: w,
+                      title: const Text('Close Order'),
+                      content: Text(widget.close
+                          ? 'You want to close this order?'
+                          : 'Order can\'t be closed due to incomplete transactions.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            widget.close
+                                ? onPressedclose()
+                                : Navigator.of(context)
+                                    .pop(); // Close the dialog
+                          },
+                          child: Text(
+                            'Close',
+                            style: TextStyle(color: widget.close ? r : grey),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+        }
+      },
+      itemBuilder: (BuildContext context) {
+        return [
+          const PopupMenuItem<String>(
+            value: 'Option 1',
+            child: Text('Edit Details'),
+          ),
+          const PopupMenuItem<String>(
+            value: 'Option 2',
+            child: Text('Close Order'),
+          ),
+        ];
+      },
+    );
   }
 }

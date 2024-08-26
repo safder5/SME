@@ -2,7 +2,7 @@ import 'package:ashwani/src/Models/address_model.dart';
 
 class CustomerModel {
   
-  final String? name;
+  final String name;
   final String? displayname;
   String? companyName;
   String? email;

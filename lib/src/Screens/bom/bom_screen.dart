@@ -17,6 +17,9 @@ class BomScreen extends StatefulWidget {
 }
 
 class _BomScreenState extends State<BomScreen> {
+  TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +44,11 @@ class _BomScreenState extends State<BomScreen> {
 
     // create list to load boms for this screen
     return Consumer<BOMProvider>(builder: (_, bom, __) {
-      final boms = bom.boms;
+      final boms = bom.boms
+          .where((bom) => bom.productName.toLowerCase().contains(_searchQuery))
+          .toList()
+          .reversed
+          .toList();
       return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButton: FloatingActionButton(
@@ -80,6 +87,23 @@ class _BomScreenState extends State<BomScreen> {
                     const Text('BOMs'),
                     const Spacer(),
                   ],
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search boms...',
+                    suffixIcon: Icon(LineIcons.search),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(width: 0.5),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.toLowerCase();
+                    });
+                  },
                 ),
                 const SizedBox(
                   height: 32,
@@ -306,7 +330,7 @@ class _ItemSelectionState extends State<ItemSelection> {
                 height: 24,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height*0.75,
+                height: MediaQuery.of(context).size.height * 0.75,
                 child: ListView.builder(
                   itemCount: items.length,
                   itemBuilder: (context, index) {

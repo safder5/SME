@@ -1,14 +1,14 @@
 import 'package:ashwani/src/Models/iq_list.dart';
 
 class SalesOrderModel {
-  final int? orderID;
-  final String? customerName;
-  final String? orderDate;
+  final int orderID;
+  final String customerName;
+  final String orderDate;
   final String? shipmentDate;
   final String? paymentMethods;
   final String? notes;
   final String? tandC;
-  final String? status;
+   String? status;
   List<Item>? items;
   List<ItemTrackingSalesOrder>? tracks;
   List<Item>? itemsDelivered;

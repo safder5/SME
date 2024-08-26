@@ -12,7 +12,8 @@ class PurchasePage extends StatefulWidget {
   State<PurchasePage> createState() => _PurchasePageState();
 }
 
-class _PurchasePageState extends State<PurchasePage> {
+class _PurchasePageState extends State<PurchasePage>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -37,7 +38,8 @@ class _PurchasePageState extends State<PurchasePage> {
                             child: Center(
                                 child: Text(
                           "Purchase Orders",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -45,7 +47,8 @@ class _PurchasePageState extends State<PurchasePage> {
                             child: Center(
                                 child: Text(
                           "Purchase Activity",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       Tab(
@@ -53,7 +56,8 @@ class _PurchasePageState extends State<PurchasePage> {
                             child: Center(
                                 child: Text(
                           "Purchase Returns",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 10),
                         ))),
                       ),
                       // Tab(
@@ -62,6 +66,7 @@ class _PurchasePageState extends State<PurchasePage> {
                     ])),
           ),
           body: const TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               PurchaseOrders(), PurchaseActivity(),
               PurchaseReturns()

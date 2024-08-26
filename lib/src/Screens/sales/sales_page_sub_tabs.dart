@@ -8,7 +8,6 @@ import 'package:ashwani/src/Models/iq_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class SOPDetails extends StatefulWidget {
   const SOPDetails({super.key, required this.orderId});
 
@@ -21,22 +20,32 @@ class SOPDetails extends StatefulWidget {
 class _SOPDetailsState extends State<SOPDetails> {
   bool allDelivered = false;
   int leftquantities = 0;
+  int totalquantity = 0;
+  int shippedquantity = 0;
 
   checkIfAllDelivered() {
     final prov = Provider.of<NSOrderProvider>(context, listen: false);
     SalesOrderModel som =
         prov.som.firstWhere((element) => element.orderID == widget.orderId);
-    List<Item> items = som.items??[];
+    List<Item> items = som.items ?? [];
+    List<Item> itemsdeliveredList = som.itemsDelivered ?? [];
     if (items.isNotEmpty) {
       for (int i = 0; i < items.length; i++) {
         Item it = items[i];
-        leftquantities += it.quantitySales!;
+        totalquantity += it.originalQuantity!;
       }
-      if (leftquantities == 0) {
-        setState(() {
-          allDelivered = true;
-        });
+    }
+    if (itemsdeliveredList.isNotEmpty) {
+      for (int i = 0; i < itemsdeliveredList.length; i++) {
+        Item it = itemsdeliveredList[i];
+        shippedquantity += it.quantitySalesDelivered!;
       }
+    }
+    leftquantities = totalquantity - shippedquantity;
+    if (leftquantities == 0) {
+      setState(() {
+        allDelivered = true;
+      });
     }
   }
 
@@ -83,7 +92,7 @@ class _SOPDetailsState extends State<SOPDetails> {
           children: [
             const Text('empty'),
             OutlinedButton(
-              onPressed: () async{
+              onPressed: () async {
 // delete sales order
                 await ip.deleteSalesOrderFB(widget.orderId);
                 ip.deleteSO(widget.orderId);
@@ -159,75 +168,45 @@ class _SOPDetailsState extends State<SOPDetails> {
                     return GestureDetector(
                       onLongPress: () {
                         // Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                          elevation: 10,
-                          backgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          content: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Edit Quantity for ${items[index].itemName}?',
-                                    style: TextStyle(color: b),
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  OutlinedButton(
-                                    onPressed: () async {
-                                      // increase quantity
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      await Future.delayed(
-                                          const Duration(milliseconds: 500));
-                                      if (!context.mounted) return;
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  IncreaseDetailsItemQuantity(
-                                                      itemName:
-                                                          items[index].itemName,
-                                                      orderId:
-                                                          widget.orderId)));
-                                      // _showDialogIncreaseQuantity(
-                                      //     context,
-                                      //     items[index].itemName,
-                                      //     widget.orderId);
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      // elevation: 10,
-                                      surfaceTintColor: gn,
-                                      backgroundColor:
-                                          Colors.green.withOpacity(0.25),
+                        som.status == 'closed'
+                            ? null
+                            : ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25)),
+                                elevation: 10,
+                                backgroundColor:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                content: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Edit Quantity for ${items[index].itemName}?',
+                                              style: TextStyle(color: b),
+                                            ),
+                                            Spacer(),
+                                            IconButton(
+                                                onPressed: () {
+                                                  ScaffoldMessenger.of(context)
+                                                      .hideCurrentSnackBar();
+                                                },
+                                                icon: Icon(Icons.close))
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    child: Text(
-                                      'Increase Quantity',
-                                      style: TextStyle(color: gn),
-                                    ),
-                                  ),
-                                  toship == 0
-                                      ? SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          child: Text(
-                                            'Cannot Reduce Quantity',
-                                            style: TextStyle(color: b),
-                                          ))
-                                      : OutlinedButton(
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        OutlinedButton(
                                           onPressed: () async {
-                                            // limit to change is toship
-                                            // item cannot be removed
+                                            // increase quantity
                                             ScaffoldMessenger.of(context)
                                                 .hideCurrentSnackBar();
                                             await Future.delayed(const Duration(
@@ -237,69 +216,74 @@ class _SOPDetailsState extends State<SOPDetails> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ReduceItemQuantity(
+                                                        IncreaseDetailsItemQuantity(
                                                             itemName:
                                                                 items[index]
                                                                     .itemName,
-                                                            orderId:
-                                                                widget.orderId,
-                                                            limit: toship)));
+                                                            orderId: widget
+                                                                .orderId)));
+                                            // _showDialogIncreaseQuantity(
+                                            //     context,
+                                            //     items[index].itemName,
+                                            //     widget.orderId);
                                           },
                                           style: OutlinedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.red.withOpacity(0.25)),
-                                          child: Text(
-                                            'Reduce Quantity',
-                                            style: TextStyle(color: r),
+                                            // elevation: 10,
+                                            surfaceTintColor: gn,
+                                            backgroundColor:
+                                                Colors.green.withOpacity(0.25),
                                           ),
-                                        )
-                                ],
-                              ),
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.spaceEvenly,
-                              //   children: [
-                              //     toship == items[index].originalQuantity
-                              //         ? OutlinedButton(
-                              //             onPressed: () async {
-                              //               // limit is toship
-                              //               // item can be removed
-                              //               ScaffoldMessenger.of(context)
-                              //                   .hideCurrentSnackBar();
-                              //               await Future.delayed(const Duration(
-                              //                   milliseconds: 500));
-                              //               if (!context.mounted) return;
-                              //               _showDialogReduceQtyAndALsoRemoveItemEntirely(
-                              //                   context,
-                              //                   items[index].itemName,
-                              //                   widget.orderId);
-                              //               // Navigator.push(
-                              //               //     context,
-                              //               //     MaterialPageRoute(
-                              //               //         builder: (context) =>
-                              //               //             ReduceItemQuantity(
-                              //               //                 itemName:
-                              //               //                     items[index]
-                              //               //                         .itemName,
-                              //               //                 orderId:
-                              //               //                     widget.orderId,
-                              //               //                 limit: toship)));
-                              //             },
-                              //             style: OutlinedButton.styleFrom(
-                              //                 backgroundColor:
-                              //                     Colors.red.withOpacity(0.25)),
-                              //             child: Text(
-                              //               'Remove Item',
-                              //               style: TextStyle(color: r),
-                              //             ),
-                              //           )
-                              //         : Container(),
-                                  
-                              //   ],
-                              // )
-                            ],
-                          ),
-                        ));
+                                          child: Text(
+                                            'Increase Quantity',
+                                            style: TextStyle(color: gn),
+                                          ),
+                                        ),
+                                        toship == 0
+                                            ? SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.4,
+                                                child: Text(
+                                                  'Cannot Reduce Quantity',
+                                                  style: TextStyle(color: b),
+                                                ))
+                                            : OutlinedButton(
+                                                onPressed: () async {
+                                                  // limit to change is toship
+                                                  // item cannot be removed
+                                                  ScaffoldMessenger.of(context)
+                                                      .hideCurrentSnackBar();
+                                                  await Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 500));
+                                                  if (!context.mounted) return;
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ReduceItemQuantity(
+                                                                  itemName: items[
+                                                                          index]
+                                                                      .itemName,
+                                                                  orderId: widget
+                                                                      .orderId,
+                                                                  limit:
+                                                                      toship)));
+                                                },
+                                                style: OutlinedButton.styleFrom(
+                                                    backgroundColor: Colors.red
+                                                        .withOpacity(0.25)),
+                                                child: Text(
+                                                  'Reduce Quantity',
+                                                  style: TextStyle(color: r),
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ));
                       },
                       child: SOPDetailsItemTile(
                         name: items[index].itemName,

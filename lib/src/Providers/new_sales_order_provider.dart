@@ -6,9 +6,6 @@ import 'package:flutter/material.dart';
 import '../../user_data.dart';
 import '../Models/iq_list.dart';
 
-
-
-
 class NSOrderProvider with ChangeNotifier {
   final List<SalesOrderModel> _so = [];
   final List<ItemTrackingSalesOrder> _sa = [];
@@ -46,6 +43,60 @@ class NSOrderProvider with ChangeNotifier {
     _sa.clear();
 
     notifyListeners();
+  }
+
+  void updateStatustoProcessing(int orderId) {
+    for (var order in _so) {
+      if (order.orderID == orderId) {
+        order.status = 'inprocess';
+      }
+    }
+  }
+
+  bool checkIfAllDelivered(int orderId) {
+    int leftquantities = 0;
+    int totalquantity = 0;
+    int shippedquantity = 0;
+    SalesOrderModel som =
+        _so.firstWhere((element) => element.orderID == orderId);
+    List<Item> items = som.items ?? [];
+    List<Item> itemsdeliveredList = som.itemsDelivered ?? [];
+    if (items.isNotEmpty) {
+      for (int i = 0; i < items.length; i++) {
+        Item it = items[i];
+        totalquantity += it.originalQuantity!;
+      }
+    }
+    if (itemsdeliveredList.isNotEmpty) {
+      for (int i = 0; i < itemsdeliveredList.length; i++) {
+        Item it = itemsdeliveredList[i];
+        shippedquantity += it.quantitySalesDelivered!;
+      }
+    }
+    leftquantities = totalquantity - shippedquantity;
+    if (leftquantities == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void closeSalesOrderInProvider(int orderID) {
+    for (var order in _so) {
+      if (order.orderID == orderID) {
+        order.status = 'closed';
+      }
+    }
+  }
+
+  Future<void> closeSalesOrder(int orderID) async {
+    try {
+      await _salesOrderCollection
+          .doc(orderID.toString())
+          .update({'status': 'closed'});
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> deleteSalesOrderFB(int orderId) async {

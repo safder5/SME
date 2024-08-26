@@ -290,6 +290,21 @@ class ContainerSalesOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String statusDisplay = (status == 'open')
+        ? "Order Created"
+        : (status == 'inprocess')
+            ? "In Process"
+            : (status == 'closed')
+                ? "Closed"
+                : " ";
+    Color statusColor = (status == 'open')
+        ? gn
+        : (status == 'inprocess')
+            ? gn
+            : (status == 'closed')
+                ? gn.withOpacity(0.8)
+                : b;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(
@@ -332,10 +347,8 @@ class ContainerSalesOrder extends StatelessWidget {
                           TextStyle(color: b.withOpacity(0.5), fontSize: 10)),
                   const Spacer(),
                   Text(
-                    status == 'open'
-                        ? 'Order Placed'.toUpperCase()
-                        : 'Order Shipped'.toUpperCase(),
-                    style: TextStyle(color: gn.withOpacity(0.8), fontSize: 12),
+                    statusDisplay,
+                    style: TextStyle(color: statusColor, fontSize: 12),
                   )
                 ],
               ),
@@ -557,8 +570,24 @@ class ContainerPurchaseOrder extends StatelessWidget {
   final String date;
   final String status;
 
+  
+
   @override
   Widget build(BuildContext context) {
+      String statusDisplay = (status == 'open')
+        ? "Order Placed"
+        : (status == 'inprocess')
+            ? "In Process"
+            : (status == 'closed')
+                ? "Closed"
+                : " ";
+    Color statusColor = (status == 'open')
+        ? gn
+        : (status == 'inprocess')
+            ? gn
+            : (status == 'closed')
+                ? gn.withOpacity(0.8)
+                : b;
     //  double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -596,8 +625,8 @@ class ContainerPurchaseOrder extends StatelessWidget {
                           TextStyle(color: b.withOpacity(0.5), fontSize: 10)),
                   const Spacer(),
                   Text(
-                    status.toUpperCase(),
-                    style: TextStyle(color: gn.withOpacity(0.8), fontSize: 12),
+                    statusDisplay,
+                    style: TextStyle(color: statusColor, fontSize: 12),
                   )
                 ],
               ),
@@ -763,7 +792,8 @@ class ItemsPageContainer extends StatelessWidget {
     super.key,
     required this.itemName,
     required this.sku,
-    required this.unitType, required this.deletable,
+    required this.unitType,
+    required this.deletable,
   });
   final String itemName;
   final String sku;
@@ -829,9 +859,13 @@ class ItemsPageContainer extends StatelessWidget {
                 //   textScaleFactor: 1,
                 //   style: TextStyle(fontWeight: FontWeight.w300),
                 // )
-                deletable? IconButton(onPressed: (){
-                  //delete button for item in items page make a separate function 
-                }, icon: const Icon(LineIcons.trash)): Container()
+                deletable
+                    ? IconButton(
+                        onPressed: () {
+                          //delete button for item in items page make a separate function
+                        },
+                        icon: const Icon(LineIcons.trash))
+                    : Container()
               ],
             ),
           ),

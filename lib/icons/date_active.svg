@@ -1,0 +1,7 @@
+<svg width="10" height="11" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 2H1V4H9V2Z" stroke="black" stroke-width="0.5" stroke-miterlimit="10"/>
+<path d="M9 4H1V10H9V4Z" stroke="black" stroke-width="0.5" stroke-miterlimit="10"/>
+<path d="M3 1V3" stroke="black" stroke-width="0.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M7 1V3" stroke="black" stroke-width="0.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M5 1V3" stroke="black" stroke-width="0.5" stroke-miterlimit="10" stroke-linecap="round"/>
+</svg>
