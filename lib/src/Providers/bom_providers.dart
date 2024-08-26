@@ -36,6 +36,7 @@ class BOMProvider extends ChangeNotifier {
   }
 
   void addBOMtoProv(BOMmodel bom) {
+    print('itne items hai abhi${bom.itemswithQuantities.length}');
     _boms.add(bom);
     notifyListeners();
   }

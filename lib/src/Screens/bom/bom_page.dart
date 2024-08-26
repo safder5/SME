@@ -23,7 +23,7 @@ class _BOMPageState extends State<BOMPage> {
       final index = allbom.indexWhere(
           (element) => element.productName == widget.bom.productName);
       final bom = allbom[index];
-      print(bom.itemswithQuantities.length);
+      // print(bom.itemswithQuantities[0].itemname);
       return Scaffold(
         backgroundColor: w,
         body: Column(
@@ -133,6 +133,8 @@ class _BOMPageState extends State<BOMPage> {
                           itemCount: bom.itemswithQuantities.length,
                           itemBuilder: ((context, index) {
                             final item = bom.itemswithQuantities[index];
+                            print(item.itemname);
+
                             final ip = Provider.of<ItemsProvider>(context,
                                 listen: false);
                             final p = ip.allItems.firstWhere(

@@ -21,6 +21,7 @@ class _ProductionState extends State<Production> {
   bool isButtonVisible = false;
   @override
   Widget build(BuildContext context) {
+    final fieldWidth = MediaQuery.of(context).size.width;
     return Consumer<ProductionProvider>(builder: (_, pp, __) {
       final prods = pp.prod
           .where((product) =>
@@ -57,21 +58,44 @@ class _ProductionState extends State<Production> {
                   const SizedBox(
                     height: 32,
                   ),
-                  TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search boms...',
-                      suffixIcon: Icon(LineIcons.search),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(width: 0.5),
-                        borderRadius: BorderRadius.circular(12.0),
+                  SizedBox(
+                    width: fieldWidth,
+                    child: TextField(
+                      cursorColor: blue,
+                      cursorHeight: 16,
+                      cursorWidth: 0.8,
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        constraints: BoxConstraints(
+                            maxWidth: fieldWidth * 0.7,
+                            minWidth: fieldWidth * 0.2),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        hintText: " Search Orders... ",
+                        hintStyle: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
+                            color: b32),
+                        suffixIcon: Icon(
+                          LineIcons.search,
+                          color: b.withOpacity(0.1),
+                        ),
+                        fillColor: w,
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: blue, width: 1)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: b.withOpacity(0.1)),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value.toLowerCase();
+                        });
+                      },
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value.toLowerCase();
-                      });
-                    },
                   ),
                   const SizedBox(height: 16),
                   Expanded(

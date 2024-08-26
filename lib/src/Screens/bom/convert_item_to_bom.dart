@@ -23,10 +23,18 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
   Future<void> _executeFutures(BOMmodel bom) async {
     final provider = Provider.of<BOMProvider>(context, listen: false);
     await provider.uploadBOMtoDB(bom);
-    provider.addBOMtoProv(bom);
     // add item to database and provider
     await uploadtoInventory();
-    provider.clearItems();
+    updateProviders(bom);
+  }
+
+  void updateProviders(BOMmodel bom) {
+    try {
+      final provider = Provider.of<BOMProvider>(context, listen: false);
+      provider.addBOMtoProv(bom);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> uploadtoInventory() async {
@@ -69,8 +77,8 @@ class _ConvertItemtoBOMState extends State<ConvertItemtoBOM> {
           backgroundColor: w,
           surfaceTintColor: w,
           title: const Text('Error'),
-          content:
-              const Text('There was an error Adding BOM. Check connection and try again.'),
+          content: const Text(
+              'There was an error Adding BOM. Check connection and try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

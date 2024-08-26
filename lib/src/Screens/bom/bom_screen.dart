@@ -16,8 +16,9 @@ class BomScreen extends StatefulWidget {
   State<BomScreen> createState() => _BomScreenState();
 }
 
-class _BomScreenState extends State<BomScreen> {
-  TextEditingController _searchController = TextEditingController();
+class _BomScreenState extends State<BomScreen>
+    with AutomaticKeepAliveClientMixin {
+  final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
   @override
@@ -36,6 +37,7 @@ class _BomScreenState extends State<BomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fieldWidth = MediaQuery.of(context).size.width;
     //    if (_keyToReload.currentState != null) {
     //   _keyToReload.currentState!
     //       .reload(); // Call a function that triggers the reload
@@ -90,13 +92,30 @@ class _BomScreenState extends State<BomScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextField(
+                  cursorColor: blue,
+                  cursorHeight: 16,
+                  cursorWidth: 0.8,
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search boms...',
-                    suffixIcon: Icon(LineIcons.search),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0.5),
-                      borderRadius: BorderRadius.circular(12.0),
+                    constraints: BoxConstraints(
+                        maxWidth: fieldWidth, minWidth: fieldWidth * 0.6),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    hintText: " Search Orders... ",
+                    hintStyle: TextStyle(
+                        fontWeight: FontWeight.w300, fontSize: 12, color: b32),
+                    suffixIcon: Icon(
+                      LineIcons.search,
+                      color: b.withOpacity(0.1),
+                    ),
+                    fillColor: w,
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: blue, width: 1)),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: b.withOpacity(0.1)),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   onChanged: (value) {
@@ -118,12 +137,14 @@ class _BomScreenState extends State<BomScreen> {
                           itemBuilder: (context, index) {
                             final bom = boms[index];
                             return GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context, rootNavigator: true)
+                                onTap: () async {
+                                  await Navigator.of(context,
+                                          rootNavigator: true)
                                       .push(MaterialPageRoute(
                                           builder: (context) => BOMPage(
                                                 bom: bom,
                                               )));
+                                  setState(() {});
                                 },
                                 child: BOMContainer(bom: bom));
                           })),
@@ -135,7 +156,78 @@ class _BomScreenState extends State<BomScreen> {
       );
     });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }
+
+class ItemSelection extends StatefulWidget {
+  const ItemSelection({super.key});
+
+  @override
+  State<ItemSelection> createState() => _ItemSelectionState();
+}
+
+class _ItemSelectionState extends State<ItemSelection> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ItemsProvider>(builder: (_, itemspvdrr, __) {
+      final items = itemspvdrr.getitemNamesofNOTBOMSYET();
+      return Scaffold(
+        backgroundColor: w,
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(children: [
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(LineIcons.angleLeft)),
+                  const SizedBox(width: 10),
+                  const Text('Add Item'),
+                  const Spacer(),
+                ],
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(items[index]),
+                      onTap: () {
+                        final name = items[index];
+                        // Handle item tap
+                        // Navigator.of(context).pop();
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                            builder: (context) => ConvertItemtoBOM(
+                              productName: name,
+                            ),
+                          ),
+                        ); // Close the dialog
+                      },
+                    );
+                  },
+                ),
+              )
+            ]),
+          ),
+        )),
+      );
+    });
+  }
+}
+
+
 
 // void _showMaterialAlert(BuildContext context) {
 //   showDialog(
@@ -294,68 +386,3 @@ class _BomScreenState extends State<BomScreen> {
 //         );
 //       });
 // }
-
-class ItemSelection extends StatefulWidget {
-  const ItemSelection({super.key});
-
-  @override
-  State<ItemSelection> createState() => _ItemSelectionState();
-}
-
-class _ItemSelectionState extends State<ItemSelection> {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<ItemsProvider>(builder: (_, itemspvdrr, __) {
-      final items = itemspvdrr.getitemNamesofNOTBOMSYET();
-      return Scaffold(
-        backgroundColor: w,
-        body: SafeArea(
-            child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(children: [
-              Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(LineIcons.angleLeft)),
-                  const SizedBox(width: 10),
-                  const Text('Add Item'),
-                  const Spacer(),
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.75,
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(items[index]),
-                      onTap: () {
-                        final name = items[index];
-                        // Handle item tap
-                        // Navigator.of(context).pop();
-                        Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(
-                            builder: (context) => ConvertItemtoBOM(
-                              productName: name,
-                            ),
-                          ),
-                        ); // Close the dialog
-                      },
-                    );
-                  },
-                ),
-              )
-            ]),
-          ),
-        )),
-      );
-    });
-  }
-}
